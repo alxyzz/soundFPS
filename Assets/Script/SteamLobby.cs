@@ -41,7 +41,7 @@ public class SteamLobby : MonoBehaviour
     {
         if (!SteamManager.Initialized)
         {
-            Debug.Log("Steam not launched!");
+            Debug.Log("This game requires a running Steam instance.");
             return;
         }
 

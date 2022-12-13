@@ -101,10 +101,10 @@ public class WeaponData : ScriptableObject
     }
     [Tooltip("WOOD, STONE, METAL, GLASS, WATER, HUMAN")]
     [SerializeField] private float[] _PenetrationAttenuation = new float[6];
-    //public float GetPenetrationAttenuation(PenetrableMaterial mat)
-    //{
-    //    return _PenetrationAttenuation[(int)mat];
-    //}
+    public float GetPenetrationAttenuation(PenetrableMaterial mat)
+    {
+        return _PenetrationAttenuation[(int)mat];
+    }
 
     [Header("Reload")]
     [SerializeField] private float _reloadMultiplier;

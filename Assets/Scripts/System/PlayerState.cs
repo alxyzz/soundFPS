@@ -142,7 +142,7 @@ public class PlayerState : NetworkBehaviour, IDamageable
                 item.shadowCastingMode = ShadowCastingMode.Off;
             }
             _curWpnObj.GetComponent<WeaponInHand>().Init(CurrentWeaponIdentity, GetComponent<LocalPlayerController>());
-            _curWpnObj.GetComponent<WeaponInHand>().SetThingsByScopeLevel(0);
+
             UI_GameHUD.SetCrosshairActive(data.Type != WeaponType.SNIPER);
             UI_GameHUD.ActiveInventorySlot((int)data.RangeType);
             UI_GameHUD.SetAmmo(ammo);
@@ -518,7 +518,6 @@ public class PlayerState : NetworkBehaviour, IDamageable
         if (_curWpnObj) Destroy(_curWpnObj);
         if (isLocalPlayer)
         {
-            CurrentWeaponInHand?.SetThingsByScopeLevel(0);
             _charaAnimHandler.CmdTpSetLayerWeight(1, 0);
             _charaAnimHandler.CmdTpSetTrigger(Animator.StringToHash("Dead"));
             for (int i = 0; i < inventoryWeapons.Length; i++)

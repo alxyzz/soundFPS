@@ -165,21 +165,21 @@ public class LobbyController : MonoBehaviour
     
     private bool CanStartGame()
     {
-        // if (_players.Count < 2) return false;
-        foreach (var item in _players)
-        {
-            string ready = SteamMatchmaking.GetLobbyMemberData(
-                _lobbyId,
-                item.Key,
-                SteamLobby.keyReady
-                );
-            if (ready != "1")
-            {
-                MasterUIManager.AddPopupHint("There are players unready...");
-                return false;
-            }
-        }
-        
+        //// if (_players.Count < 2) return false;
+        //foreach (var item in _players)
+        //{
+        //    string ready = SteamMatchmaking.GetLobbyMemberData(
+        //        _lobbyId,
+        //        item.Key,
+        //        SteamLobby.keyReady
+        //        );
+        //    if (ready != "1")
+        //    {
+        //        MasterUIManager.AddPopupHint("There are players unready...");
+        //        return false;
+        //    }
+        //}
+        //always returns true, because it's an arena shooter. can join while it's running
         return true;
     }
 
@@ -202,10 +202,10 @@ public class LobbyController : MonoBehaviour
             if (CanStartGame())
             {
                 Debug.Log("Can start game!");
-                SteamMatchmaking.SetLobbyJoinable(_lobbyId, false);
+                SteamMatchmaking.SetLobbyJoinable(_lobbyId, true);
                 SteamMatchmaking.SetLobbyData(_lobbyId, SteamLobby.keyGameStarted, "1");
 
-                // SteamLobby.SceneToLoad = "MainMap";
+
                 MyNetworkManager.singleton.StartGame();
             }
         }

@@ -110,6 +110,7 @@ public class GameState : NetworkBehaviour
 
     public readonly SyncDictionary<ulong, uint> playerDic = new SyncDictionary<ulong, uint>();
     public int ConnectedPlayerNum => playerDic.Count;
+    [HideInInspector] int maxKills = 30;
     [Server]
     private void OnLobbyChatUpdate(LobbyChatUpdate_t callback)
     {
@@ -291,7 +292,7 @@ public class GameState : NetworkBehaviour
             winnerNetId = playerDic.First().Value;
             return true;
         }
-        List<PlayerState> livings = GetPlayerStateList().FindAll(x => x.IsAlive);
+        List<PlayerState> livings = GetPlayerStateList().FindAll(x => x.Kills >= instance.maxKills);
 
         switch (livings.Count)
         {

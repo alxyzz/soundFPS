@@ -17,7 +17,6 @@ public class UI_GameHUD : MonoBehaviour
     private void Start()
     {        
         ClearInteractionHint();
-        SetScopeActive(false);
     }
 
     [Header("Countdown")]
@@ -60,12 +59,6 @@ public class UI_GameHUD : MonoBehaviour
         instance._tmpInteraction.SetText("");
     }
 
-    [Header("Scope")]
-    [SerializeField] private GameObject _objScope;
-    public static void SetScopeActive(bool active)
-    {
-        instance._objScope.SetActive(active);
-    }
     [Header("Opposite Name")]
     [SerializeField] private TextMeshProUGUI _tmpAimedPlayerName;
     [SerializeField] private LayerMask _aimLayerMask;
@@ -191,17 +184,7 @@ public class UI_GameHUD : MonoBehaviour
 
     public static void ShowWinner(PlayerState ps)
     {
-        instance._winnerPanel.SetActive(true);
 
-        Callback<AvatarImageLoaded_t>.Create(instance.OnWinnerIconLoaded);
-        int ImageID = SteamFriends.GetLargeFriendAvatar(ps.SteamId);
-        if (ImageID != -1) instance._imgWinnerIcon.texture = SteamLobby.GetSteamImageAsTexture(ImageID);
-
-        instance._tmpWinnerName.SetText(SteamFriends.GetFriendPersonaName(ps.SteamId));
-        instance._btnReturnToLobby.interactable =
-            SteamMatchmaking.GetLobbyOwner(SteamLobby.Instance.CurrentLobbyId) == SteamUser.GetSteamID();
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
     }
     private void OnWinnerIconLoaded(AvatarImageLoaded_t callback)
     {

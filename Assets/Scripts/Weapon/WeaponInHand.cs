@@ -182,10 +182,6 @@ public class WeaponInHand : MonoBehaviour
         }
 
         //Camera.main.transform.localRotation = GetClampedRecoilRot(-5);
-        Camera.main.GetComponent<CameraShake>().ShakeTo(
-            GetClampedRecoilRot(-5),
-            _identity.Data.FireDelay,
-            _identity.Data.RecoilRecoveryDuration.Evaluate(RecoilValue / _identity.Data.Ammo));
         UI_GameHUD.SetCrosshairFireSpread(_identity.Data.CrosshairSpread * 2.0f, _identity.Data.FireDelay);
         StartCoroutine(ContinuousFiringDelay());
     }
@@ -200,10 +196,7 @@ public class WeaponInHand : MonoBehaviour
 
         RecoilValue += 1;
 
-        Camera.main.GetComponent<CameraShake>().ShakeTo(
-            GetClampedRecoilRot(-5),
-            _identity.Data.FireDelay,
-            _identity.Data.RecoilRecoveryDuration.Evaluate(RecoilValue / _identity.Data.Ammo));
+
         UI_GameHUD.SetCrosshairFireSpread(_identity.Data.CrosshairSpread * 2.0f, _identity.Data.FireDelay);
         StartCoroutine(ContinuousFiringDelay());
     }
@@ -246,14 +239,14 @@ public class WeaponInHand : MonoBehaviour
     {
         Debug.Log("Toggle Scope!");
     }
-    public virtual void SetThingsByScopeLevel(int level)
-    {
-        UI_GameHUD.SetScopeActive(level != 0);
-        _playerCtrl.MouseSensitivityMultiplier = 1.0f / Mathf.Pow(3, level);
-        _playerCtrl.SetFirstPersonVisible(level == 0);
-        SetVisible(level == 0);
-        Camera.main.fieldOfView = level == 0 ? 60 : (level == 1 ? 10 : 1);
-    }
+    //public virtual void SetThingsByScopeLevel(int level)
+    //{
+    //    UI_GameHUD.SetScopeActive(level != 0);
+    //    _playerCtrl.MouseSensitivityMultiplier = 1.0f / Mathf.Pow(3, level);
+    //    _playerCtrl.SetFirstPersonVisible(level == 0);
+    //    SetVisible(level == 0);
+    //    Camera.main.fieldOfView = level == 0 ? 60 : (level == 1 ? 10 : 1);
+    //}
     public bool CanReload()
     {
         return !IsHolstered && !_isReloading && _identity.CurrentAmmo < _identity.Data.Ammo && _identity.BackupAmmo > 0;

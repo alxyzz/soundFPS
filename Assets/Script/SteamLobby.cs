@@ -41,7 +41,7 @@ public class SteamLobby : MonoBehaviour
     {
         if (!SteamManager.Initialized)
         {
-            Debug.Log("Steam not launched!");
+            Debug.Log("This game requires a running Steam instance.");
             return;
         }
 
@@ -104,12 +104,6 @@ public class SteamLobby : MonoBehaviour
                 return;
             case EChatRoomEnterResponse.k_EChatRoomEnterResponseDoesntExist:
                 MasterUIManager.AddPopupHint("Lobby does not exist...");
-                break;
-            case EChatRoomEnterResponse.k_EChatRoomEnterResponseNotAllowed:
-                if (SteamMatchmaking.GetLobbyData(lobbyId, keyGameStarted) != "0")
-                {
-                    MasterUIManager.AddPopupHint("The game has already begun.");
-                }
                 break;
             case EChatRoomEnterResponse.k_EChatRoomEnterResponseFull:
                 MasterUIManager.AddPopupHint("The lobby is full...");

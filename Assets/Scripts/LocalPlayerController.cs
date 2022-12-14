@@ -367,7 +367,7 @@ public class LocalPlayerController : NetworkBehaviour
         SetThirdPersonVisible(true);
 
         UI_GameHUD.SetUIEnabled(false);
-        Camera.main.transform.GetComponent<CameraShake>().Stop();
+
         Camera.main.transform.GetChild(0).SetParent(Camera.main.transform.parent);
         Camera.main.transform.SetParent(null);
         StartCoroutine(UpdateCameraToSpectator(

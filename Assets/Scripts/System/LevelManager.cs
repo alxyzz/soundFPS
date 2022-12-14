@@ -15,7 +15,7 @@ public class LevelManager : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdSpawnWeaponOverworld(string weaponName, Vector3 position, int currentAmmo, int backupAmmo)
     {
-        string path = Path.Combine("Weapons", "Overworld", weaponName);
+        string path = Path.Combine("Weapons", "OverworldModel", weaponName);
         GameObject obj = Instantiate(Resources.Load<GameObject>(path), position, Quaternion.identity);
         obj.GetComponent<WeaponOverworld>().SetAmmo(currentAmmo, backupAmmo);
         NetworkServer.Spawn(obj);

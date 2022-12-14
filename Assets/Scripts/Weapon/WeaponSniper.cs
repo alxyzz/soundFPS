@@ -13,25 +13,17 @@ public class WeaponSniper : WeaponInHand
     {
         return !_isFiring && !_isReloading && !IsHolstered;
     }
-    public override void ToggleScope()
-    {
-        base.ToggleScope();
-        _scopeLevel = (_scopeLevel + 1) % (_maxScopeLevel + 1);
-        SetThingsByScopeLevel(_scopeLevel);
-    }
+
     
     public override void FireBurst(out List<Vector3> directions)
     {
-        SetThingsByScopeLevel(0);
+        
         SetInspect(false);
         _identity.CurrentAmmo--;
         _isFiring = true;
         HitScan(out directions);
         _recoilValue = 1;
-        Camera.main.GetComponent<CameraShake>().ShakeTo(
-            GetClampedRecoilRot(-5),
-            0.05f,
-            _identity.Data.RecoilRecoveryDuration.Evaluate(1));
+
         // _cRecoilRecovery = StartCoroutine(RecoilRecovery());
         StartCoroutine(FireReady());
     }
@@ -42,7 +34,7 @@ public class WeaponSniper : WeaponInHand
     private IEnumerator FireReady()
     {
         yield return new WaitForSeconds(_identity.Data.FireDelay);
-        SetThingsByScopeLevel(_scopeLevel);
+
         _recoilValue = 0;
         _isFiring = false;
     }
@@ -50,7 +42,7 @@ public class WeaponSniper : WeaponInHand
     {
         base.StartReload();
         _scopeLevel = 0;
-        SetThingsByScopeLevel(0);
+
     }
     public override void SetInspect(bool inspect)
     {
@@ -58,7 +50,7 @@ public class WeaponSniper : WeaponInHand
         if (inspect)
         {
             _scopeLevel = 0;
-            SetThingsByScopeLevel(0);
+
         }
     }
 }

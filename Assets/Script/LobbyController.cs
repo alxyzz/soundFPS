@@ -154,30 +154,6 @@ public class LobbyController : MonoBehaviour
 
 
 
-<<<<<<< Updated upstream
-        if (_isOwner)
-        {
-            if (CanStartGame())
-            {
-                Debug.Log("Can start game!");
-                SteamMatchmaking.SetLobbyJoinable(_lobbyId, true);
-                SteamMatchmaking.SetLobbyData(_lobbyId, SteamLobby.keyGameStarted, "1");
-
-
-                MyNetworkManager.singleton.StartGame();
-            }
-        }
-        else
-        {
-            _isReady = !_isReady;
-            SteamMatchmaking.SetLobbyMemberData(
-                _lobbyId,
-                SteamLobby.keyReady,
-                _isReady ? "1" : "0");
-            _btnStartReady.GetComponentInChildren<TextMeshProUGUI>().SetText(_isReady ? "Unready" : "Ready");
-        }
-    }
-=======
     //public void StartOrReady()
     //{
     //    if (SteamMatchmaking.GetLobbyData(_lobbyId, SteamLobby.keyGameStarted) != "0")
@@ -208,5 +184,4 @@ public class LobbyController : MonoBehaviour
 
     //    }
     //}
->>>>>>> Stashed changes
 }

@@ -8,9 +8,11 @@ using UnityEngine.UI;
 public class MainMenuUI : MonoBehaviour
 {
     [SerializeField] private TMP_InputField _ifLobbyId;
+    [SerializeField] GameObject grid;
     private void Start()
     {
         SteamLobby.Instance.onRecoverUI += () => { SetChildrenEnabled(true); };
+        EpilepsyMenu.SetActive(true);
     }
     private void SetChildrenEnabled(bool enabled)
     {
@@ -38,4 +40,23 @@ public class MainMenuUI : MonoBehaviour
             SetChildrenEnabled(true);
         }
     }
+
+    [SerializeField] GameObject EpilepsyMenu;
+    [SerializeField] AnimateGridMaterialWithSound menuScript;
+    public void onClickEpilepticYes()
+    {
+        menuScript.started = true;
+        menuScript.epilepsy = true;
+        EpilepsyMenu.SetActive(false);
+        grid.GetComponent<Animator>().enabled = false;
+
+    }
+
+    public void onClickEpilepticNo()
+    {
+        menuScript.started = true;
+        menuScript.epilepsy = false;
+        EpilepsyMenu.SetActive(false);
+    }
+
 }

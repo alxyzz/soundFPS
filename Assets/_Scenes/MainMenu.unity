@@ -41295,6 +41295,7 @@ GameObject:
   - component: {fileID: 749501881}
   - component: {fileID: 749501885}
   - component: {fileID: 749501886}
+  - component: {fileID: 749501887}
   m_Layer: 5
   m_Name: Main Menu Canvas
   m_TagString: Untagged
@@ -41420,22 +41421,41 @@ MonoBehaviour:
   audioSource: {fileID: 1986097667}
   titleText: {fileID: 1679317748}
   MaterialToAnimate: {fileID: 2100000, guid: 1d730623f28132a4f90d216f8cd1eaf7, type: 2}
+  soundAnalyzer: {fileID: 749501887}
   b_host: {fileID: 1830152244}
   b_settings: {fileID: 169678262}
   b_credits: {fileID: 37386505}
   b_quit: {fileID: 1518682096}
   frequencyStartHz: 20
-  range_host: 60
-  range_settings: 100
-  range_credits: 200
-  range_quit: 2000
+  range_end_host: 120
+  range_end_settings: 250
+  range_end_credits: 300
+  range_end_quit: 500
+  barDecayValue: 0.25
+  barGrowMultiplier: 3
+  barLerpStep: 0.1
   epilepsy: 0
   started: 0
   sunLight: {fileID: 1286940618}
   onBeatSunColorModifier: 0
-  updateStep: 0.1
+  updateStep: 0.25
   sampleDataLength: 1024
   clipLoudnessBeatDetectionThreshold: 0.11
+--- !u!114 &749501887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 749501880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 409035dd39741ae41b8cdcc8cee14d8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RmsValue: 0
+  DbValue: 0
+  PitchValue: 0
 --- !u!1 &749715889
 GameObject:
   m_ObjectHideFlags: 0

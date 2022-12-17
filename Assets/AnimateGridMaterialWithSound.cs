@@ -1,16 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class AnimateGridMaterialWithSound : MonoBehaviour
 {
     [Header("References")]
-    public AudioSource audioSource;
-    public TMPro.TextMeshProUGUI titleText;
-    public Material MaterialToAnimate;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] TMPro.TextMeshProUGUI titleText;
+    [SerializeField] Material MaterialToAnimate;
     private Material originalMat;
-
+    [SerializeField] SpectrumAnalyzer soundAnalyzer;
 
     //sound spectrum animation stuff
     [Header("Sound Visualization")]
@@ -26,10 +24,20 @@ public class AnimateGridMaterialWithSound : MonoBehaviour
     [SerializeField] float range_end_settings;
     [SerializeField] float range_end_credits;
     [SerializeField] float range_end_quit;
+    [SerializeField] float barDecayValue;
+    [SerializeField] float barGrowMultiplier;
+    [SerializeField] float barLerpStep;
+
+
+
+    float targetWidth_host;
+    float targetWidth_settings;
+    float targetWidth_credits;
+    float targetWidth_quit;
 
     //range starts at frequencyStart then each additional range adds on top of that
     [Header("Settings")]
-    [HideInInspector]public bool epilepsy;
+    [HideInInspector] public bool epilepsy;
     [HideInInspector] public bool started;
 
 
@@ -48,21 +56,55 @@ public class AnimateGridMaterialWithSound : MonoBehaviour
     private float[] clipSampleData;
 
 
+    RectTransform b_hostRect;
+    RectTransform b_settingsRect;
+    RectTransform b_creditsRect;
+    RectTransform b_quitRect;
 
 
 
-    private void ButtonVisualizeSound(float[] soundData, Button btn, float range, float start)
+    /// <summary>
+    /// 1. check if sound was higher in that frequency
+    /// 2. if it was, we grow the relevant bar target
+    /// 3. if it was not, we decay the relevant bar target
+    /// 4. on update, we lerp the bar width to the bar target
+    /// </summary>
+
+    private void ButtonVisualizeSound()
     {
 
-
-
+        b_hostRect.sizeDelta = new Vector2(Mathf.Clamp(Mathf.Lerp(b_hostRect.sizeDelta.x, targetWidth_host, barLerpStep), 125, 860), b_hostRect.sizeDelta.y);
+        b_settingsRect.sizeDelta = new Vector2(Mathf.Clamp(Mathf.Lerp(b_settingsRect.sizeDelta.x, targetWidth_settings, barLerpStep), 125, 860), b_hostRect.sizeDelta.y);
+        b_creditsRect.sizeDelta = new Vector2(Mathf.Clamp(Mathf.Lerp(b_creditsRect.sizeDelta.x, targetWidth_credits, barLerpStep), 125, 860), b_hostRect.sizeDelta.y);
+        b_quitRect.sizeDelta = new Vector2(Mathf.Clamp(Mathf.Lerp(b_quitRect.sizeDelta.x, targetWidth_quit, barLerpStep), 125, 860), b_hostRect.sizeDelta.y);
     }
 
 
 
+    private float GetWidthTarget(float sound, Button btn, float rangeStart, float rangeEnd)
+    {
+
+        
+        if (inRange(rangeStart, rangeEnd, sound))
+        {
+            return sound * barGrowMultiplier;
+        }
+        else
+        {
+            return 105; //starts to decay
+        }
+    }
 
 
 
+    private bool inRange(float min, float max, float value)
+    {
+        if (value >= min && value < max)
+        {
+            return true;
+        }
+        else return false;
+    }
     // Use this for initialization
     void Awake()
     {
@@ -71,16 +113,25 @@ public class AnimateGridMaterialWithSound : MonoBehaviour
         originalMat = MaterialToAnimate;
         if (!audioSource)
         {
-            Debug.LogError(GetType() + ".Awake: there was no audioSource set.");
+            Debug.LogError(GetType() + "AnimateGridMaterialWithSound.Awake: there was no audioSource set.");
         }
         clipSampleData = new float[sampleDataLength];
 
-    }
 
+        b_hostRect = b_host.GetComponent<RectTransform>();
+        b_settingsRect = b_settings.GetComponent<RectTransform>();
+        b_creditsRect = b_credits.GetComponent<RectTransform>();
+        b_quitRect = b_quit.GetComponent<RectTransform>();
+
+        soundAnalyzer.SetAudio(audioSource);
+
+
+
+    }
     // Update is called once per frame
     void Update()
     {
-        
+
         if (epilepsy || !started)
         {
             return;
@@ -99,11 +150,10 @@ public class AnimateGridMaterialWithSound : MonoBehaviour
 
             clipLoudness /= sampleDataLength; //clipLoudness is what you are looking for
 
+            //we get the data
+           
 
-            ButtonVisualizeSound(clipSampleData, b_host, range_end_host, frequencyStartHz);
-            ButtonVisualizeSound(clipSampleData, b_settings, range_end_settings, range_end_host);
-            ButtonVisualizeSound(clipSampleData, b_credits, range_end_credits, range_end_settings);
-            ButtonVisualizeSound(clipSampleData, b_quit, range_end_quit, range_end_credits);
+
 
 
             if (clipLoudness > clipLoudnessBeatDetectionThreshold)
@@ -118,11 +168,22 @@ public class AnimateGridMaterialWithSound : MonoBehaviour
                 MaterialToAnimate.SetColor("_UnlitColor", Color.white);
                 titleText.color = Color.white;
             }
-            
+
 
             //Debug.LogWarning("clipLoudness ->" + clipLoudness);
         }
-        
+        //outside the period for smoother look
+        float b = soundAnalyzer.AnalyzeSound();
+
+        //we set the target widths for each
+        targetWidth_host = GetWidthTarget(b, b_host, frequencyStartHz, range_end_host);
+        targetWidth_settings = GetWidthTarget(b, b_settings, range_end_host, range_end_settings);
+        targetWidth_credits = GetWidthTarget(b, b_credits, range_end_settings, range_end_credits);
+        targetWidth_quit = GetWidthTarget(b, b_quit, range_end_credits, range_end_quit);
+
+        //we act accordingly
+        ButtonVisualizeSound();
+
     }
 
 

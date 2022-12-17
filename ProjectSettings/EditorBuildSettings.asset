@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/MAPBLOCKOUT.unity
     guid: e1ef68a1877a4c145aaf024ec382c059
+  - enabled: 1
+    path: Assets/_Scenes/MainMap.unity
+    guid: fb2f0f4c2dca72c4bb5c35caff8d007c
   m_configObjects: {}

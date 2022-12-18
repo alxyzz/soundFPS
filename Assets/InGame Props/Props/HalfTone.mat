@@ -160,7 +160,7 @@ Material:
     - _CullMode: 2
     - _CullModeForward: 2
     - _Cutoff: 0.5
-    - _Density: 14.7
+    - _Density: 60
     - _DepthOffsetEnable: 0
     - _DetailAlbedoScale: 1
     - _DetailNormalScale: 1
@@ -182,8 +182,8 @@ Material:
     - _EnableFogOnTransparent: 1
     - _EnableGeometricSpecularAA: 0
     - _EnergyConservingSpecularColor: 1
-    - _First_Edge: 3.55
-    - _Fresnel: 80.13
+    - _First_Edge: 1.07
+    - _Fresnel: 1.2
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5
     - _HeightMapParametrization: 0
@@ -202,10 +202,10 @@ Material:
     - _Metallic: 0
     - _MetallicRemapMax: 1
     - _MetallicRemapMin: 0
-    - _Mul: 0.54
+    - _Mul: 6.1
     - _NormalMapSpace: 0
     - _NormalScale: 1
-    - _Offset: -18.41
+    - _Offset: -0.26
     - _OpaqueCullMode: 2
     - _PPDLodThreshold: 5
     - _PPDMaxSamples: 15
@@ -218,7 +218,7 @@ Material:
     - _RefractionModel: 0
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
-    - _ShadowThreshold: 0.2
+    - _ShadowThreshold: -0.14
     - _Smoothness: 0.5
     - _SmoothnessRemapMax: 1
     - _SmoothnessRemapMin: 0
@@ -241,7 +241,7 @@ Material:
     - _SurfaceType: 0
     - _TexWorldScale: 1
     - _TexWorldScaleEmissive: 1
-    - _Thickness: 1
+    - _Thickness: 0.31
     - _TransmissionEnable: 1
     - _TransparentBackfaceEnable: 0
     - _TransparentCullMode: 2
@@ -272,9 +272,10 @@ Material:
     - _EmissiveColorLDR: {r: 0, g: 0, b: 0, a: 1}
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
-    - _Light_Stuff: {r: 121.58, g: 219.4, b: -51.2, a: 0}
-    - _MainColor: {r: 0.5059005, g: 0.23113209, b: 1, a: 0}
+    - _Light_Stuff: {r: 50.9, g: 66.8, b: 81.8, a: 0}
+    - _MainColor: {r: 0.35714293, g: 0, b: 1, a: 0}
     - _Mul: {r: 0.93, g: 4.06, b: 0, a: 0}
+    - _OutLine_Color: {r: 0, g: 0, b: 0, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _ThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _TransmittanceColor: {r: 1, g: 1, b: 1, a: 1}

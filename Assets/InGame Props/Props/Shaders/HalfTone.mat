@@ -273,7 +273,7 @@ Material:
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _Light_Stuff: {r: 50.9, g: 66.8, b: 81.8, a: 0}
-    - _MainColor: {r: 0.35714293, g: 0, b: 1, a: 0}
+    - _MainColor: {r: 0, g: 0.50251865, b: 1, a: 0}
     - _Mul: {r: 0.93, g: 4.06, b: 0, a: 0}
     - _OutLine_Color: {r: 0, g: 0, b: 0, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}

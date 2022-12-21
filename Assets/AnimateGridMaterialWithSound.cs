@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using GD.MinMaxSlider;
 
 public class AnimateGridMaterialWithSound : MonoBehaviour
 {
@@ -20,10 +21,19 @@ public class AnimateGridMaterialWithSound : MonoBehaviour
     [SerializeField] float frequencyStartHz;
 
     [HideInInspector] float startButtonWidth;
-    [SerializeField] float range_end_host;
-    [SerializeField] float range_end_settings;
-    [SerializeField] float range_end_credits;
-    [SerializeField] float range_end_quit;
+
+    [Header("Frequency Ranges (in Hertz)")]
+    [MinMaxSlider(20, 15000)]
+    [SerializeField]Vector2 frequencyRange_host;
+    [MinMaxSlider(20, 15000)]
+    [SerializeField] Vector2 frequencyRange_settings;
+    [MinMaxSlider(20, 15000)]
+    [SerializeField] Vector2 frequencyRange_credits;
+    [MinMaxSlider(20, 15000)]
+    [SerializeField] Vector2 frequencyRange_quit;
+
+
+
     [SerializeField] float barDecayValue;
     [SerializeField] float barGrowMultiplier;
     [SerializeField] float barLerpStep;
@@ -176,10 +186,10 @@ public class AnimateGridMaterialWithSound : MonoBehaviour
         float b = soundAnalyzer.AnalyzeSound();
 
         //we set the target widths for each
-        targetWidth_host = GetWidthTarget(b, b_host, frequencyStartHz, range_end_host);
-        targetWidth_settings = GetWidthTarget(b, b_settings, range_end_host, range_end_settings);
-        targetWidth_credits = GetWidthTarget(b, b_credits, range_end_settings, range_end_credits);
-        targetWidth_quit = GetWidthTarget(b, b_quit, range_end_credits, range_end_quit);
+        targetWidth_host = GetWidthTarget(b, b_host, frequencyRange_host.x, frequencyRange_host.y);
+        targetWidth_settings = GetWidthTarget(b, b_settings, frequencyRange_settings.x, frequencyRange_settings.y);
+        targetWidth_credits = GetWidthTarget(b, b_credits, frequencyRange_credits.x, frequencyRange_credits.y);
+        targetWidth_quit = GetWidthTarget(b, b_quit, frequencyRange_quit.x, frequencyRange_quit.y);
 
         //we act accordingly
         ButtonVisualizeSound();

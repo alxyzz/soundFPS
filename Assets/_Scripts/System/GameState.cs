@@ -25,13 +25,73 @@ public enum GameStage
  * The Game State is responsible for enabling the clients to monitor the state of the game.
  * Conceptually, the Game State should manage information that is meant to be known to all connected clients.
  */
+
+
+
 public class GameState : NetworkBehaviour
 {
+
+    public float BeatsPerMinute;
+
+
+    public void SetBPM()
+    {
+
+    }
+
+    public void GetBPM()
+    {
+
+
+    }
+
+    public void StartBeat()
+    {
+        if (isLocalPlayer)
+        {
+            Debug.Log("GameState.StartBeat() ran on local player.");
+            return;
+        }
+        Debug.Log("GameState.StartBeat() ran on server.");
+        InvokeRepeating("FourFourBeat", 0.01f, 4f);
+    }
+    //because this runs on the server, it should make sure that even if there are newcomers, the beat remote procedure call will apply to them
+    IEnumerator FourFourBeat()
+    {
+        yield return new WaitForSecondsRealtime(4f);
+        ServersideBeat();
+        ClientsideBeat();
+    }
+
+
+
+    [ClientRpc]
+    public void ClientsideBeat()
+    {
+        Debug.Log("GameState.ClientsideBeat().beat happened on client");
+    }
+
+    private void ServersideBeat()
+    {
+
+        if (isLocalPlayer)
+        {
+            Debug.Log("GameState.ServersideBeat().beat happened on client");
+            return;
+        }
+        Debug.Log("GameState.ServersideBeat().beat happened on server");
+    }
+
+
+
+
+
+
     public override void OnStartServer()
     {
         Debug.Log("Game state OnStartServer.");
         instance = this;
-        SteamLobby.Instance.onLobbyChatUpdate += OnLobbyChatUpdate;
+
     }
 
     public override void OnStartClient()
@@ -41,7 +101,7 @@ public class GameState : NetworkBehaviour
         // _playerNetIds
         foreach (var item in playerDic)
         {
-            UI_GameHUD.Instance.AddPlayerToStatistics(item.Value);           
+            UI_GameHUD.Instance.AddPlayerToStatistics(item.Value);
         }
         playerDic.Callback += PlayerDic_Callback;
     }
@@ -95,7 +155,7 @@ public class GameState : NetworkBehaviour
             case GameStage.READY:
                 break;
             case GameStage.PLAYING:
-                if (null != LocalGame.Instance.onClientGameStarted)
+                if (LocalGame.Instance.onClientGameStarted != null)
                 {
                     LocalGame.Instance.onClientGameStarted.Invoke();
                 }
@@ -105,7 +165,7 @@ public class GameState : NetworkBehaviour
                 break;
             default:
                 break;
-        }  
+        }
     }
 
     public readonly SyncDictionary<ulong, uint> playerDic = new SyncDictionary<ulong, uint>();
@@ -219,7 +279,7 @@ public class GameState : NetworkBehaviour
             {
                 return identity.TryGetComponent(out ps);
             }
-        }        
+        }
         return false;
     }
     public bool TryGetPlayerStateByNetId(uint netId, out PlayerState ps)
@@ -244,7 +304,7 @@ public class GameState : NetworkBehaviour
                 if (identity.TryGetComponent(out PlayerState ps))
                 {
                     results.Add(ps);
-                }                
+                }
             }
         }
         return results;

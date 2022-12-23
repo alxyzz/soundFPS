@@ -10,11 +10,11 @@ public class WID_Info : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _tmpName;
     [SerializeField] private TextMeshProUGUI _tmpDetails;
 
-    public void Initialise(Transform following, string wpnName, int curAmmo, int backupAmmo, WeaponRangeType type)
+    public void Initialise(Transform following, string wpnName, int curAmmo, int backupAmmo)
     {
         Following = following;
         _tmpName.SetText(wpnName);
-        _tmpDetails.SetText($"AMMO: <#FFF200>{curAmmo} / {backupAmmo}</color>\n{type}");
+        _tmpDetails.SetText($"AMMO: <#FFF200>{curAmmo} / {backupAmmo}</color>");
     }
 
     void Update()

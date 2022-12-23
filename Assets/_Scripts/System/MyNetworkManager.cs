@@ -180,6 +180,7 @@ public class MyNetworkManager : NetworkManager
         {
             Debug.Log($"Client scene changed to {SceneManager.GetActiveScene().name}");
             NetworkClient.AddPlayer();
+
         }
     }
     #endregion

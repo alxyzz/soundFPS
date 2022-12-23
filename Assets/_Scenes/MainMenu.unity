@@ -114440,12 +114440,12 @@ PrefabInstance:
     - target: {fileID: 8148686590251316528, guid: 856c3e986636cf64389bcf8b2574ee22,
         type: 3}
       propertyPath: gameScene
-      value: Assets/_Scenes/MAPBLOCKOUT.unity
+      value: Assets/_Scenes/MainMap.unity
       objectReference: {fileID: 0}
     - target: {fileID: 8148686590251316528, guid: 856c3e986636cf64389bcf8b2574ee22,
         type: 3}
       propertyPath: onlineScene
-      value: Assets/_Scenes/MAPBLOCKOUT.unity
+      value: Assets/_Scenes/MainMap.unity
       objectReference: {fileID: 0}
     - target: {fileID: 8148686590251316528, guid: 856c3e986636cf64389bcf8b2574ee22,
         type: 3}

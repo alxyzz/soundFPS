@@ -73,6 +73,9 @@ public class PlayerState : NetworkBehaviour, IDamageable
     private readonly int _aUnholster = Animator.StringToHash("Unholster");
     private readonly int _aInspect = Animator.StringToHash("Inspect");
     private readonly int _aUninspect = Animator.StringToHash("Uninspect");
+    public bool isFiring;
+
+    private List<WeaponInHand> weaponInventory = new();
 
     [Header("General Settings")]
     [SerializeField] private LayerMask _shootingLayer;
@@ -101,7 +104,7 @@ public class PlayerState : NetworkBehaviour, IDamageable
     [SyncVar][HideInInspector] private int _curWpnIndex = -1;
     // [SyncVar(hook = nameof(OnCurWpnDbIndexChanged))][HideInInspector] public int curWpnDbIndex = -1;
 
-    public WeaponIdentityData[] inventoryWeapons = new WeaponIdentityData[3];
+    public WeaponIdentityData[] inventoryWeapons = new WeaponIdentityData[3]; //4 weapons
     public WeaponIdentityData CurrentWeaponIdentity
     {
         get
@@ -143,8 +146,7 @@ public class PlayerState : NetworkBehaviour, IDamageable
             }
             _curWpnObj.GetComponent<WeaponInHand>().Init(CurrentWeaponIdentity, GetComponent<LocalPlayerController>());
 
-            UI_GameHUD.SetCrosshairActive(data.Type != WeaponType.SNIPER);
-            UI_GameHUD.ActiveInventorySlot((int)data.RangeType);
+            
             UI_GameHUD.SetAmmo(ammo);
             UI_GameHUD.SetBackupAmmo(backupAmmo);
             UI_GameHUD.SetCrosshairWeaponSpread(data.CrosshairSpread);
@@ -156,46 +158,30 @@ public class PlayerState : NetworkBehaviour, IDamageable
         }
     }
 
-    public void PickUpWeapon(WeaponData data, int currentAmmo, int backupAmmo) // only called on the client
+    public void PickUpWeapon(WeaponData data, int currentAmmo, int backupAmmo) // only called on the client in order to replenish the equivalent weapon's ammo when entering a weapon pickup's collider
     {
-        UI_GameHUD.SetNewWeapon((int)data.RangeType, data.WeaponName);
+        UI_GameHUD.SetNewWeapon(data.WeaponID ,data.WeaponName);
 
-        if (inventoryWeapons[(int)data.RangeType] != null)
+        if (inventoryWeapons[data.WeaponID] != null)
         {
-            ThrowWeapon(inventoryWeapons[(int)data.RangeType].Data.WeaponName,
-                    transform.position + Vector3.up + transform.forward,
-                    inventoryWeapons[(int)data.RangeType].CurrentAmmo,
-                    inventoryWeapons[(int)data.RangeType].BackupAmmo);
+            inventoryWeapons[data.WeaponID].AddAmmo(currentAmmo + backupAmmo);
         }
-        inventoryWeapons[(int)data.RangeType] = new WeaponIdentityData(data, currentAmmo, backupAmmo);
+        inventoryWeapons[data.WeaponID] = new WeaponIdentityData(data, currentAmmo, backupAmmo);
+
+        if (!isHoldingWeapon())
+        {
+            GetComponent<LocalPlayerController>().SetFirstPersonVisible(true);
+            EquipWeaponByIndex((int)data.WeaponID);
+        }
+        return;
+    }
+    private bool isHoldingWeapon()
+    {
 
         if (_curWpnIndex < 0)
         {
-            GetComponent<LocalPlayerController>().SetFirstPersonVisible(true);
-            EquipAt((int)data.RangeType);
-        }
-        else if (_curWpnIndex == (int)data.RangeType)
-        {
-            EquipAt((int)data.RangeType);
-        }
-
-        return;
-    }
-    public void TryThrowCurrentWeapon()
-    {
-
-    }
-    public void ThrowWeapon(string weaponName, Vector3 position, int currentAmmo, int backupAmmo)
-    {
-        LevelManager.Instance.CmdSpawnWeaponOverworld(weaponName, position, currentAmmo, backupAmmo);
-    }
-    public void ThrowWeapon(WeaponIdentityData identity)
-    {
-        LevelManager.Instance.CmdSpawnWeaponOverworld(
-            identity.Data.WeaponName,
-            transform.position + Vector3.up + transform.forward,
-            identity.CurrentAmmo,
-            identity.BackupAmmo);
+            return false;
+        } return true;
     }
 
     [Command]
@@ -208,24 +194,12 @@ public class PlayerState : NetworkBehaviour, IDamageable
         }
     }
 
-    public void FireBurst()
+   
+
+
+    public void Shoot()
     {
-        if (CurrentWeaponInHand != null && CurrentWeaponInHand.CanFireBurst())
-        {
-            PlayWeaponFireSound(CurrentWeaponDatabaseIndex);
-            _charaAnimHandler.FpSetTrigger(_aFire);
-            _charaAnimHandler.CmdTpSetTrigger(_aFire);
-
-            CurrentWeaponInHand.FireBurst(out List<Vector3> directions);
-            UI_GameHUD.SetAmmo(CurrentWeaponIdentity.CurrentAmmo);
-
-            CmdFire(CurrentWeaponDatabaseIndex, Camera.main.transform.position, directions);
-        }
-
-    }
-    public void FireContinuously()
-    {
-        if (CurrentWeaponInHand != null && CurrentWeaponInHand.CanFireContinuously())
+        if (CurrentWeaponInHand != null && CurrentWeaponInHand._CanFire)
         {
             PlayWeaponFireSound(CurrentWeaponDatabaseIndex);
             _charaAnimHandler.FpSetTrigger(_aFire);
@@ -244,12 +218,11 @@ public class PlayerState : NetworkBehaviour, IDamageable
     {
         if (CurrentWeaponInHand != null && CurrentWeaponInHand.CanToggleScope())
         {
-            EndInspectImmediately();
             CurrentWeaponInHand.ToggleScope();
         }        
     }
 
-    public void EquipAt(int index) // only called on the client
+    public void EquipWeaponByIndex(int index) // only called on the client
     {
         if (inventoryWeapons[index] != null)
         {
@@ -301,24 +274,14 @@ public class PlayerState : NetworkBehaviour, IDamageable
                         }
                     }
                     else dmg = wpn.BaseDamage;
-                    dmg *= wpn.GetDistanceAttenuation(hits[i].distance);
+                   
                     d.ApplyDamage(Mathf.Max(0, Mathf.RoundToInt(dmg * attenuation)), this, wpn, DamageType.SHOOT);
                 }
 
                 // Temperory: spawn decal               
                 GameObject obj = Instantiate(Resources.Load<GameObject>("test"), hits[i].point, Quaternion.identity);
                 NetworkServer.Spawn(obj);
-
-                //// Calculate Attenuation
-                //if (hits[i].transform.TryGetComponent(out IPenetrable p))
-                //{
-                //    attenuation = p.GetAttenuation(attenuation, wpn);
-                //}
-                //else
-                //{
-                //    // If cannot penetrate, then break
-                //    break;
-                //}
+                
             }
         }
     }
@@ -342,7 +305,7 @@ public class PlayerState : NetworkBehaviour, IDamageable
             k = (_curWpnIndex + inventoryWeapons.Length + val * i) % inventoryWeapons.Length;
             if (inventoryWeapons[k] != null)
             {
-                EquipAt(k);
+                EquipWeaponByIndex(k);
                 break;
             }
         }
@@ -486,28 +449,6 @@ public class PlayerState : NetworkBehaviour, IDamageable
     private void OnKillsChanged(int oldKill, int newKill) { onKillsChanged?.Invoke(newKill); }
     #endregion
 
-    #region Inspect
-    public void Inspect()
-    {
-        if (CurrentWeaponInHand != null && CurrentWeaponInHand.CanInspect())
-        {
-            CurrentWeaponInHand?.SetInspect(true);
-            _charaAnimHandler?.FpResetTrigger(_aUninspect);
-            _charaAnimHandler?.FpSetTrigger(_aInspect);
-        }
-    }
-    public void EndInspect()
-    {
-        CurrentWeaponInHand?.SetInspect(false);
-    }
-    public void EndInspectImmediately()
-    {
-
-        CurrentWeaponInHand?.SetInspect(false);
-        _charaAnimHandler?.FpResetTrigger(_aInspect);
-        _charaAnimHandler?.FpSetTrigger(_aUninspect);
-    }
-    #endregion
     public bool IsAlive => _health > 0;
     // public Action onDied;
     [ClientRpc]
@@ -520,13 +461,6 @@ public class PlayerState : NetworkBehaviour, IDamageable
         {
             _charaAnimHandler.CmdTpSetLayerWeight(1, 0);
             _charaAnimHandler.CmdTpSetTrigger(Animator.StringToHash("Dead"));
-            for (int i = 0; i < inventoryWeapons.Length; i++)
-            {
-                if (null != inventoryWeapons[i])
-                {
-                    ThrowWeapon(inventoryWeapons[i]);
-                }
-            }
             GetComponent<LocalPlayerController>().Die();
         }
     }

@@ -5,27 +5,22 @@ using UnityEngine;
 
 public enum WeaponType
 {
-    RIFLE,
-    PISTOL,
-    SHOTGUN,
-    SNIPER
+    PROJECTILE,
+    HITSCAN
 }
-public enum WeaponRangeType
-{
-    SHORT,
-    MEDIUM,
-    LONG
-}
+
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Data/Weapon")]
 public class WeaponData : ScriptableObject
 {
     [Header("General")]
     [SerializeField] private string _weaponName;
+    [SerializeField] private int _weaponID; //the order of the weapon in the inventory. must be unique
     public string WeaponName => _weaponName;
+    public int WeaponID => _weaponID;
+
     [SerializeField] private WeaponType _type;
     public WeaponType Type => _type;
-    [SerializeField] private WeaponRangeType _rangeType;
-    public WeaponRangeType RangeType => _rangeType;
+    
     //[SerializeField] private float _effectiveRange;
     //public float EffectiveRange => _effectiveRange;
     [SerializeField] private float _maxRange;
@@ -94,17 +89,6 @@ public class WeaponData : ScriptableObject
     public float DamageArm => _baseDamage * _dmgArmMultiplier;
     public float DamageThigh => _baseDamage * _dmgThighMultiplier;
     public float DamageCalf => _baseDamage * _dmgCalfMultiplier;
-    [SerializeField] private AnimationCurve _distanceAttenuation = AnimationCurve.EaseInOut(0, 1, 1, 0);
-    public float GetDistanceAttenuation(float distance)
-    {
-        return _distanceAttenuation.Evaluate(Mathf.Clamp01(distance / MaxRange));        
-    }
-    [Tooltip("WOOD, STONE, METAL, GLASS, WATER, HUMAN")]
-    [SerializeField] private float[] _PenetrationAttenuation = new float[6];
-    public float GetPenetrationAttenuation(PenetrableMaterial mat)
-    {
-        return _PenetrationAttenuation[(int)mat];
-    }
 
     [Header("Reload")]
     [SerializeField] private float _reloadMultiplier;

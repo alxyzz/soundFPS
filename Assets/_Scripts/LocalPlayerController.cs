@@ -87,6 +87,7 @@ public class LocalPlayerController : NetworkBehaviour
     public CharacterMovement CharaMovementComp => _charaMovement;
     private PlayerState _playerState;
 
+
     [Header("Settings")]
     [SerializeField] private float _mouseSensitivity = 2.0f;
     public float MouseSensitivityMultiplier { get; set; } = 1.0f;
@@ -150,7 +151,7 @@ public class LocalPlayerController : NetworkBehaviour
         UpdateFireInput();
         UpdateChangeWeaponInput();
         UpdateReloadInput();
-        UpdateInspectInput();
+
         UpdateScopeInput();
 
         CheckInteractable();
@@ -297,18 +298,20 @@ public class LocalPlayerController : NetworkBehaviour
     #region Weapon
     private void UpdateFireInput()
     {
-        if (Input.GetButtonDown("Fire1"))
-        {
-            _playerState.FireBurst();
-        }
-        else if (Input.GetButton("Fire1"))
-        {
-            _playerState.FireContinuously();
-        }
-        else if (Input.GetButtonUp("Fire1"))
-        {
-            _playerState.FireStop();
-        }
+
+        _playerState.isFiring = Input.GetButtonDown("Fire1");
+        //if (I)
+        //{
+        //    _playerState.FireBurst();
+        //}
+        //else if (Input.GetButton("Fire1"))
+        //{
+        //    _playerState.FireContinuously();
+        //}
+        //else if (Input.GetButtonUp("Fire1"))
+        //{
+        //    _playerState.FireStop();
+        //}
     }
     private void UpdateChangeWeaponInput()
     {
@@ -316,11 +319,11 @@ public class LocalPlayerController : NetworkBehaviour
         if (val != 0)
             _playerState.EquipScroll((int)val);
         else if (Input.GetKeyDown(KeyCode.Alpha1))
-            _playerState.EquipAt(0);
+            _playerState.EquipWeaponByIndex(0);
         else if (Input.GetKeyDown(KeyCode.Alpha2))
-            _playerState.EquipAt(1);
+            _playerState.EquipWeaponByIndex(1);
         else if (Input.GetKeyDown(KeyCode.Alpha3))
-            _playerState.EquipAt(2);
+            _playerState.EquipWeaponByIndex(2);
     }
     private void UpdateReloadInput()
     {
@@ -345,19 +348,8 @@ public class LocalPlayerController : NetworkBehaviour
     }
     #endregion
 
-    #region Inspect
-    private void UpdateInspectInput()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            _playerState.Inspect();
-        }
-        else if (Input.GetKeyUp(KeyCode.F))
-        {
-            GetComponentInChildren<FpAnimEventHandler>().ResetInspectMultiplier();
-        }
-    }
-    #endregion
+ 
+
     [Header("Death")]
     [SerializeField] private Transform _spectator;
     [SerializeField] private float _deathLerpDuration = 1.5f;

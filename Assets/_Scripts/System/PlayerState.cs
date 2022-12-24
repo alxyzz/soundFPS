@@ -15,8 +15,17 @@ public class RaycastHitComparer : IComparer<RaycastHit>
     }
 }
 
+public enum DebugEquipWeapon
+{
+    Pistol,
+    Shotgun,
+    SMG
+
+}
+
+
 /* A Player State is the state of a participant in the game.
- * Some examples of player information that the Player State can contain include:
+ * Some examples of player information included:
  *   Name
  *   Current level
  *   Health
@@ -64,6 +73,8 @@ public class PlayerState : NetworkBehaviour, IDamageable
     [SerializeField] private Transform _fpSocketWeaponLeft;
     [SerializeField] private Transform _fpSocketWeaponRight;
     [SerializeField] private AudioSource _weaponAudioSource;
+    [SerializeField] private BeatHUD _beatHUDComponent;
+   
     // [SerializeField] private Animator _firstPersonAnimator;
     // [SerializeField] private Animator _thirdPersonAnimator;
     private List<IObserver> _observers = new List<IObserver>();
@@ -75,8 +86,12 @@ public class PlayerState : NetworkBehaviour, IDamageable
     private readonly int _aUninspect = Animator.StringToHash("Uninspect");
     public bool isFiring;
 
-    private List<WeaponInHand> weaponInventory = new();
+   
 
+    [HideInInspector]public DebugEquipWeapon startWeapon = DebugEquipWeapon.Pistol;
+
+    private List<WeaponInHand> weaponInventory = new();
+    
     [Header("General Settings")]
     [SerializeField] private LayerMask _shootingLayer;
 
@@ -156,6 +171,8 @@ public class PlayerState : NetworkBehaviour, IDamageable
             _curWpnObj = Instantiate(Resources.Load<GameObject>(path), _tpSocketWeaponRight);
             _curWpnObj.GetComponent<WeaponInHand>().Init(new WeaponIdentityData(data, 0, 0), null);
         }
+
+        Debug.Log("PlayerState.RpcEquipWeapon() done.");
     }
 
     public void PickUpWeapon(WeaponData data, int currentAmmo, int backupAmmo) // only called on the client in order to replenish the equivalent weapon's ammo when entering a weapon pickup's collider
@@ -175,6 +192,14 @@ public class PlayerState : NetworkBehaviour, IDamageable
         }
         return;
     }
+
+
+
+    public void GiveDebugWeapon()
+    {
+        RpcEquipWeapon(0, 30, 30);
+    }
+
     private bool isHoldingWeapon()
     {
 
@@ -464,4 +489,9 @@ public class PlayerState : NetworkBehaviour, IDamageable
             GetComponent<LocalPlayerController>().Die();
         }
     }
+
+
+
+
+
 }

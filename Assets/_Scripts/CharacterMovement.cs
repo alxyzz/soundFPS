@@ -45,17 +45,7 @@ public class CharacterMovement : NetworkBehaviour
             return _maxJogSpeed * weapon;
         }
     }
-    public float RecoilMultiplier
-    {
-        get
-        {
-            if (!IsOnGround) return 3.0f;
-            if (IsCrouching) return 0.7f;
-            if (IsWalking) return 0.9f;
-            if (_lastMovementInput != Vector3.zero) return _lastMovementInput.sqrMagnitude + 1.0f;
-            return 1.0f;
-        }
-    }
+    
     [SyncVar] private bool _isWalking;
     public bool IsWalking => _isWalking;
     [Command]

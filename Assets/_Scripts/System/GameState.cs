@@ -15,6 +15,9 @@ public enum GameStage
     PLAYING, // playing
     OVER // winner
 }
+
+
+
 /* When rule-related events in the game happen and need to be tracked and shared with all players,
  * that information is stored and synced through the Game State. This information can include:
  *   How long the game has been running (including running time before the local player joined).
@@ -27,11 +30,26 @@ public enum GameStage
  */
 public class GameState : NetworkBehaviour
 {
+    public bool Beating;
+
+
+
+    public void GivePeopleDebugWeapons()
+    {
+        Debug.Log("GameState.GivePeopleDebugWeapons() start.");
+        foreach (PlayerState item in GetPlayerStateList())
+        {
+            Debug.Log("GameState.GivePeopleDebugWeapons() - gave weapon to " + item);
+            item.GiveDebugWeapon();
+        }
+    }
+
     public override void OnStartServer()
     {
-        Debug.Log("Game state OnStartServer.");
+        Debug.Log("Game state OnStartServer.AAAAAAAAAAAAAAAAAAAAAAAA");
         instance = this;
         SteamLobby.Instance.onLobbyChatUpdate += OnLobbyChatUpdate;
+        GivePeopleDebugWeapons();
     }
 
     public override void OnStartClient()
@@ -42,6 +60,7 @@ public class GameState : NetworkBehaviour
         foreach (var item in playerDic)
         {
             UI_GameHUD.Instance.AddPlayerToStatistics(item.Value);           
+            
         }
         playerDic.Callback += PlayerDic_Callback;
     }

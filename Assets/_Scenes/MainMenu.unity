@@ -83994,7 +83994,7 @@ PrefabInstance:
     - target: {fileID: 4202021547995123198, guid: b1db6955b8d90f048be9871ec736255c,
         type: 3}
       propertyPath: _wpnDatabase.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4202021547995123198, guid: b1db6955b8d90f048be9871ec736255c,
         type: 3}
@@ -84021,6 +84021,12 @@ PrefabInstance:
       propertyPath: _footsteps.Array.data[4]
       value: 
       objectReference: {fileID: 8300000, guid: abe644f904b8e7043b3cd43285e77463, type: 3}
+    - target: {fileID: 4202021547995123198, guid: b1db6955b8d90f048be9871ec736255c,
+        type: 3}
+      propertyPath: _wpnDatabase.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 3f4444805366e254190c7395b2e1fe86,
+        type: 2}
     - target: {fileID: 4202021547995123199, guid: b1db6955b8d90f048be9871ec736255c,
         type: 3}
       propertyPath: m_Name
@@ -114456,13 +114462,24 @@ PrefabInstance:
         type: 3}
       propertyPath: playerPrefab
       value: 
-      objectReference: {fileID: 1683108570907877897, guid: d226aedd64f533c44a1d850e360de075,
+      objectReference: {fileID: 3497460100174721767, guid: 4863ad098fed9b940aa542e8fe679ac9,
         type: 3}
     - target: {fileID: 8148686590251316528, guid: 856c3e986636cf64389bcf8b2574ee22,
         type: 3}
       propertyPath: autoCreatePlayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8148686590251316528, guid: 856c3e986636cf64389bcf8b2574ee22,
+        type: 3}
+      propertyPath: spawnPrefabs.Array.size
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8148686590251316528, guid: 856c3e986636cf64389bcf8b2574ee22,
+        type: 3}
+      propertyPath: spawnPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 3497460100174721767, guid: 4863ad098fed9b940aa542e8fe679ac9,
+        type: 3}
     - target: {fileID: 8148686590251316529, guid: 856c3e986636cf64389bcf8b2574ee22,
         type: 3}
       propertyPath: m_RootOrder

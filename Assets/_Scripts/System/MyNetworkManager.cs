@@ -323,7 +323,7 @@ public class MyNetworkManager : NetworkManager
     [Scene] public string gameScene = "";
     public int numPlayerSpawnPoint;
     public void StartGame()
-    {
+    {   
         ServerChangeScene(gameScene);
     }
 }

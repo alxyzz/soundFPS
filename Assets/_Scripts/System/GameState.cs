@@ -71,7 +71,7 @@ public class GameState : NetworkBehaviour
         switch (op)
         {
             case SyncIDictionary<ulong, uint>.Operation.OP_ADD:
-                UI_GameHUD.Instance.AddPlayerToStatistics(item);
+                //UI_GameHUD.Instance.AddPlayerToStatistics(item);
                 UpdateConnectedPlayerNum();
                 break;
             case SyncIDictionary<ulong, uint>.Operation.OP_CLEAR:
@@ -98,7 +98,7 @@ public class GameState : NetworkBehaviour
     [Client]
     private void UpdateConnectedPlayerNum()
     {
-        UI_GameHUD.Instance.UpdateConnectedPlayerNum(playerDic.Count, SteamMatchmaking.GetNumLobbyMembers(SteamLobby.Instance.CurrentLobbyId));
+        //UI_GameHUD.Instance.UpdateConnectedPlayerNum(playerDic.Count, SteamMatchmaking.GetNumLobbyMembers(SteamLobby.Instance.CurrentLobbyId));
     }
 
     private static GameState instance;

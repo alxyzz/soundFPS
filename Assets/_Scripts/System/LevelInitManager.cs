@@ -10,6 +10,7 @@ public class LevelInitManager : NetworkBehaviour
         if (SteamLobby.Instance == null)
         {
             SceneManager.LoadScene("MainMenu");
+            Debug.LogWarning("LevelInitManager.Awake() - Steamlobby was null, going to main menu.");
             return;
         }
     }

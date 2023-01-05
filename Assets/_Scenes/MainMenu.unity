@@ -41427,10 +41427,10 @@ MonoBehaviour:
   b_credits: {fileID: 37386505}
   b_quit: {fileID: 1518682096}
   frequencyStartHz: 20
-  range_end_host: 120
-  range_end_settings: 250
-  range_end_credits: 300
-  range_end_quit: 500
+  frequencyRange_host: {x: 20, y: 120}
+  frequencyRange_settings: {x: 20, y: 250}
+  frequencyRange_credits: {x: 250, y: 350}
+  frequencyRange_quit: {x: 350, y: 500}
   barDecayValue: 0.25
   barGrowMultiplier: 3
   barLerpStep: 0.1
@@ -114440,12 +114440,12 @@ PrefabInstance:
     - target: {fileID: 8148686590251316528, guid: 856c3e986636cf64389bcf8b2574ee22,
         type: 3}
       propertyPath: gameScene
-      value: Assets/_Scenes/MAPBLOCKOUT.unity
+      value: Assets/_Scenes/MainMap.unity
       objectReference: {fileID: 0}
     - target: {fileID: 8148686590251316528, guid: 856c3e986636cf64389bcf8b2574ee22,
         type: 3}
       propertyPath: onlineScene
-      value: Assets/_Scenes/MAPBLOCKOUT.unity
+      value: Assets/_Scenes/MainMap.unity
       objectReference: {fileID: 0}
     - target: {fileID: 8148686590251316528, guid: 856c3e986636cf64389bcf8b2574ee22,
         type: 3}

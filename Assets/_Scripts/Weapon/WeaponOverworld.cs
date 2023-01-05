@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponOverworld : NetworkBehaviour, IInteractable
+public class WeaponOverworld : NetworkBehaviour
 {
     private GameObject _widget;
     [SerializeField] private WeaponData _data;
@@ -25,25 +25,34 @@ public class WeaponOverworld : NetworkBehaviour, IInteractable
 
     public void BeInteracted(PlayerState pState)
     {
-        pState.PickUpWeapon(_data, CurrentAmmo, BackupAmmo);
-        CmdDestroy();
+        
     }
 
 
-    public void EndBeingSeen()
+    private void OnTriggerEnter(Collider other)
     {
-        // Debug.Log(name + " was unseen.");
-        UI_GameHUD.ClearInteractionHint();
-        Destroy(_widget);
+        PlayerState b = other.GetComponentInChildren<PlayerState>();
+        if (b != null)
+        {
+            b.PickUpWeapon(_data, CurrentAmmo, BackupAmmo);
+            CmdDestroy();
+        }
     }
 
-    public void StartBeingSeen()
-    {
-        Debug.Log(name + " was seen.");
-        UI_GameHUD.AddInteractionHint("E: Pick up");
-        _widget = Instantiate(_pfbInfoWidget);
-        _widget.GetComponent<WID_Info>().Initialise(transform, _data.WeaponName, CurrentAmmo, BackupAmmo, _data.RangeType);
-    }
+    //public void EndBeingSeen()
+    //{
+    //    // Debug.Log(name + " was unseen.");
+    //    UI_GameHUD.ClearInteractionHint();
+    //    Destroy(_widget);
+    //}
+
+    //public void StartBeingSeen()
+    //{
+    //    Debug.Log(name + " was seen.");
+    //    UI_GameHUD.AddInteractionHint("E: Pick up");
+    //    _widget = Instantiate(_pfbInfoWidget);
+    //    _widget.GetComponent<WID_Info>().Initialise(transform, _data.WeaponName, CurrentAmmo, BackupAmmo, _data.RangeType);
+    //}
 
     [Command(requiresAuthority = false)]
     public void CmdDestroy()

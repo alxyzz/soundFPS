@@ -10,7 +10,7 @@ public enum BodyPart
     THIGH,
     CALF
 }
-public class CharacterBodyParts : PenetrableBehaviour
+public class CharacterBodyParts
 {
     [SerializeField] private BodyPart _part;
     public BodyPart Part => _part;

@@ -15,18 +15,20 @@ public class WeaponSniper : WeaponInHand
     }
 
     
-    public override void FireBurst(out List<Vector3> directions)
-    {
+    //public override void FireBurst(out List<Vector3> directions)
+    //{
         
-        SetInspect(false);
-        _identity.CurrentAmmo--;
-        _isFiring = true;
-        HitScan(out directions);
-        _recoilValue = 1;
+    //    SetInspect(false);
+    //    _identity.CurrentAmmo--;
+    //    _isFiring = true;
+    //    HitScan(out directions);
+    //    _recoilValue = 1;
 
-        // _cRecoilRecovery = StartCoroutine(RecoilRecovery());
-        StartCoroutine(FireReady());
-    }
+    //    // _cRecoilRecovery = StartCoroutine(RecoilRecovery());
+    //    StartCoroutine(FireReady());
+    //}
+
+
     public override void FireStop()
     {
         return;

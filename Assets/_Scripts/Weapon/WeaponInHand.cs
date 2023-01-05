@@ -17,17 +17,22 @@ public class WeaponIdentityData
     public WeaponData Data { get; set; }
     public int CurrentAmmo { get; set; }
     public int BackupAmmo { get; set; }
+
+    public void AddAmmo(int q)
+    {
+        BackupAmmo += Mathf.Clamp(q, 0, Data.BackupAmmo); //adds the ammo but not over the max capacity.
+    }
 }
 public class WeaponInHand : MonoBehaviour
 {
     [SerializeField] private Transform _magazine;
     private Transform _magazineOriginalParent;
     private Vector3 _magazinOriginalPosition;
-    private Quaternion _magazinOriginalRotation;
+    private Quaternion _magazineOriginalRotation;
     public void LoadMagazine()
     {
         _magazine.SetParent(_magazineOriginalParent);
-        _magazine.SetLocalPositionAndRotation(_magazinOriginalPosition, _magazinOriginalRotation);
+        _magazine.SetLocalPositionAndRotation(_magazinOriginalPosition, _magazineOriginalRotation);
     }
     public void RemoveMagazine(Transform hand)
     {
@@ -49,7 +54,7 @@ public class WeaponInHand : MonoBehaviour
     {
         _magazineOriginalParent = _magazine.parent;
         _magazinOriginalPosition = _magazine.localPosition;
-        _magazinOriginalRotation = _magazine.localRotation;
+        _magazineOriginalRotation = _magazine.localRotation;
     }
     //protected virtual void Start()
     //{
@@ -62,6 +67,19 @@ public class WeaponInHand : MonoBehaviour
     protected bool _isReloading = false;
     protected bool _isInspected = false;
     protected float _recoilValue;
+
+    public bool _CanFire
+    {
+
+        get
+        {
+            if (Identity.Data.Ammo > 0)
+            {
+                return true;
+            } return false;
+        }
+
+    }
     protected float RecoilValue
     {
         get { return _recoilValue; }
@@ -70,22 +88,7 @@ public class WeaponInHand : MonoBehaviour
             _recoilValue = Mathf.Clamp(value, 1, _identity.Data.Ammo);
         }
     }
-    private Quaternion RecoilRot
-    {
-        get
-        {
-            return Quaternion.AngleAxis(_identity.Data.RecoilHorizontal.Evaluate(RecoilValue) * _playerCtrl.CharaMovementComp.RecoilMultiplier,
-                Vector3.up) * Quaternion.AngleAxis(_identity.Data.RecoilVertical.Evaluate(RecoilValue) * -1 * _playerCtrl.CharaMovementComp.RecoilMultiplier,
-                _playerCtrl.FirstPersonRight);
-        }
-    }
-    protected Quaternion GetClampedRecoilRot(float pitchClamp)
-    {
-        return Quaternion.Euler(
-            Mathf.Clamp(_identity.Data.RecoilVertical.Evaluate(RecoilValue) * -1 * _playerCtrl.CharaMovementComp.RecoilMultiplier, pitchClamp, 0),
-            _identity.Data.RecoilHorizontal.Evaluate(RecoilValue) * _playerCtrl.CharaMovementComp.RecoilMultiplier,
-            0.0f);
-    }
+    
     protected virtual float FireSpreadRadius => GetFireSpreadRadius(_identity.Data.FireSpread);
     protected float GetFireSpreadRadius(float baseSpread)
     {
@@ -140,19 +143,9 @@ public class WeaponInHand : MonoBehaviour
         }
         return true;
     }
-    public virtual bool CanFireContinuously()
-    {
-        if (!_identity.Data.IsAutomatic)
-        {
-            return false;
-        }
-        return CanFireBurst();
-    }
-
     protected virtual void HitScan(out List<Vector3> directions)
     {
-        // RaycastHit[] hits = new RaycastHit[10];
-        Vector3 dir = RecoilRot * _playerCtrl.FirstPersonForward;
+        Vector3 dir = _playerCtrl.FirstPersonForward;
         Vector3 center = Camera.main.transform.position + dir;
         float r = Random.Range(0f, FireSpreadRadius);
         float angle = Random.Range(0, Mathf.PI * 2);
@@ -161,75 +154,20 @@ public class WeaponInHand : MonoBehaviour
         directions = new List<Vector3>();
         directions.Add(center - Camera.main.transform.position);
     }
-
-    public virtual void FireBurst(out List<Vector3> directions)
-    {
-        SetInspect(false);
-        _identity.CurrentAmmo--;
-        _isFiring = true;
-        if (_cRecoilRecovery != null) StopCoroutine(_cRecoilRecovery);
-
-        // 根据当前 _recoilValue 计算受后坐力影响得到的偏移射线
-        HitScan(out directions);
-
-        if (RecoilValue == 0)
-        {
-            RecoilValue = 1;
-        }
-        else
-        {
-            RecoilValue += _identity.Data.BurstRecoilGain;
-        }
-
-        //Camera.main.transform.localRotation = GetClampedRecoilRot(-5);
-        UI_GameHUD.SetCrosshairFireSpread(_identity.Data.CrosshairSpread * 2.0f, _identity.Data.FireDelay);
-        StartCoroutine(ContinuousFiringDelay());
-    }
-
     public virtual void FireContinuously(out List<Vector3> directions)
     {
-        _identity.CurrentAmmo--;
-        _isFiring = true;
-
-        // 根据当前 _recoilValue 计算受后坐力影响得到的偏移射线
         HitScan(out directions);
-
-        RecoilValue += 1;
-
-
-        UI_GameHUD.SetCrosshairFireSpread(_identity.Data.CrosshairSpread * 2.0f, _identity.Data.FireDelay);
-        StartCoroutine(ContinuousFiringDelay());
     }
-
-
     public virtual void FireStop()
     {
         if (!_isFiring) return;
         _isFiring = false;
-        // Camera.main.GetComponent<CameraShake>().Stop();
-        _cRecoilRecovery = StartCoroutine(RecoilRecovery());
+
     }
     private IEnumerator ContinuousFiringDelay()
     {
         yield return new WaitForSeconds(_identity.Data.FireDelay);
         _isFiring = false;
-    }
-    protected Coroutine _cRecoilRecovery;
-    protected IEnumerator RecoilRecovery()
-    {
-        float startValue = _recoilValue;
-        float speed = startValue / _identity.Data.RecoilRecoveryDuration.Evaluate(startValue / _identity.Data.Ammo);
-        Quaternion startRot = Camera.main.transform.localRotation;
-        while (_recoilValue > 0)
-        {
-            _recoilValue = Mathf.Max(0, _recoilValue - speed * Time.deltaTime);
-            //Camera.main.transform.localRotation = Quaternion.Slerp(
-            //    Quaternion.identity,
-            //    startRot,
-            //    _recoilValue / startValue
-            //    );
-            yield return null;
-        }
     }
     public virtual bool CanToggleScope()
     {
@@ -239,14 +177,6 @@ public class WeaponInHand : MonoBehaviour
     {
         Debug.Log("Toggle Scope!");
     }
-    //public virtual void SetThingsByScopeLevel(int level)
-    //{
-    //    UI_GameHUD.SetScopeActive(level != 0);
-    //    _playerCtrl.MouseSensitivityMultiplier = 1.0f / Mathf.Pow(3, level);
-    //    _playerCtrl.SetFirstPersonVisible(level == 0);
-    //    SetVisible(level == 0);
-    //    Camera.main.fieldOfView = level == 0 ? 60 : (level == 1 ? 10 : 1);
-    //}
     public bool CanReload()
     {
         return !IsHolstered && !_isReloading && _identity.CurrentAmmo < _identity.Data.Ammo && _identity.BackupAmmo > 0;
@@ -259,7 +189,6 @@ public class WeaponInHand : MonoBehaviour
     {
         _isInspected = inspect;
     }
-
     public virtual void StartReload()
     {
         FireStop();

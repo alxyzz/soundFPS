@@ -217,13 +217,13 @@ MonoBehaviour:
   active: 1
   type:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 2
   intensity:
     m_OverrideState: 1
-    m_Value: 0.64
+    m_Value: 0.477
   response:
     m_OverrideState: 1
-    m_Value: 0.355
+    m_Value: 0.105
   texture:
     m_OverrideState: 0
     m_Value: {fileID: 0}
@@ -470,16 +470,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b24b200358312b4fa1004e2431c2f1f, type: 3}
   m_Name: ShadowsMidtonesHighlights
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   shadows:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.30183005, z: 0.79204834, w: 0.01090514}
+    m_Value: {x: 1, y: 0.9509737, z: 0.96945256, w: -0.026478304}
   midtones:
-    m_OverrideState: 0
-    m_Value: {x: 1, y: 1, z: 1, w: -0.000000013911042}
+    m_OverrideState: 1
+    m_Value: {x: 0.7118733, y: 1, z: 0.8229466, w: -0.18534864}
   highlights:
     m_OverrideState: 1
-    m_Value: {x: 0.917326, y: 0.97859305, z: 1, w: 0.07633588}
+    m_Value: {x: 0.9612371, y: 0.9278587, z: 1, w: 0.026478386}
   shadowsStart:
     m_OverrideState: 1
     m_Value: 0.3
@@ -631,19 +631,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 598e2d32e2c7b0c418e030c3236d663a, type: 3}
   m_Name: ChromaticAberration
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   quality:
     m_OverrideState: 1
     m_Value: 3
   spectralLut:
     m_OverrideState: 1
-    m_Value: {fileID: 0}
+    m_Value: {fileID: 2800000, guid: 234705178956abf4c959b382610eb5f1, type: 3}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.475
+    m_Value: 0.024
   m_MaxSamples:
     m_OverrideState: 1
-    m_Value: 7
+    m_Value: 5
 --- !u!114 &7259682928311595869
 MonoBehaviour:
   m_ObjectHideFlags: 3

@@ -36,9 +36,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseColorMap:
-        m_Texture: {fileID: 2800000, guid: 6344bf96fbda94141a525046d088fb23, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Texture: {fileID: 2800000, guid: 7339b9c8800325f4d9d3f28624995c8c, type: 3}
+        m_Scale: {x: 0.01, y: 0.07}
+        m_Offset: {x: 0.14, y: 0}
     - _BaseColorMap0:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -160,9 +160,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 6344bf96fbda94141a525046d088fb23, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Texture: {fileID: 2800000, guid: 7339b9c8800325f4d9d3f28624995c8c, type: 3}
+        m_Scale: {x: 0.01, y: 0.07}
+        m_Offset: {x: 0.14, y: 0}
     - _MaskMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -420,7 +420,7 @@ Material:
     - _InheritBaseNormal1: 0
     - _InheritBaseNormal2: 0
     - _InheritBaseNormal3: 0
-    - _InvTilingScale: 1
+    - _InvTilingScale: 25
     - _InvTilingScale0: 1
     - _InvTilingScale1: 1
     - _InvTilingScale2: 1

@@ -10,11 +10,14 @@ using UnityEngine;
 
 public enum GameStage
 {
-    WAITING, // waiting for other players
-    READY, // all players connected. Countdown
+    //WAITING, // waiting for other players
+    //READY, // all players connected. Countdown
     PLAYING, // playing
     OVER // winner
 }
+
+
+
 /* When rule-related events in the game happen and need to be tracked and shared with all players,
  * that information is stored and synced through the Game State. This information can include:
  *   How long the game has been running (including running time before the local player joined).
@@ -27,11 +30,26 @@ public enum GameStage
  */
 public class GameState : NetworkBehaviour
 {
+    public bool Beating;
+
+
+
+    public void GivePeopleDebugWeapons()
+    {
+        Debug.Log("GameState.GivePeopleDebugWeapons() start.");
+        foreach (PlayerState item in GetPlayerStateList())
+        {
+            Debug.Log("GameState.GivePeopleDebugWeapons() - gave weapon to " + item);
+            item.GiveDebugWeapon();
+        }
+    }
+
     public override void OnStartServer()
     {
-        Debug.Log("Game state OnStartServer.");
+        Debug.Log("Game state OnStartServer.AAAAAAAAAAAAAAAAAAAAAAAA");
         instance = this;
         SteamLobby.Instance.onLobbyChatUpdate += OnLobbyChatUpdate;
+        GivePeopleDebugWeapons();
     }
 
     public override void OnStartClient()
@@ -42,6 +60,7 @@ public class GameState : NetworkBehaviour
         foreach (var item in playerDic)
         {
             UI_GameHUD.Instance.AddPlayerToStatistics(item.Value);           
+            
         }
         playerDic.Callback += PlayerDic_Callback;
     }
@@ -52,17 +71,13 @@ public class GameState : NetworkBehaviour
         switch (op)
         {
             case SyncIDictionary<ulong, uint>.Operation.OP_ADD:
-                UI_GameHUD.Instance.AddPlayerToStatistics(item);
+                //UI_GameHUD.Instance.AddPlayerToStatistics(item);
                 UpdateConnectedPlayerNum();
                 break;
             case SyncIDictionary<ulong, uint>.Operation.OP_CLEAR:
                 break;
             case SyncIDictionary<ulong, uint>.Operation.OP_REMOVE:
                 UI_GameHUD.Instance.RemovePlayerFromStatistics(item);
-                if (_stage == GameStage.WAITING)
-                {
-                    UpdateConnectedPlayerNum();
-                }
                 break;
             case SyncIDictionary<ulong, uint>.Operation.OP_SET:
                 break;
@@ -79,21 +94,17 @@ public class GameState : NetworkBehaviour
     [Client]
     private void UpdateConnectedPlayerNum()
     {
-        UI_GameHUD.Instance.UpdateConnectedPlayerNum(playerDic.Count, SteamMatchmaking.GetNumLobbyMembers(SteamLobby.Instance.CurrentLobbyId));
+        //UI_GameHUD.Instance.UpdateConnectedPlayerNum(playerDic.Count, SteamMatchmaking.GetNumLobbyMembers(SteamLobby.Instance.CurrentLobbyId));
     }
 
     private static GameState instance;
     public static GameState Instance => instance;
-    [SyncVar(hook = nameof(OnGameStageChanged))] private GameStage _stage = GameStage.WAITING;
+    [SyncVar(hook = nameof(OnGameStageChanged))] private GameStage _stage = GameStage.PLAYING;
     public GameStage Stage => instance._stage;
     private void OnGameStageChanged(GameStage oldVal, GameStage newVal)
     {
         switch (newVal)
         {
-            case GameStage.WAITING:
-                break;
-            case GameStage.READY:
-                break;
             case GameStage.PLAYING:
                 if (null != LocalGame.Instance.onClientGameStarted)
                 {
@@ -120,10 +131,6 @@ public class GameState : NetworkBehaviour
             case EChatMemberStateChange.k_EChatMemberStateChangeEntered:
                 break;
             case EChatMemberStateChange.k_EChatMemberStateChangeLeft:
-                if (_stage == GameStage.WAITING)
-                {
-                    RemovePlayer(callback.m_ulSteamIDUserChanged);
-                }
                 break;
             case EChatMemberStateChange.k_EChatMemberStateChangeDisconnected:
                 break;
@@ -144,15 +151,6 @@ public class GameState : NetworkBehaviour
             playerDic.Add(steamIdUlong, netId);
             switch (_stage)
             {
-                case GameStage.WAITING:
-                    if (IfGameCanStart())
-                    {
-                        Debug.Log("All players connected!");
-                        GameReady();
-                    }
-                    break;
-                case GameStage.READY:
-                    break;
                 case GameStage.PLAYING:
                     break;
                 case GameStage.OVER:
@@ -165,27 +163,10 @@ public class GameState : NetworkBehaviour
     {
         Debug.Log($"Server game state remove player {steamIdUlong}");
         if (playerDic.ContainsKey(steamIdUlong)) playerDic.Remove(steamIdUlong);
-        else if (_stage == GameStage.WAITING) RpcUpdateConnectedPlayerNum();
         uint winnerNetId;
         bool isDraw;
         switch (_stage)
         {
-            case GameStage.WAITING:
-                if (IfGameOver(out winnerNetId, out isDraw))
-                {
-                    GameOver(winnerNetId, isDraw);
-                }
-                else if (IfGameCanStart())
-                {
-                    GameReady();
-                }
-                break;
-            case GameStage.READY:
-                if (IfGameOver(out winnerNetId, out isDraw))
-                {
-                    GameOver(winnerNetId, isDraw);
-                }
-                break;
             case GameStage.PLAYING:
                 if (IfGameOver(out winnerNetId, out isDraw))
                 {
@@ -279,10 +260,7 @@ public class GameState : NetworkBehaviour
     }
 
     #region End Conditions
-    private bool IfGameCanStart()
-    {
-        return playerDic.Count >= SteamMatchmaking.GetNumLobbyMembers(SteamLobby.Instance.CurrentLobbyId);
-    }
+
     private bool IfGameOver(out uint winnerNetId, out bool isDraw)
     {
         winnerNetId = 0;
@@ -307,15 +285,15 @@ public class GameState : NetworkBehaviour
                 return false;
         }
     }
-    [Server]
-    private void GameReady()
-    {
-        if (_stage == GameStage.WAITING)
-        {
-            _stage = GameStage.READY;
-            _cReadyCountdown = StartCoroutine(ReadyCountdown());
-        }
-    }
+    //[Server]
+    //private void GameReady()
+    //{
+    //    if (_stage == GameStage.WAITING)
+    //    {
+    //        _stage = GameStage.READY;
+    //        _cReadyCountdown = StartCoroutine(ReadyCountdown());
+    //    }
+    //}
     [Server]
     private void GameOver(uint winnerNetId, bool isDraw = false)
     {

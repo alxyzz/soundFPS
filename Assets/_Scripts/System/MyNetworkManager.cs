@@ -211,14 +211,7 @@ public class MyNetworkManager : NetworkManager
     /// <param name="conn">Connection from client.</param>
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
-        //if (SceneManager.GetActiveScene().name == "Lobby")
-        //{
-        //    PlayerObjectController GamePlayerInstance = Instantiate(GamePlayerPrefab);
-        //    GamePlayerInstance.connectionID = conn.connectionId;
-        //    GamePlayerInstance.playerIDNumber = GamePlayers.Count + 1;
-        //    GamePlayerInstance.playerSteamID = (ulong)SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)SteamLobby.Instance.CurrentLobbyId, GamePlayers.Count);
-        //    NetworkServer.AddPlayerForConnection(conn, GamePlayerInstance.gameObject);
-        //}
+        
         base.OnServerAddPlayer(conn);
     }
 
@@ -323,7 +316,7 @@ public class MyNetworkManager : NetworkManager
     [Scene] public string gameScene = "";
     public int numPlayerSpawnPoint;
     public void StartGame()
-    {
+    {   
         ServerChangeScene(gameScene);
     }
 }

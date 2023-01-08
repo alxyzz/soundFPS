@@ -27,6 +27,14 @@ public class MainMenuUI : MonoBehaviour
         SteamLobby.Instance.HostLobby();
     }
 
+
+    public void OnClickDebugJoin()
+    {
+       // SetChildrenEnabled(false);
+       // SteamLobby.Instance.HostLobby();
+       //// SteamLobby.Instance.JoinLobby(result);
+    }
+
     public void OnClickJoin()
     {
         SetChildrenEnabled(false);

@@ -65,8 +65,13 @@ public class CharacterMovement : NetworkBehaviour
     private void Update()
     {
         if (!isLocalPlayer) return;
-        if (!_playerState.IsAlive) return;
+        if (!_playerState.IsAlive)
+        {
+            Debug.Log("player not ALIVE");
+            return;
+        }
         if (GameState.Instance.Stage != GameStage.PLAYING) return;
+           
 
         CheckOnGround();
 

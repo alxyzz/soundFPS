@@ -43,9 +43,9 @@ public class BeatHUD : MonoBehaviour
         rightArrowStartPos = _beatArrow_right.position;
         CenterPos = _crosshair.position;
 
-        Debug.Log("leftArrowStartPos - " + leftArrowStartPos);
-        Debug.Log("rightArrowStartPos - " + rightArrowStartPos);
-        Debug.Log("CenterPos - " + CenterPos);
+        //Debug.Log("leftArrowStartPos - " + leftArrowStartPos);
+        //Debug.Log("rightArrowStartPos - " + rightArrowStartPos);
+        //Debug.Log("CenterPos - " + CenterPos);
     }
 
     // Update is called once per frame

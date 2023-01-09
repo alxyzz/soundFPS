@@ -211,7 +211,19 @@ public class MyNetworkManager : NetworkManager
     /// <param name="conn">Connection from client.</param>
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
-        
+
+
+        //try
+        //{
+        //    System.Diagnostics.Process.Start(Environment.CurrentDirectory + "Assets/_Chat/sam.exe 'hello there, new player.'");
+        //}
+        //catch (Exception e)
+        //{
+        //    Debug.Log(e.Message);
+        //    throw;
+        //}
+
+        Debug.Log("OnServerAddPlayer @ MyNetworkManager just ran.");
         base.OnServerAddPlayer(conn);
     }
 

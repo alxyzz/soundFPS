@@ -27,7 +27,9 @@ public class MasterUIManager : MonoBehaviour
     
     public static void AddPopupHint(string content)
     {
-        UI_Cmn_PopupHint popup = Instantiate(instance._pfbPopupHint, instance._popupHintList).GetComponent<UI_Cmn_PopupHint>();
-        popup.Appear(content);
+        //UI_Cmn_PopupHint popup = Instantiate(instance._pfbPopupHint, instance._popupHintList).GetComponent<UI_Cmn_PopupHint>();
+        //popup.Appear(content);
+
+        Debug.Log("Popup message simulated with content: " + content);
     }
 }

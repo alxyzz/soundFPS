@@ -74,6 +74,7 @@ public class PlayerState : NetworkBehaviour, IDamageable
     [SerializeField] private Transform _fpSocketWeaponRight;
     [SerializeField] private AudioSource _weaponAudioSource;
     [SerializeField] private BeatHUD _beatHUDComponent;
+    [SerializeField] private GameObject _scoreUI;
 
 
     // [SerializeField] private Animator _firstPersonAnimator;
@@ -221,7 +222,22 @@ public class PlayerState : NetworkBehaviour, IDamageable
     }
 
    
+    public void ToggleScoreboard(bool b)
+    {
+        _scoreUI.SetActive(b); //this shows or hides the list with frags and deaths and assists
+    }
 
+
+
+    public void RelayBeat()
+    {
+        if (!isLocalPlayer)
+        {
+            Debug.LogWarning("For some reason, RelayBEatTick@LocalPlayerController ran on a player which is not local.");
+            return;
+        }
+        _beatHUDComponent.DoOnBetTick();
+    }
 
     public void Shoot()
     {

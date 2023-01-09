@@ -300,6 +300,7 @@ public class LocalPlayerController : NetworkBehaviour
     {
 
         _playerState.isFiring = Input.GetButtonDown("Fire1");
+        Debug.Log("player just pressed the fire button.");
         //if (I)
         //{
         //    _playerState.FireBurst();
@@ -348,6 +349,16 @@ public class LocalPlayerController : NetworkBehaviour
     }
     #endregion
 
+
+    public void RelayBeatTick()
+    {
+        if (!isLocalPlayer)
+        {
+            Debug.LogWarning("For some reason, RelayBEatTick@LocalPlayerController ran on a player which is not local.");
+            return;
+        }
+        _playerState.RelayBeat();
+    }
  
 
     [Header("Death")]

@@ -243,6 +243,7 @@ public class MyNetworkManager : NetworkManager
     /// </summary>
     public override void OnClientConnect()
     {
+        Debug.Log("Client just connected @ MyNetworkManager.cs");
         base.OnClientConnect();
     }
 

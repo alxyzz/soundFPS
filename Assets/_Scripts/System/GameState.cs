@@ -30,9 +30,9 @@ public enum GameStage
  */
 public class GameState : NetworkBehaviour
 {
-    public bool Beating;
+    public bool beat_toggle;
 
-
+    [HideInInspector] int maxKills = 30;
 
     public void GivePeopleDebugWeapons()
     {
@@ -42,6 +42,48 @@ public class GameState : NetworkBehaviour
             Debug.Log("GameState.GivePeopleDebugWeapons() - gave weapon to " + item);
             item.GiveDebugWeapon();
         }
+    }
+
+
+    public void UpdatePlayerScoreboard()
+    {
+
+    }
+    [ClientRpc]
+    public void RPCUpdatePlayerScoreboard()
+    {
+        
+    }
+
+
+
+    private void InitializeBeat()
+    {
+        if (!isClient)
+        {
+
+        }
+    }
+    int beatNr = 0;
+    IEnumerator PeriodicBeat()
+    {
+        Debug.Log("Periodic Beat #" + beatNr);
+        beatNr++;
+        yield return new WaitForSecondsRealtime(2f);
+        RPCDoBeat();
+    }
+    /*
+       When running a game as a host with a local client, ClientRpc calls will be invoked on the local client even though it is in the same process as the server. So the behaviours of local and remote clients are the same for ClientRpc calls.
+     */
+    [ClientRpc]
+    private void RPCDoBeat()
+    {
+        foreach (PlayerState item in GetPlayerStateList())
+        {
+            Debug.Log("GameState.GivePeopleDebugWeapons() - gave weapon to " + item);
+            item.RelayBeat();
+        }
+       
     }
 
     public override void OnStartServer()
@@ -106,7 +148,7 @@ public class GameState : NetworkBehaviour
         switch (newVal)
         {
             case GameStage.PLAYING:
-                if (null != LocalGame.Instance.onClientGameStarted)
+                if (LocalGame.Instance.onClientGameStarted != null)
                 {
                     LocalGame.Instance.onClientGameStarted.Invoke();
                 }
@@ -121,7 +163,7 @@ public class GameState : NetworkBehaviour
 
     public readonly SyncDictionary<ulong, uint> playerDic = new SyncDictionary<ulong, uint>();
     public int ConnectedPlayerNum => playerDic.Count;
-    [HideInInspector] int maxKills = 30;
+
     [Server]
     private void OnLobbyChatUpdate(LobbyChatUpdate_t callback)
     {
@@ -231,20 +273,20 @@ public class GameState : NetworkBehaviour
         return results;
     }
 
-    Coroutine _cReadyCountdown;
-    private IEnumerator ReadyCountdown()
-    {
-        yield return new WaitForSecondsRealtime(1.0f);
-        RpcCountdown("3");
-        yield return new WaitForSecondsRealtime(1.0f);
-        RpcCountdown("2");
-        yield return new WaitForSecondsRealtime(1.0f);
-        RpcCountdown("1");
-        yield return new WaitForSecondsRealtime(1.0f);
-        RpcCountdown("");
-        _stage = GameStage.PLAYING;
-        LocalGame.Instance.onServerGameStarted?.Invoke();
-    }
+    //Coroutine _cReadyCountdown;
+    //private IEnumerator ReadyCountdown()
+    //{
+    //    yield return new WaitForSecondsRealtime(1.0f);
+    //    RpcCountdown("3");
+    //    yield return new WaitForSecondsRealtime(1.0f);
+    //    RpcCountdown("2");
+    //    yield return new WaitForSecondsRealtime(1.0f);
+    //    RpcCountdown("1");
+    //    yield return new WaitForSecondsRealtime(1.0f);
+    //    RpcCountdown("");
+    //    _stage = GameStage.PLAYING;
+    //    LocalGame.Instance.onServerGameStarted?.Invoke();
+    //}
     [ClientRpc]
     private void RpcCountdown(string str)
     {
@@ -297,7 +339,7 @@ public class GameState : NetworkBehaviour
     [Server]
     private void GameOver(uint winnerNetId, bool isDraw = false)
     {
-        if (null != _cReadyCountdown) StopCoroutine(_cReadyCountdown);
+
         _stage = GameStage.OVER;
         LocalGame.Instance.onServerGameEnded?.Invoke();
         if (isDraw)

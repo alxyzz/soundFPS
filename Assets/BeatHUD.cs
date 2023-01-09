@@ -21,7 +21,7 @@ public class BeatHUD : MonoBehaviour
 
 
 
-    public void OnBeat()
+    public void DoOnBetTick()
     {
         _beatSimpleIndicator.gameObject.SetActive(false);
         StartCoroutine(showBeat());
@@ -31,7 +31,7 @@ public class BeatHUD : MonoBehaviour
     {
         _beatSimpleIndicator.gameObject.SetActive(true);
 
-        yield return new WaitForSecondsRealtime(0.1f);
+        yield return new WaitForSecondsRealtime(0.2f);
 
         _beatSimpleIndicator.gameObject.SetActive(false);
     }
@@ -51,30 +51,6 @@ public class BeatHUD : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (beat)
-        //{
-        //    if ((_beatArrow_left.anchoredPosition - _crosshair.anchoredPosition).x >  5f)
-        //    {
-        //        _beatArrow_left.anchoredPosition = Vector2.MoveTowards(_beatArrow_left.anchoredPosition, _crosshair.anchoredPosition, 1f);
-        //    }
-        //    else
-        //    {
-        //        _beatArrow_left.anchoredPosition = leftArrowStartPos;
-        //    }
-
-
-
-
-
-        //    //if (_beatArrow_right.anchoredPosition.x > _beatArrow_right.anchoredPosition.x - 100)
-        //    //{
-        //    //    _beatArrow_right.anchoredPosition = new Vector2(_beatArrow_right.anchoredPosition.x - 1f, _beatArrow_right.anchoredPosition.y);
-        //    //}
-        //    //else
-        //    //{
-        //    //    _beatArrow_right.anchoredPosition = rightArrowStartPos;
-        //    //}
-        //}
     }
 
 

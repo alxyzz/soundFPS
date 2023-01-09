@@ -190,23 +190,23 @@ public class CharacterMovement : NetworkBehaviour
     #endregion
 
     private void UpdateCrosshairSpread()
-    {
-        if (IsOnGround)
-        {
-            if (IsCrouching)
-                UI_GameHUD.SetCrosshairMovementSpread(0);
-            else if (_lastMovementInput != Vector3.zero)
-            {
-                if (IsWalking)
-                    UI_GameHUD.SetCrosshairMovementSpread(30 * _lastMovementInput.sqrMagnitude);
-                else
-                    UI_GameHUD.SetCrosshairMovementSpread(100 * _lastMovementInput.sqrMagnitude);
-            }
-            else
-                UI_GameHUD.SetCrosshairMovementSpread(5);
-        }
-        else
-            UI_GameHUD.SetCrosshairMovementSpread(200);
+    { //arena shooters dont need different accuracy while moving, this is not csgo
+        //if (IsOnGround)
+        //{
+        //    if (IsCrouching)
+        //        UI_GameHUD.SetCrosshairMovementSpread(0);
+        //    else if (_lastMovementInput != Vector3.zero)
+        //    {
+        //        if (IsWalking)
+        //            UI_GameHUD.SetCrosshairMovementSpread(30 * _lastMovementInput.sqrMagnitude);
+        //        else
+        //            UI_GameHUD.SetCrosshairMovementSpread(100 * _lastMovementInput.sqrMagnitude);
+        //    }
+        //    else
+        //        UI_GameHUD.SetCrosshairMovementSpread(5);
+        //}
+        //else
+        //    UI_GameHUD.SetCrosshairMovementSpread(200);
     }
 }
 

@@ -75,6 +75,8 @@ public class LocalPlayerController : NetworkBehaviour
     [Header("Components")]
     [SerializeField] private Transform _thirdPersonRoot;
     [SerializeField] private Transform _firstPersonRoot;
+
+    [SerializeField] private Animator _GunAnimatorTest;
     // [SerializeField] private AudioSource _soundPlayer;
 
     //public Vector3 FirstPersonForward => _firstPersonRoot.forward;
@@ -303,10 +305,24 @@ public class LocalPlayerController : NetworkBehaviour
 
 
     #region Weapon
+
+    public void StopFiring()
+    {
+        _GunAnimatorTest.SetBool(0, false);
+    }
     private void UpdateFireInput()
     {
-
         _playerState.isFiring = Input.GetKeyDown(KeyCode.Mouse0);
+        if (_playerState.isFiring && _playerState._beatHUDComponent.beating)
+        {
+
+            _GunAnimatorTest.SetBool(0, true);
+
+        }
+
+
+
+
         //Debug.Log("player just pressed the fire button.");
         //if (I)
         //{

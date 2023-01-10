@@ -77,6 +77,7 @@ public class PlayerState : NetworkBehaviour, IDamageable
     [SerializeField] private GameObject _scoreUI;
 
 
+
     // [SerializeField] private Animator _firstPersonAnimator;
     // [SerializeField] private Animator _thirdPersonAnimator;
     private List<IObserver> _observers = new List<IObserver>();

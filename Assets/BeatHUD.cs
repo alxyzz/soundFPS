@@ -11,7 +11,7 @@ public class BeatHUD : MonoBehaviour
     //[SerializeField] private RectTransform _beatArrow_left;
     //[SerializeField] private RectTransform _beatArrow_right;
     [SerializeField] public Image _beatSimpleIndicator;
-    bool beat = true;
+    public bool beating;
 
 
 
@@ -23,7 +23,9 @@ public class BeatHUD : MonoBehaviour
 
     public void DoBeatTick()
     {
+        Debug.LogError("Beat tick just happened @ BeatHUD");
         _beatSimpleIndicator.gameObject.SetActive(false);
+        beating = true;
         StartCoroutine(showBeat());
     }
 
@@ -33,6 +35,7 @@ public class BeatHUD : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(0.2f);
 
+        beating = false;
         _beatSimpleIndicator.gameObject.SetActive(false);
     }
 

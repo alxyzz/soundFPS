@@ -73,12 +73,12 @@ public class CharacterMovement : NetworkBehaviour
         if (GameState.Instance.Stage != GameStage.PLAYING) return;
            
 
-        CheckOnGround();
+        //CheckOnGround();
 
         // Update movement
         Vector3 targetMove = _lastMovementInput * DesiredSpeed;
 
-        if (IsOnGround)
+        if (_charaCtrl.isGrounded)
         {
             _moveVelocity = targetMove;
 

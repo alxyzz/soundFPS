@@ -6,11 +6,11 @@ public class BeatHUD : MonoBehaviour
 {
     [Header("HUD Elements")]
     [SerializeField] private RectTransform _crosshair;
-    [SerializeField] private RectTransform _beatArrow_start_left;
-    [SerializeField] private RectTransform _beatArrow_start_right;
-    [SerializeField] private RectTransform _beatArrow_left;
-    [SerializeField] private RectTransform _beatArrow_right;
-    [SerializeField] private Image _beatSimpleIndicator;
+    //[SerializeField] private RectTransform _beatArrow_start_left;
+    //[SerializeField] private RectTransform _beatArrow_start_right;
+    //[SerializeField] private RectTransform _beatArrow_left;
+    //[SerializeField] private RectTransform _beatArrow_right;
+    [SerializeField] public Image _beatSimpleIndicator;
     bool beat = true;
 
 
@@ -39,8 +39,8 @@ public class BeatHUD : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        leftArrowStartPos = _beatArrow_left.position;
-        rightArrowStartPos = _beatArrow_right.position;
+        //leftArrowStartPos = _beatArrow_left.position;
+        //rightArrowStartPos = _beatArrow_right.position;
         CenterPos = _crosshair.position;
         _beatSimpleIndicator.gameObject.SetActive(false);
         //Debug.Log("leftArrowStartPos - " + leftArrowStartPos);

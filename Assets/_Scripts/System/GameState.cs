@@ -72,7 +72,11 @@ public class GameState : NetworkBehaviour
         Debug.LogError("Periodic Beat #" + beatNr);
         beatNr++;
         yield return new WaitForSecondsRealtime(2f);
-        RPCDoBeat();
+        if (beat_toggle)
+        {
+            RPCDoBeat();
+        }
+       
     }
     /*
        When running a game as a host with a local client, ClientRpc calls will be invoked on the local client even though it is in the same process as the server. So the behaviours of local and remote clients are the same for ClientRpc calls.

@@ -181,13 +181,13 @@ public class CharacterMovement : NetworkBehaviour
     [SerializeField] private float _airControl = 0.02f;
     public Action OnJumped;
     public Action<RaycastHit> OnLanded;
-    private bool CanJump => IsOnGround;
+    private bool CanJump => _charaCtrl.isGrounded;
     public void Jump()
     {
         if (CanJump)
         {
             // Uncrouch();
-            _charaAnimHandler.CmdTpSetBool(_aIsInAir, true);
+            //_charaAnimHandler.CmdTpSetBool(_aIsInAir, true);
             _inAirVelocity.y = _jumpUpSpeed;
             OnJumped?.Invoke();
         }

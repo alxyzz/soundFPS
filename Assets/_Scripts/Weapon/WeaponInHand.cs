@@ -143,21 +143,21 @@ public class WeaponInHand : MonoBehaviour
         }
         return true;
     }
-    protected virtual void HitScan(out List<Vector3> directions)
-    {
-        Vector3 dir = _playerCtrl.FirstPersonForward;
-        Vector3 center = Camera.main.transform.position + dir;
-        float r = Random.Range(0f, FireSpreadRadius);
-        float angle = Random.Range(0, Mathf.PI * 2);
-        center.x += Mathf.Cos(angle) * r;
-        center.y += Mathf.Sin(angle) * r;
-        directions = new List<Vector3>();
-        directions.Add(center - Camera.main.transform.position);
-    }
-    public virtual void FireContinuously(out List<Vector3> directions)
-    {
-        HitScan(out directions);
-    }
+    //protected virtual void HitScan(out List<Vector3> directions)
+    //{
+    //    //Vector3 dir = _playerCtrl.FirstPersonForward;
+    //    //Vector3 center = Camera.main.transform.position + dir;
+    //    //float r = Random.Range(0f, FireSpreadRadius);
+    //    //float angle = Random.Range(0, Mathf.PI * 2);
+    //    //center.x += Mathf.Cos(angle) * r;
+    //    //center.y += Mathf.Sin(angle) * r;
+    //    //directions = new List<Vector3>();
+    //    //directions.Add(center - Camera.main.transform.position);
+    //}
+    //public virtual void FireContinuously(out List<Vector3> directions)
+    //{
+    //    //HitScan(out directions);
+    //}
     public virtual void FireStop()
     {
         if (!_isFiring) return;

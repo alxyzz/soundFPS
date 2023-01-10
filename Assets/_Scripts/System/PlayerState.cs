@@ -73,7 +73,7 @@ public class PlayerState : NetworkBehaviour, IDamageable
     [SerializeField] private Transform _fpSocketWeaponLeft;
     [SerializeField] private Transform _fpSocketWeaponRight;
     [SerializeField] private AudioSource _weaponAudioSource;
-    [SerializeField] private BeatHUD _beatHUDComponent;
+    [SerializeField] public BeatHUD _beatHUDComponent;
     [SerializeField] private GameObject _scoreUI;
 
 
@@ -243,12 +243,12 @@ public class PlayerState : NetworkBehaviour, IDamageable
     {
         if (CurrentWeaponInHand != null && CurrentWeaponInHand._CanFire)
         {
-            PlayWeaponFireSound(CurrentWeaponDatabaseIndex);
-            _charaAnimHandler.FpSetTrigger(_aFire);
-            _charaAnimHandler.CmdTpSetTrigger(_aFire);
-            CurrentWeaponInHand.FireContinuously(out List<Vector3> directions);
-            UI_GameHUD.SetAmmo(CurrentWeaponIdentity.CurrentAmmo);
-            CmdFire(CurrentWeaponDatabaseIndex, Camera.main.transform.position, directions);
+            //PlayWeaponFireSound(CurrentWeaponDatabaseIndex);
+            //_charaAnimHandler.FpSetTrigger(_aFire);
+            //_charaAnimHandler.CmdTpSetTrigger(_aFire);
+            //CurrentWeaponInHand.FireContinuously(out List<Vector3> directions);
+            //UI_GameHUD.SetAmmo(CurrentWeaponIdentity.CurrentAmmo);
+            //CmdFire(CurrentWeaponDatabaseIndex, Camera.main.transform.position, directions);
         }
     }
     public void FireStop()

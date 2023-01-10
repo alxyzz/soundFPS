@@ -321,10 +321,6 @@ public class MyNetworkManager : NetworkManager
     public override void OnStopClient() { }
 
     #endregion
-
-
-    //[SerializeField] private PlayerObjectController GamePlayerPrefab;
-    //public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
     [Header("Game")]
     [Scene] public string gameScene = "";
     public int numPlayerSpawnPoint;

@@ -56,7 +56,7 @@ public class CharacterMovement : NetworkBehaviour
 
     void Awake()
     {
-        _charaAnimHandler = GetComponent<CharacterAnimHandler>();
+        //_charaAnimHandler = GetComponent<CharacterAnimHandler>();
         _charaCtrl = GetComponent<CharacterController>();
         _playerState = GetComponent<PlayerState>();
         
@@ -110,12 +110,12 @@ public class CharacterMovement : NetworkBehaviour
         Vector3 input = new Vector3(rawInput.x, 0, rawInput.y);
         _lastMovementInput = Vector3.ClampMagnitude(rot * input, 1.0f);
 
-        _charaAnimHandler.FpSetFloat(_aMovementMultiplier, DesiredSpeed / _maxJogSpeed);
-        _charaAnimHandler.FpSetFloat(_aSpeedLevel, _lastMovementInput.magnitude);
+        //_charaAnimHandler.FpSetFloat(_aMovementMultiplier, DesiredSpeed / _maxJogSpeed);
+        //_charaAnimHandler.FpSetFloat(_aSpeedLevel, _lastMovementInput.magnitude);
 
-        _charaAnimHandler.CmdTpSetFloat(_aMovementMultiplier, DesiredSpeed / _maxJogSpeed);
-        _charaAnimHandler.CmdTpSetFloat(_aSpeedLevelRt, _lastMovementRawInput.x);
-        _charaAnimHandler.CmdTpSetFloat(_aSpeedLevelFwd, _lastMovementRawInput.y);
+        //_charaAnimHandler.CmdTpSetFloat(_aMovementMultiplier, DesiredSpeed / _maxJogSpeed);
+        ///_charaAnimHandler.CmdTpSetFloat(_aSpeedLevelRt, _lastMovementRawInput.x);
+        //_charaAnimHandler.CmdTpSetFloat(_aSpeedLevelFwd, _lastMovementRawInput.y);
     }
 
 
@@ -137,7 +137,7 @@ public class CharacterMovement : NetworkBehaviour
             if (!IsOnGround)
             {
                 IsOnGround = true;
-                _charaAnimHandler.CmdTpSetBool(_aIsInAir, false);
+                //_charaAnimHandler.CmdTpSetBool(_aIsInAir, false);
                 OnLanded?.Invoke(hit);
             }
         }

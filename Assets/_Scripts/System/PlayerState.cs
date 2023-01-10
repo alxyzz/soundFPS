@@ -236,7 +236,7 @@ public class PlayerState : NetworkBehaviour, IDamageable
             Debug.LogWarning("For some reason, RelayBEatTick@LocalPlayerController ran on a player which is not local.");
             return;
         }
-        _beatHUDComponent.DoOnBetTick();
+        _beatHUDComponent.DoBeatTick();
     }
 
     public void Shoot()

@@ -254,7 +254,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2960309849582973055}
   - component: {fileID: 3364071012687074001}
-  - component: {fileID: 3378553872526585139}
+  - component: {fileID: 5153574407051280732}
   m_Layer: 5
   m_Name: BeatSignal
   m_TagString: Untagged
@@ -290,7 +290,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1909712516882100957}
   m_CullTransparentMesh: 1
---- !u!114 &3378553872526585139
+--- !u!114 &5153574407051280732
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -299,7 +299,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1909712516882100957}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -310,13 +310,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 0}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+  m_Sprite: {fileID: 21300000, guid: eb698112f7773f748b716649872a142b, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &2192923091733080314
 GameObject:
   m_ObjectHideFlags: 0
@@ -798,9 +801,9 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
-  walkingSpeed: 7.5
-  runningSpeed: 11.5
-  jumpSpeed: 8
+  walkingSpeed: 15
+  runningSpeed: 23
+  jumpSpeed: 12.34
   gravity: 20
   playerCamera: {fileID: 3497460100243879327}
   lookSpeed: 2
@@ -827,7 +830,7 @@ MonoBehaviour:
   _groundCheckDistance: 0.15
   _groundCheckLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2147483647
   _jumpUpSpeed: 4.2
   _airControl: 0.02
 --- !u!114 &6827026340142603606
@@ -851,6 +854,7 @@ MonoBehaviour:
   _fpSocketWeaponRight: {fileID: 7018795474670350557}
   _weaponAudioSource: {fileID: 0}
   _beatHUDComponent: {fileID: 4501239038807548373}
+  _scoreUI: {fileID: 0}
   isFiring: 0
   startWeapon: 0
   _shootingLayer:
@@ -874,7 +878,7 @@ MonoBehaviour:
   _beatArrow_start_right: {fileID: 4323887645422646881}
   _beatArrow_left: {fileID: 3967921864582498444}
   _beatArrow_right: {fileID: 7872318389226571667}
-  _beatSimpleIndicator: {fileID: 0}
+  _beatSimpleIndicator: {fileID: 5153574407051280732}
 --- !u!1 &3497460100243879324
 GameObject:
   m_ObjectHideFlags: 0

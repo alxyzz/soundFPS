@@ -19,9 +19,9 @@ public class BeatHUD : MonoBehaviour
     private Vector2 leftArrowStartPos, rightArrowStartPos, CenterPos;
 
 
+    
 
-
-    public void DoOnBetTick()
+    public void DoBeatTick()
     {
         _beatSimpleIndicator.gameObject.SetActive(false);
         StartCoroutine(showBeat());
@@ -42,7 +42,7 @@ public class BeatHUD : MonoBehaviour
         leftArrowStartPos = _beatArrow_left.position;
         rightArrowStartPos = _beatArrow_right.position;
         CenterPos = _crosshair.position;
-
+        _beatSimpleIndicator.gameObject.SetActive(false);
         //Debug.Log("leftArrowStartPos - " + leftArrowStartPos);
         //Debug.Log("rightArrowStartPos - " + rightArrowStartPos);
         //Debug.Log("CenterPos - " + CenterPos);

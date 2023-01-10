@@ -52,7 +52,7 @@ public class GameState : NetworkBehaviour
     [ClientRpc]
     public void RPCUpdatePlayerScoreboard()
     {
-        
+
     }
 
 
@@ -61,13 +61,15 @@ public class GameState : NetworkBehaviour
     {
         if (!isClient)
         {
-
+            Debug.LogError("GameState@ InitializeBeat - invoked the repetition");
+            InvokeRepeating("PeriodicBeat", 4, 4);
         }
     }
+
     int beatNr = 0;
     IEnumerator PeriodicBeat()
     {
-        Debug.Log("Periodic Beat #" + beatNr);
+        Debug.LogError("Periodic Beat #" + beatNr);
         beatNr++;
         yield return new WaitForSecondsRealtime(2f);
         RPCDoBeat();
@@ -83,7 +85,7 @@ public class GameState : NetworkBehaviour
             Debug.Log("GameState.GivePeopleDebugWeapons() - gave weapon to " + item);
             item.RelayBeat();
         }
-       
+
     }
 
     public override void OnStartServer()
@@ -92,17 +94,18 @@ public class GameState : NetworkBehaviour
         instance = this;
         SteamLobby.Instance.onLobbyChatUpdate += OnLobbyChatUpdate;
         GivePeopleDebugWeapons();
+        InitializeBeat();
     }
 
     public override void OnStartClient()
     {
-        Debug.Log("Game state OnStartClient. Binding callbak method.");
+        Debug.Log("Game state OnStartClient. Binding callback method.");
         instance = this;
         // _playerNetIds
         foreach (var item in playerDic)
         {
-            UI_GameHUD.Instance.AddPlayerToStatistics(item.Value);           
-            
+            UI_GameHUD.Instance.AddPlayerToStatistics(item.Value);
+
         }
         playerDic.Callback += PlayerDic_Callback;
     }
@@ -158,7 +161,7 @@ public class GameState : NetworkBehaviour
                 break;
             default:
                 break;
-        }  
+        }
     }
 
     public readonly SyncDictionary<ulong, uint> playerDic = new SyncDictionary<ulong, uint>();
@@ -242,7 +245,7 @@ public class GameState : NetworkBehaviour
             {
                 return identity.TryGetComponent(out ps);
             }
-        }        
+        }
         return false;
     }
     public bool TryGetPlayerStateByNetId(uint netId, out PlayerState ps)
@@ -267,7 +270,7 @@ public class GameState : NetworkBehaviour
                 if (identity.TryGetComponent(out PlayerState ps))
                 {
                     results.Add(ps);
-                }                
+                }
             }
         }
         return results;
@@ -345,21 +348,21 @@ public class GameState : NetworkBehaviour
         if (isDraw)
         {
             Debug.Log("And then there were none.");
-            RpcDecalreWinner(winnerNetId);
+            //RpcDecalreWinner(winnerNetId);
         }
         else
         {
             Debug.Log($"Game Over! The winner's net ID is {winnerNetId}.");
-            RpcDecalreWinner(winnerNetId);
+            //RpcDecalreWinner(winnerNetId);
         }
     }
     [ClientRpc]
     private void RpcDecalreWinner(uint netId)
     {
-        if (TryGetPlayerStateByNetId(netId, out PlayerState ps))
-        {
-            UI_GameHUD.ShowWinner(ps);
-        }
+        //if (TryGetPlayerStateByNetId(netId, out PlayerState ps))
+        //{
+        //    UI_GameHUD.ShowWinner(ps);
+        //}
     }
     #endregion
 }

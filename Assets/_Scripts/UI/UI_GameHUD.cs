@@ -104,13 +104,13 @@ public class UI_GameHUD : MonoBehaviour
             instance._crosshair.WeaponSpread = pixel;
         }
     }
-    public static void SetCrosshairMovementSpread(float pixel)
-    {
-        if (instance._crosshair.gameObject.activeSelf)
-        {
-            instance._crosshair.MovementSpread = pixel;
-        }
-    }
+    //public static void SetCrosshairMovementSpread(float pixel)
+    //{
+    //    if (instance._crosshair.gameObject.activeSelf)
+    //    {
+    //        instance._crosshair.MovementSpread = pixel;
+    //    }
+    //}
     public static void SetCrosshairFireSpread(float pixel, float duration)
     {
         if (instance._crosshair.gameObject.activeSelf)

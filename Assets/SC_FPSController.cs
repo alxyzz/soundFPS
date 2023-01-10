@@ -49,6 +49,7 @@ public class SC_FPSController : NetworkBehaviour
 
         if (Input.GetButton("Jump") && canMove && characterController.isGrounded)
         {
+            characterController = gameObject.GetComponent<CharacterController>();
             moveDirection.y = jumpSpeed;
         }
         else

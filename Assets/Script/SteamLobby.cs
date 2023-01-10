@@ -66,6 +66,7 @@ public class SteamLobby : MonoBehaviour
 
     public void HostLobby()
     {
+        
         SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, MyNetworkManager.singleton.maxConnections);
     }
     public void JoinLobby(ulong id)

@@ -75,13 +75,15 @@ public class LocalPlayerController : NetworkBehaviour
     [Header("Components")]
     [SerializeField] private Transform _thirdPersonRoot;
     [SerializeField] private Transform _firstPersonRoot;
+
+    [SerializeField] private Animator _GunAnimatorTest;
     // [SerializeField] private AudioSource _soundPlayer;
 
-    public Vector3 FirstPersonForward => _firstPersonRoot.forward;
-    public Vector3 FirstPersonRight => _firstPersonRoot.right;
-    [SerializeField] private Transform _firstPersonArm;
-    [SerializeField] private SkinnedMeshRenderer _fpSMR;
-    [SerializeField] private SkinnedMeshRenderer _tpSMR;
+    //public Vector3 FirstPersonForward => _firstPersonRoot.forward;
+    //public Vector3 FirstPersonRight => _firstPersonRoot.right;
+    //[SerializeField] private Transform _firstPersonArm;
+    //[SerializeField] private SkinnedMeshRenderer _fpSMR;
+    //[SerializeField] private SkinnedMeshRenderer _tpSMR;
 
     private CharacterMovement _charaMovement;
     public CharacterMovement CharaMovementComp => _charaMovement;
@@ -105,19 +107,25 @@ public class LocalPlayerController : NetworkBehaviour
     private void Start()
     {
         SetFirstPersonVisible(false);
-        GetComponentInChildren<FpAnimEventHandler>().IsLocalPlayer = isLocalPlayer;
+        //GetComponentInChildren<FpAnimEventHandler>().IsLocalPlayer = isLocalPlayer;
         if (isLocalPlayer)
         {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Confined;
             SetThirdPersonVisible(false);
 
             gameObject.layer = LayerMask.NameToLayer("Player");
             //if (!isServer) // if the local client is not the host
             //    _thirdPersonRoot.gameObject.SetActive(false);
 
+            
             Camera.main.transform.SetParent(_firstPersonRoot);
             Camera.main.transform.localPosition = Vector3.zero;
             Camera.main.transform.localRotation = Quaternion.identity;
-            _firstPersonArm.SetParent(Camera.main.transform);
+            //_firstPersonArm.SetParent(Camera.main.transform);
+
+
+            _playerState._beatHUDComponent._beatSimpleIndicator.canvas.worldCamera = Camera.main;
 
             LocalGame.Instance.onClientGameStarted += () => { InputManager.Instance.SetInputMode(EInputMode.GameOnly); };
 
@@ -125,12 +133,13 @@ public class LocalPlayerController : NetworkBehaviour
             _charaMovement.OnStartCrouching += () => { UpdateCrouchCoroutine(1); };
             _charaMovement.OnEndCrouching += () => { UpdateCrouchCoroutine(-1); };
 
-            UI_GameHUD.Instance.RegisterPlayerTransform(transform);
+            //UI_GameHUD.Instance.RegisterPlayerTransform(transform);
             // Die callback
             // _playerState.onDied += Die;
         }        
         else
         {
+            
             // Destroy(this.GetComponentInChildren<FpAnimEventHandler>());
             Destroy(this);
         }
@@ -145,12 +154,12 @@ public class LocalPlayerController : NetworkBehaviour
         if (GameState.Instance.Stage != GameStage.PLAYING) return;
         if (InputManager.Instance.InputMode == EInputMode.UIOnly) return;
         UpdateRotationInput();
-        UpdateCrouchingInput();
-        UpdateWalkingInput();
+       //UpdateCrouchingInput();
+        //UpdateWalkingInput();
         UpdateJumpingInput();
         UpdateFireInput();
         UpdateChangeWeaponInput();
-        UpdateReloadInput();
+        //UpdateReloadInput();
 
         UpdateScopeInput();
 
@@ -170,7 +179,7 @@ public class LocalPlayerController : NetworkBehaviour
     private void UpdateRotationInput()
     {
         Yaw += Input.GetAxis("Mouse X") * MouseSensitivity;
-        Pitch += Input.GetAxis("Mouse Y") * MouseSensitivity;
+        Pitch -= Input.GetAxis("Mouse Y") * MouseSensitivity;
         Pitch = Mathf.Clamp(Pitch, -90, 90);
 
         _firstPersonRoot.localRotation = Quaternion.Euler(Pitch, 0, 0);
@@ -200,10 +209,10 @@ public class LocalPlayerController : NetworkBehaviour
     private float _crouchValue = 0.0f;
     private void UpdateCrouchingInput()
     {
-        if (Input.GetButtonDown("Crouch"))
-            _charaMovement.Crouch();
-        else if (Input.GetButtonUp("Crouch"))
-            _charaMovement.Uncrouch();
+        //if (Input.GetButtonDown("Crouch"))
+        //    _charaMovement.Crouch();
+        //else if (Input.GetButtonUp("Crouch"))
+        //    _charaMovement.Uncrouch();
     }
     public void UpdateCrouchCoroutine(float crouch)
     {
@@ -223,19 +232,19 @@ public class LocalPlayerController : NetworkBehaviour
     private void UpdateWalkingInput()
     {
 
-        if (Input.GetButtonDown("Walk"))
-        {
-            _charaMovement.CmdSetIsWalking(true);
-        }
-        else if (Input.GetButtonUp("Walk"))
-        {
-            _charaMovement.CmdSetIsWalking(false);
-        }
+        //if (Input.GetButtonDown("Walk"))
+        //{
+        //    _charaMovement.CmdSetIsWalking(true);
+        //}
+        //else if (Input.GetButtonUp("Walk"))
+        //{
+        //    _charaMovement.CmdSetIsWalking(false);
+        //}
     }
 
     private void UpdateJumpingInput()
     {
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             _charaMovement.Jump();
         }
@@ -296,10 +305,25 @@ public class LocalPlayerController : NetworkBehaviour
 
 
     #region Weapon
+
+    public void StopFiring()
+    {
+        _GunAnimatorTest.SetBool(0, false);
+    }
     private void UpdateFireInput()
     {
+        _playerState.isFiring = Input.GetKeyDown(KeyCode.Mouse0);
+        if (_playerState.isFiring && _playerState._beatHUDComponent.beating)
+        {
 
-        _playerState.isFiring = Input.GetButtonDown("Fire1");
+            _GunAnimatorTest.SetBool(0, true);
+
+        }
+
+
+
+
+        //Debug.Log("player just pressed the fire button.");
         //if (I)
         //{
         //    _playerState.FireBurst();
@@ -327,10 +351,10 @@ public class LocalPlayerController : NetworkBehaviour
     }
     private void UpdateReloadInput()
     {
-        if (Input.GetButtonDown("Reload"))
-        {
-            _playerState.StartReload();
-        }
+        //if (Input.GetButtonDown("Reload"))
+        //{
+        //    _playerState.StartReload();
+        //}
     }
     #endregion
 
@@ -348,7 +372,8 @@ public class LocalPlayerController : NetworkBehaviour
     }
     #endregion
 
- 
+
+
 
     [Header("Death")]
     [SerializeField] private Transform _spectator;
@@ -393,10 +418,10 @@ public class LocalPlayerController : NetworkBehaviour
     public void SetFirstPersonVisible(bool visible)
     {
 
-        _fpSMR.gameObject.layer = visible ? LayerMask.NameToLayer("Ignore Raycast") : LayerMask.NameToLayer("Disable Rendering");
+        _firstPersonRoot.gameObject.layer = visible ? LayerMask.NameToLayer("Ignore Raycast") : LayerMask.NameToLayer("Disable Rendering");
     }
     public void SetThirdPersonVisible(bool visible)
     {
-        _tpSMR.gameObject.layer = visible ? LayerMask.NameToLayer("Ignore Raycast") : LayerMask.NameToLayer("Disable Rendering");
+        _thirdPersonRoot.gameObject.layer = visible ? LayerMask.NameToLayer("Ignore Raycast") : LayerMask.NameToLayer("Disable Rendering");
     }
 }

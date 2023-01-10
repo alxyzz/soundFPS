@@ -211,7 +211,19 @@ public class MyNetworkManager : NetworkManager
     /// <param name="conn">Connection from client.</param>
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
-        
+
+
+        //try
+        //{
+        //    System.Diagnostics.Process.Start(Environment.CurrentDirectory + "Assets/_Chat/sam.exe 'hello there, new player.'");
+        //}
+        //catch (Exception e)
+        //{
+        //    Debug.Log(e.Message);
+        //    throw;
+        //}
+
+        Debug.Log("OnServerAddPlayer @ MyNetworkManager just ran.");
         base.OnServerAddPlayer(conn);
     }
 
@@ -243,6 +255,7 @@ public class MyNetworkManager : NetworkManager
     /// </summary>
     public override void OnClientConnect()
     {
+        Debug.Log("Client just connected @ MyNetworkManager.cs");
         base.OnClientConnect();
     }
 
@@ -308,10 +321,6 @@ public class MyNetworkManager : NetworkManager
     public override void OnStopClient() { }
 
     #endregion
-
-
-    //[SerializeField] private PlayerObjectController GamePlayerPrefab;
-    //public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
     [Header("Game")]
     [Scene] public string gameScene = "";
     public int numPlayerSpawnPoint;

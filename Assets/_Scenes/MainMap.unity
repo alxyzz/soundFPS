@@ -1739,9 +1739,9 @@ Light:
   m_Shape: 0
   m_Color: {r: 0.7877358, g: 1, b: 0.8196761, a: 1}
   m_Intensity: 365.47675
-  m_Range: 16.4
-  m_SpotAngle: 84.75557
-  m_InnerSpotAngle: 23.437277
+  m_Range: 28.86
+  m_SpotAngle: 145.0757
+  m_InnerSpotAngle: 104.35961
   m_CookieSize: 10
   m_Shadows:
     m_Type: 0
@@ -1777,7 +1777,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 0
@@ -2140,9 +2140,9 @@ Light:
   m_Shape: 0
   m_Color: {r: 0.48584908, g: 0.6803357, b: 1, a: 1}
   m_Intensity: 365.47675
-  m_Range: 16.4
-  m_SpotAngle: 84.75557
-  m_InnerSpotAngle: 23.437277
+  m_Range: 28.86
+  m_SpotAngle: 145.0757
+  m_InnerSpotAngle: 104.35961
   m_CookieSize: 10
   m_Shadows:
     m_Type: 0
@@ -2178,7 +2178,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 0
@@ -3038,9 +3038,9 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 107.703415
-  m_Range: 10.061258
-  m_SpotAngle: 166.98064
-  m_InnerSpotAngle: 56.53829
+  m_Range: 28.86
+  m_SpotAngle: 145.0757
+  m_InnerSpotAngle: 104.35961
   m_CookieSize: 10
   m_Shadows:
     m_Type: 0
@@ -3076,7 +3076,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 6.35
@@ -3592,7 +3592,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1692797726
 Transform:
   m_ObjectHideFlags: 0
@@ -4658,9 +4658,9 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 0.6650944, b: 0.6650944, a: 1}
   m_Intensity: 366.92
-  m_Range: 17.57
-  m_SpotAngle: 84.75557
-  m_InnerSpotAngle: 23.437277
+  m_Range: 28.86
+  m_SpotAngle: 145.0757
+  m_InnerSpotAngle: 104.35961
   m_CookieSize: 10
   m_Shadows:
     m_Type: 0
@@ -4696,12 +4696,12 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 7.9
   m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
+  m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1

@@ -206,7 +206,7 @@ MonoBehaviour:
   syncInterval: 0.1
   _gravityScale: 1
   _maxJogSpeed: 15
-  _maxCrouchSpeed: 1.68
+  _maxCrouchSpeed: -7.89
   _groundCheckDistance: 0.15
   _groundCheckLayers:
     serializedVersion: 2

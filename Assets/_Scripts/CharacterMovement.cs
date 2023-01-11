@@ -31,7 +31,7 @@ public class CharacterMovement : NetworkBehaviour
 
     [Header("Ground Locomotion")]
     [SerializeField] private float _maxJogSpeed = 3.0f;
-    [SerializeField] private float _maxCrouchSpeed = 1.68f;
+   // [SerializeField] private float _maxCrouchSpeed = 1.68f;
     private Vector3 _moveVelocity = Vector3.zero;
     private Vector3 _inAirVelocity = Vector3.zero;
     
@@ -41,7 +41,7 @@ public class CharacterMovement : NetworkBehaviour
         {
             float weapon = 1.0f;
             if (_playerState.CurrentWeaponIdentity != null) weapon = _playerState.CurrentWeaponIdentity.Data.MovementMultiplier;
-            if (IsCrouching) return _maxCrouchSpeed * weapon;
+            //if (IsCrouching) return _maxCrouchSpeed * weapon;
             return _maxJogSpeed * weapon;
         }
     }
@@ -184,6 +184,8 @@ public class CharacterMovement : NetworkBehaviour
     private bool CanJump => _charaCtrl.isGrounded;
     public void Jump()
     {
+
+        Debug.LogWarning("Character is grounded? => " + _charaCtrl.isGrounded);
         if (CanJump)
         {
             // Uncrouch();

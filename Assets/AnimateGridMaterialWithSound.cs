@@ -166,13 +166,13 @@ public class AnimateGridMaterialWithSound : MonoBehaviour
             if (clipLoudness > clipLoudnessBeatDetectionThreshold)
             {
                 sunLight.color = new Color(originalLightColor.r + (clipLoudness * onBeatSunColorModifier), originalLightColor.g, originalLightColor.b);
-                MaterialToAnimate.SetColor("_UnlitColor", newColor);
+                MaterialToAnimate.SetColor("_BaseColor", newColor);
                 titleText.color = newColor;
             }
             else
             {
                 sunLight.color = originalLightColor;
-                MaterialToAnimate.SetColor("_UnlitColor", Color.white);
+                MaterialToAnimate.SetColor("_BaseColor", Color.white);
                 titleText.color = Color.white;
             }
 

@@ -255,6 +255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _crosshair: {fileID: 9164541748967824419}
   _beatSimpleIndicator: {fileID: 5974167392586855772}
+  beating: 0
 --- !u!114 &3853611606690215997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -421,7 +422,7 @@ GameObject:
   - component: {fileID: 4806389296381804647}
   - component: {fileID: 8326222754021545281}
   - component: {fileID: 1722727987276365712}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: gunObj
   m_TagString: Untagged
   m_Icon: {fileID: 0}

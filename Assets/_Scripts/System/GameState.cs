@@ -21,7 +21,7 @@ class Beat
     private string name; //name
     private float period; // amount of time between beats
     private float duration;
-    private Coroutine _coroutine = null; //tracks the associated coroutine
+    public Coroutine _coroutine = null; //tracks the associated coroutine
 
     public Beat(string n, float p, float d)
     {
@@ -30,10 +30,16 @@ class Beat
         duration = d;
     }
 
+    public string GetName()
+    {
+        return name;
+    }
+
     public void AssociateCoroutine(Coroutine c)
     {
         _coroutine = c;
     }
+
 
     public bool isActive()
     {
@@ -60,6 +66,17 @@ class BeatController
     public void AddBeat(string name, float period, float duration)
     {
         Beat b = new Beat(name, period, duration);
+        beats.Add(b);
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="n">beat name</param>
+    /// <param name="script">reference to script it's running</param>
+    public void RemoveBeat(string n, MonoBehaviour script )
+    {
+        List<Beat> results = beats.FindAll(x => x.GetName() == n);
+        script.StopCoroutine(results[0]._coroutine);
     }
 
 }

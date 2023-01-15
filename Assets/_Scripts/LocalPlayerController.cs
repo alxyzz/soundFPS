@@ -75,6 +75,7 @@ public class LocalPlayerController : NetworkBehaviour
     [Header("Components")]
     [SerializeField] private Transform _thirdPersonRoot;
     [SerializeField] private Transform _firstPersonRoot;
+    [SerializeField] private gunshooter _TESTGUN;
 
     [SerializeField] private Animator _GunAnimatorTest;
     // [SerializeField] private AudioSource _soundPlayer;
@@ -316,7 +317,14 @@ public class LocalPlayerController : NetworkBehaviour
         if (_playerState.isFiring && _playerState._beatHUDComponent.beating)
         {
 
-            _GunAnimatorTest.SetBool(0, true);
+           
+
+
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                _TESTGUN.onShoot();
+             // _GunAnimatorTest.SetBool(0, true);
+            }
 
         }
 

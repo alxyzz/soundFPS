@@ -16,7 +16,53 @@ public enum GameStage
     OVER // winner
 }
 
+class Beat
+{
+    private string name; //name
+    private float period; // amount of time between beats
+    private float duration;
+    private Coroutine _coroutine = null; //tracks the associated coroutine
 
+    public Beat(string n, float p, float d)
+    {
+        name = n;
+        period = p;
+        duration = d;
+    }
+
+    public void AssociateCoroutine(Coroutine c)
+    {
+        _coroutine = c;
+    }
+
+    public bool isActive()
+    {
+        return !(_coroutine == null);
+    }
+}
+
+class BeatController
+{
+    private List<Beat> beats = new List<Beat>();
+    private List<Coroutine> beatCoroutines = new List<Coroutine>();
+
+    public void InitializeBeatLoop()
+    {
+        //start a periodic IEnumerator with each beat given and keep track of them
+        // so we can stop them at will or pause them or add new ones.
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="period">time from one beat to another</param>
+    /// <param name="duration">duration of beat until the next period starts</param>
+    public void AddBeat(string name, float period, float duration)
+    {
+        Beat b = new Beat(name, period, duration);
+    }
+
+}
 
 /* When rule-related events in the game happen and need to be tracked and shared with all players,
  * that information is stored and synced through the Game State. This information can include:
@@ -31,6 +77,9 @@ public enum GameStage
 public class GameState : NetworkBehaviour
 {
     public bool beat_toggle;
+    [HideInInspector]private bool BEAT;
+    public bool IsBeating => BEAT;
+
 
     [HideInInspector] int maxKills = 30;
 
@@ -74,20 +123,23 @@ public class GameState : NetworkBehaviour
         yield return new WaitForSecondsRealtime(2f);
         if (beat_toggle)
         {
-            RPCDoBeat();
+            RPCDoBeat(true);
         }
        
     }
+
+
+
     /*
        When running a game as a host with a local client, ClientRpc calls will be invoked on the local client even though it is in the same process as the server. So the behaviours of local and remote clients are the same for ClientRpc calls.
      */
     [ClientRpc]
-    private void RPCDoBeat()
+    private void RPCDoBeat( bool toggle)
     {
         foreach (PlayerState item in GetPlayerStateList())
         {
             Debug.Log("GameState.GivePeopleDebugWeapons() - gave weapon to " + item);
-            item.RelayBeat();
+            item._beatHUDComponent.ShowBeat(true);
         }
 
     }

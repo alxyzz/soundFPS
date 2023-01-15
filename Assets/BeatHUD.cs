@@ -24,9 +24,15 @@ public class BeatHUD : MonoBehaviour
     public void DoBeatTick()
     {
         Debug.LogError("Beat tick just happened @ BeatHUD");
-        _beatSimpleIndicator.gameObject.SetActive(false);
+        
         beating = true;
         StartCoroutine(showBeat());
+    }
+
+    public void ShowBeat(bool b)
+    {
+
+        _beatSimpleIndicator.gameObject.SetActive(b);
     }
 
     IEnumerator showBeat()

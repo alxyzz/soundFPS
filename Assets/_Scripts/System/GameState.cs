@@ -16,7 +16,70 @@ public enum GameStage
     OVER // winner
 }
 
+class Beat
+{
+    private string name; //name
+    private float period; // amount of time between beats
+    private float duration;
+    public Coroutine _coroutine = null; //tracks the associated coroutine
 
+    public Beat(string n, float p, float d)
+    {
+        name = n;
+        period = p;
+        duration = d;
+    }
+
+    public string GetName()
+    {
+        return name;
+    }
+
+    public void AssociateCoroutine(Coroutine c)
+    {
+        _coroutine = c;
+    }
+
+
+    public bool isActive()
+    {
+        return !(_coroutine == null);
+    }
+}
+
+class BeatController
+{
+    private List<Beat> beats = new List<Beat>();
+    private List<Coroutine> beatCoroutines = new List<Coroutine>();
+
+    public void InitializeBeatLoop()
+    {
+        //start a periodic IEnumerator with each beat given and keep track of them
+        // so we can stop them at will or pause them or add new ones.
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="period">time from one beat to another</param>
+    /// <param name="duration">duration of beat until the next period starts</param>
+    public void AddBeat(string name, float period, float duration)
+    {
+        Beat b = new Beat(name, period, duration);
+        beats.Add(b);
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="n">beat name</param>
+    /// <param name="script">reference to script it's running</param>
+    public void RemoveBeat(string n, MonoBehaviour script )
+    {
+        List<Beat> results = beats.FindAll(x => x.GetName() == n);
+        script.StopCoroutine(results[0]._coroutine);
+    }
+
+}
 
 /* When rule-related events in the game happen and need to be tracked and shared with all players,
  * that information is stored and synced through the Game State. This information can include:
@@ -30,7 +93,11 @@ public enum GameStage
  */
 public class GameState : NetworkBehaviour
 {
-    public bool beat_toggle;
+    public bool BeatIsEnabled;
+    [HideInInspector]private bool BEAT;
+    public bool IsBeating => BEAT;
+    [SerializeField] private float _duration;
+    [SerializeField] private float _period;
 
     [HideInInspector] int maxKills = 30;
 
@@ -62,7 +129,7 @@ public class GameState : NetworkBehaviour
         if (!isClient)
         {
             Debug.LogError("GameState@ InitializeBeat - invoked the repetition");
-            InvokeRepeating("PeriodicBeat", 4, 4);
+            InvokeRepeating("PeriodicBeat", 0f, _period+0.001f);
         }
     }
 
@@ -72,26 +139,40 @@ public class GameState : NetworkBehaviour
         Debug.LogError("Periodic Beat #" + beatNr);
         beatNr++;
         yield return new WaitForSecondsRealtime(2f);
-        if (beat_toggle)
+        if (BeatIsEnabled)
         {
-            RPCDoBeat();
+            RpcDoBeat(_duration);
         }
        
     }
+
+
+
     /*
        When running a game as a host with a local client, ClientRpc calls will be invoked on the local client even though it is in the same process as the server. So the behaviours of local and remote clients are the same for ClientRpc calls.
      */
     [ClientRpc]
-    private void RPCDoBeat()
+    private void RpcDoBeat(float duration)
     {
         foreach (PlayerState item in GetPlayerStateList())
         {
-            Debug.Log("GameState.GivePeopleDebugWeapons() - gave weapon to " + item);
+            Debug.Log("GameState.RPCDoBeat() -> true : " + item);
+            
             item.RelayBeat();
         }
 
+        StartCoroutine((beatEnd(duration)));
     }
 
+    IEnumerator beatEnd(float duration)
+    {
+        yield return new WaitForSecondsRealtime(duration);
+        foreach (PlayerState item in GetPlayerStateList())
+        {
+            Debug.Log("GameState.RPCDoBeat() -> false : " + item);
+            item._beatHUDComponent.ToggleBeatVisibility(false);
+        }
+    }
     public override void OnStartServer()
     {
         Debug.Log("Game state OnStartServer.AAAAAAAAAAAAAAAAAAAAAAAA");

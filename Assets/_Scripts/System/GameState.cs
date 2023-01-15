@@ -93,10 +93,11 @@ class BeatController
  */
 public class GameState : NetworkBehaviour
 {
-    public bool beat_toggle;
+    public bool BeatIsEnabled;
     [HideInInspector]private bool BEAT;
     public bool IsBeating => BEAT;
-
+    [SerializeField] private float _duration;
+    [SerializeField] private float _period;
 
     [HideInInspector] int maxKills = 30;
 
@@ -128,7 +129,7 @@ public class GameState : NetworkBehaviour
         if (!isClient)
         {
             Debug.LogError("GameState@ InitializeBeat - invoked the repetition");
-            InvokeRepeating("PeriodicBeat", 4, 4);
+            InvokeRepeating("PeriodicBeat", 0f, _period+0.001f);
         }
     }
 
@@ -138,9 +139,9 @@ public class GameState : NetworkBehaviour
         Debug.LogError("Periodic Beat #" + beatNr);
         beatNr++;
         yield return new WaitForSecondsRealtime(2f);
-        if (beat_toggle)
+        if (BeatIsEnabled)
         {
-            RPCDoBeat(true);
+            RPCDoBeat(_duration);
         }
        
     }
@@ -151,16 +152,26 @@ public class GameState : NetworkBehaviour
        When running a game as a host with a local client, ClientRpc calls will be invoked on the local client even though it is in the same process as the server. So the behaviours of local and remote clients are the same for ClientRpc calls.
      */
     [ClientRpc]
-    private void RPCDoBeat( bool toggle)
+    private void RPCDoBeat(float duration)
     {
         foreach (PlayerState item in GetPlayerStateList())
         {
-            Debug.Log("GameState.GivePeopleDebugWeapons() - gave weapon to " + item);
+            Debug.Log("GameState.RPCDoBeat() -> true : " + item);
             item._beatHUDComponent.ShowBeat(true);
         }
 
+        StartCoroutine((beatEnd(duration)));
     }
 
+    IEnumerator beatEnd(float duration)
+    {
+        yield return new WaitForSecondsRealtime(duration);
+        foreach (PlayerState item in GetPlayerStateList())
+        {
+            Debug.Log("GameState.RPCDoBeat() -> false : " + item);
+            item._beatHUDComponent.ShowBeat(false);
+        }
+    }
     public override void OnStartServer()
     {
         Debug.Log("Game state OnStartServer.AAAAAAAAAAAAAAAAAAAAAAAA");

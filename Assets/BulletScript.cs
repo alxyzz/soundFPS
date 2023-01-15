@@ -25,7 +25,7 @@ public class BulletScript : MonoBehaviour
         timeleft -= Time.deltaTime;
         if (Vector3.Distance(transform.position, direction) > 1f)
         {
-            transform.position = Vector3.Lerp(transform.position, direction, 0.01f);
+            transform.position = Vector3.Lerp(transform.position, direction, 0.05f);
         }
         else
         {

@@ -75,7 +75,6 @@ public class LocalPlayerController : NetworkBehaviour
     [Header("Components")]
     [SerializeField] private Transform _thirdPersonRoot;
     [SerializeField] private Transform _firstPersonRoot;
-    [SerializeField] private gunshooter _TESTGUN;
 
     [SerializeField] private Animator _GunAnimatorTest;
     // [SerializeField] private AudioSource _soundPlayer;
@@ -313,22 +312,13 @@ public class LocalPlayerController : NetworkBehaviour
     }
     private void UpdateFireInput()
     {
-        if (!isLocalPlayer)
-        {
-            return;
-        }
         _playerState.isFiring = Input.GetKeyDown(KeyCode.Mouse0);
+        if (_playerState.isFiring && _playerState._beatHUDComponent.beating)
+        {
 
-        if (!_playerState.isFiring) return;
-        
-            Debug.LogWarning(" _playerState._beatHUDComponent.beating EQUALS " + _playerState._beatHUDComponent.beating);
-            if ( _playerState._beatHUDComponent.beating)
-            {
-                _TESTGUN.onShoot(_playerState);
-                _GunAnimatorTest.SetBool(0, true);
-            }
-            
-       
+            _GunAnimatorTest.SetBool(0, true);
+
+        }
 
 
 

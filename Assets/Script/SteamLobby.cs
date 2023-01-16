@@ -46,29 +46,28 @@ public class SteamLobby : MonoBehaviour
         }
 
         Callback<LobbyCreated_t>.Create(OnLobbyCreated);
-       // Callback<GameLobbyJoinRequested_t>.Create(OnJoinRequest);
+        Callback<GameLobbyJoinRequested_t>.Create(OnJoinRequest);
         Callback<LobbyEnter_t>.Create(OnLobbyEntered);
 
-        //Callback<LobbyDataUpdate_t>.Create(OnLobbyDataUpdate);
-        //Callback<LobbyChatUpdate_t>.Create(OnLobbyChatUpdate);
+        Callback<LobbyDataUpdate_t>.Create(OnLobbyDataUpdate);
+        Callback<LobbyChatUpdate_t>.Create(OnLobbyChatUpdate);
     }
 
-    //private void OnLobbyChatUpdate(LobbyChatUpdate_t param)
-    //{
-    //    onLobbyChatUpdate?.Invoke(param);
-    //}
+    private void OnLobbyChatUpdate(LobbyChatUpdate_t param)
+    {
+        onLobbyChatUpdate?.Invoke(param);
+    }
 
-    //private void OnLobbyDataUpdate(LobbyDataUpdate_t param)
-    //{
-    //    onLobbyDataUpdate?.Invoke(param);
-    //}
+    private void OnLobbyDataUpdate(LobbyDataUpdate_t param)
+    {
+        onLobbyDataUpdate?.Invoke(param);
+    }
 
 
     public void HostLobby()
     {
         
         SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, MyNetworkManager.singleton.maxConnections);
-        MyNetworkManager.singleton.ServerChangeScene("MainMap");
     }
     public void JoinLobby(ulong id)
     {

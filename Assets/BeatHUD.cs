@@ -24,25 +24,19 @@ public class BeatHUD : MonoBehaviour
     public void DoBeatTick()
     {
         Debug.LogError("Beat tick just happened @ BeatHUD");
-        
+        _beatSimpleIndicator.gameObject.SetActive(false);
         beating = true;
         StartCoroutine(showBeat());
     }
 
-    public void ToggleBeatVisibility(bool b)
-    {
-
-        _beatSimpleIndicator.gameObject.SetActive(b);
-    }
-
     IEnumerator showBeat()
     {
-        ToggleBeatVisibility(true);
+        _beatSimpleIndicator.gameObject.SetActive(true);
 
         yield return new WaitForSecondsRealtime(0.2f);
 
         beating = false;
-        ToggleBeatVisibility(false);
+        _beatSimpleIndicator.gameObject.SetActive(false);
     }
 
     // Start is called before the first frame update

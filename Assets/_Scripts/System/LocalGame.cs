@@ -12,8 +12,7 @@ public class LocalGame : MonoBehaviour
     {
         instance = this;
     }
-
-
+    
 
     public Action onServerGameStarted;
     public Action onClientGameStarted;

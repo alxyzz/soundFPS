@@ -176,12 +176,12 @@ public class MyNetworkManager : NetworkManager
     public override void OnClientSceneChanged()
     {        
         base.OnClientSceneChanged();
-        //if (SceneManager.GetActiveScene().path == gameScene)
-        //{
-        //    Debug.Log($"Client scene changed to {SceneManager.GetActiveScene().name}");
-        //    //NetworkClient.AddPlayer();
+        if (SceneManager.GetActiveScene().path == gameScene)
+        {
+            Debug.Log($"Client scene changed to {SceneManager.GetActiveScene().name}");
+            NetworkClient.AddPlayer();
 
-        //}
+        }
     }
     #endregion
 
@@ -325,12 +325,7 @@ public class MyNetworkManager : NetworkManager
     [Scene] public string gameScene = "";
     public int numPlayerSpawnPoint;
     public void StartGame()
-    {
-
-        SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, MyNetworkManager.singleton.maxConnections);
-        CSteamID _lobbyId = SteamLobby.Instance.CurrentLobbyId;
-        SteamMatchmaking.SetLobbyJoinable(_lobbyId, true);
-        SteamMatchmaking.SetLobbyData(_lobbyId, SteamLobby.keyGameStarted, "1");
+    {   
         ServerChangeScene(gameScene);
     }
 }

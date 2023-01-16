@@ -56,16 +56,16 @@ namespace Mirror.Examples.AdditiveLevels
         /// <param name="sceneName">Name of the scene that's about to be loaded</param>
         /// <param name="sceneOperation">Scene operation that's about to happen</param>
         /// <param name="customHandling">true to indicate that scene loading will be handled through overrides</param>
-        //public override void OnClientChangeScene(string sceneName, SceneOperation sceneOperation, bool customHandling)
-        //{
-        //    //Debug.Log($"{System.DateTime.Now:HH:mm:ss:fff} OnClientChangeScene {sceneName} {sceneOperation}");
+        public override void OnClientChangeScene(string sceneName, SceneOperation sceneOperation, bool customHandling)
+        {
+            //Debug.Log($"{System.DateTime.Now:HH:mm:ss:fff} OnClientChangeScene {sceneName} {sceneOperation}");
 
-        //    if (sceneOperation == SceneOperation.UnloadAdditive)
-        //        StartCoroutine(UnloadAdditive(sceneName));
+            if (sceneOperation == SceneOperation.UnloadAdditive)
+                StartCoroutine(UnloadAdditive(sceneName));
 
-        //    if (sceneOperation == SceneOperation.LoadAdditive)
-        //        StartCoroutine(LoadAdditive(sceneName));
-        //}
+            if (sceneOperation == SceneOperation.LoadAdditive)
+                StartCoroutine(LoadAdditive(sceneName));
+        }
 
         IEnumerator LoadAdditive(string sceneName)
         {

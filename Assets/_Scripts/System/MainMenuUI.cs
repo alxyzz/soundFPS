@@ -24,23 +24,15 @@ public class MainMenuUI : MonoBehaviour
     public void OnClickHost()
     {
         SetChildrenEnabled(false);
-        //SteamLobby.Instance.HostLobby();
-        MyNetworkManager.singleton.StartGame();
+        SteamLobby.Instance.HostLobby();
     }
 
 
     public void OnClickDebugJoin()
     {
        // SetChildrenEnabled(false);
-       //x SteamLobby.Instance.HostLobby();
+       // SteamLobby.Instance.HostLobby();
        //// SteamLobby.Instance.JoinLobby(result);
-    }
-
-    public void OnClickQuitGame()
-    {
-
-        Application.Quit();
-
     }
 
     public void OnClickJoin()

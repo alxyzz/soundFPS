@@ -87,7 +87,7 @@ public class PlayerState : NetworkBehaviour, IDamageable
     private readonly int _aUnholster = Animator.StringToHash("Unholster");
     private readonly int _aInspect = Animator.StringToHash("Inspect");
     private readonly int _aUninspect = Animator.StringToHash("Uninspect");
-    [HideInInspector]public bool isFiring;
+    public bool isFiring;
 
    
 
@@ -234,7 +234,7 @@ public class PlayerState : NetworkBehaviour, IDamageable
     {
         if (!isLocalPlayer)
         {
-            Debug.LogWarning("For some reason, RelayBEatTick@LocalPlayerController ran on a player which is not local. this should not happen considering a ClientRPC told us to do this.");
+            Debug.LogWarning("For some reason, RelayBEatTick@LocalPlayerController ran on a player which is not local.");
             return;
         }
         _beatHUDComponent.DoBeatTick();
@@ -332,14 +332,12 @@ public class PlayerState : NetworkBehaviour, IDamageable
     [ClientRpc(includeOwner = false)]
     private void RpcFireSound(int dbIndex)
     {
-        Debug.Log("did fire sound as heard by other players");
         PlayWeaponFireSound(dbIndex);
     }
     private void PlayWeaponFireSound(int dbIndex)
     {
         //_weaponAudioSource.clip = GameManager.GetWeaponData(dbIndex).FireSound;
         //_weaponAudioSource.Play();
-        Debug.Log("did fire sound as heard by player");
         _weaponAudioSource.PlayOneShot(GameManager.GetWeaponData(dbIndex).FireSound);
     }
     public void EquipScroll(int val)

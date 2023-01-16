@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-       // Greet();
+        Greet();
     }
 
     private void Greet()

@@ -190,11 +190,11 @@ public class UI_GameHUD : MonoBehaviour
     {
         instance._imgWinnerIcon.texture = SteamLobby.GetSteamImageAsTexture(callback.m_iImage);
     }
-    //public void OnClickReturnToLobby()
-    //{
-    //    // SteamLobby.SceneToLoad = "Lobby";
-    //    MyNetworkManager.singleton.ServerChangeScene("Lobby");
-    //}
+    public void OnClickReturnToLobby()
+    {
+        // SteamLobby.SceneToLoad = "Lobby";
+        MyNetworkManager.singleton.ServerChangeScene("Lobby");
+    }
     public static void SetUIEnabled(bool enabled)
     {
         instance._pnlAmmo.SetActive(enabled);

@@ -12,22 +12,22 @@ using Mirror.Examples.Pong;
 
 public class LobbyController : MonoBehaviour
 {
-    public static LobbyController instance;
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-    }
+    //public static LobbyController instance;
+    //private void Awake()
+    //{
+    //    if (instance == null)
+    //    {
+    //        instance = this;
+    //    }
+    //}
 
 
-    private CSteamID _lobbyId;
-    private bool _isOwner;
+    //private CSteamID _lobbyId;
+    //private bool _isOwner;
     //private Dictionary<CSteamID, UI_Lobby_PlayerItem> _players = new Dictionary<CSteamID, UI_Lobby_PlayerItem>();
-    private bool _isReady = false;
+    //private bool _isReady = false;
 
-    private GameObject _playerItem;
+    //private GameObject _playerItem;
 
     private void Start()
     {
@@ -38,16 +38,16 @@ public class LobbyController : MonoBehaviour
         }
         //_playerItem = Resources.Load<GameObject>("UI/Lobby/LobbyPlayerItem");
 
-        _lobbyId = SteamLobby.Instance.CurrentLobbyId;
-        _isOwner = SteamMatchmaking.GetLobbyOwner(_lobbyId) == SteamUser.GetSteamID();
-        _isReady = _isOwner;
-        if (_isOwner)
-        {
-            SteamMatchmaking.SetLobbyData(_lobbyId, SteamLobby.keyGameStarted, "0");
-            SteamMatchmaking.SetLobbyJoinable(_lobbyId, true);
-        }
+        //_lobbyId = SteamLobby.Instance.CurrentLobbyId;
+        //_isOwner = SteamMatchmaking.GetLobbyOwner(_lobbyId) == SteamUser.GetSteamID();
+        //_isReady = _isOwner;
+        //if (_isOwner)
+        //{
+        //    SteamMatchmaking.SetLobbyData(_lobbyId, SteamLobby.keyGameStarted, "0");
+        //    SteamMatchmaking.SetLobbyJoinable(_lobbyId, true);
+        //}
 
-        SteamMatchmaking.SetLobbyMemberData(_lobbyId, SteamLobby.keyReady, _isReady ? "1" : "0");
+        //SteamMatchmaking.SetLobbyMemberData(_lobbyId, SteamLobby.keyReady, _isReady ? "1" : "0");
 
 
 
@@ -167,7 +167,8 @@ public class LobbyController : MonoBehaviour
     //        if (CanStartGame())
     //        {
     //            Debug.Log("Can start game!");
-                
+    //            SteamMatchmaking.SetLobbyJoinable(_lobbyId, true);
+    //            SteamMatchmaking.SetLobbyData(_lobbyId, SteamLobby.keyGameStarted, "1");
 
 
     //            MyNetworkManager.singleton.StartGame();
@@ -176,7 +177,10 @@ public class LobbyController : MonoBehaviour
     //    else
     //    {
     //        _isReady = !_isReady;
-
+    //        SteamMatchmaking.SetLobbyMemberData(
+    //            _lobbyId,
+    //            SteamLobby.keyReady,
+    //            _isReady ? "1" : "0");
 
     //    }
     //}

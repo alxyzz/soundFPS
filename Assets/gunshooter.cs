@@ -14,7 +14,7 @@ public class gunshooter : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            Debug.Log("SHOT");
+            Debug.LogError("SHOT");
             GameObject b = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
             Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
             Vector3 target = transform.position + transform.forward * 50f;

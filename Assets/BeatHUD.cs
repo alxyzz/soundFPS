@@ -29,7 +29,7 @@ public class BeatHUD : MonoBehaviour
         StartCoroutine(showBeat());
     }
 
-    public void ShowBeat(bool b)
+    public void ToggleBeatVisibility(bool b)
     {
 
         _beatSimpleIndicator.gameObject.SetActive(b);
@@ -37,12 +37,12 @@ public class BeatHUD : MonoBehaviour
 
     IEnumerator showBeat()
     {
-        _beatSimpleIndicator.gameObject.SetActive(true);
+        ToggleBeatVisibility(true);
 
         yield return new WaitForSecondsRealtime(0.2f);
 
         beating = false;
-        _beatSimpleIndicator.gameObject.SetActive(false);
+        ToggleBeatVisibility(false);
     }
 
     // Start is called before the first frame update

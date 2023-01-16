@@ -141,7 +141,7 @@ public class GameState : NetworkBehaviour
         yield return new WaitForSecondsRealtime(2f);
         if (BeatIsEnabled)
         {
-            RPCDoBeat(_duration);
+            RpcDoBeat(_duration);
         }
        
     }
@@ -152,12 +152,13 @@ public class GameState : NetworkBehaviour
        When running a game as a host with a local client, ClientRpc calls will be invoked on the local client even though it is in the same process as the server. So the behaviours of local and remote clients are the same for ClientRpc calls.
      */
     [ClientRpc]
-    private void RPCDoBeat(float duration)
+    private void RpcDoBeat(float duration)
     {
         foreach (PlayerState item in GetPlayerStateList())
         {
             Debug.Log("GameState.RPCDoBeat() -> true : " + item);
-            item._beatHUDComponent.ShowBeat(true);
+            
+            item.RelayBeat();
         }
 
         StartCoroutine((beatEnd(duration)));
@@ -169,7 +170,7 @@ public class GameState : NetworkBehaviour
         foreach (PlayerState item in GetPlayerStateList())
         {
             Debug.Log("GameState.RPCDoBeat() -> false : " + item);
-            item._beatHUDComponent.ShowBeat(false);
+            item._beatHUDComponent.ToggleBeatVisibility(false);
         }
     }
     public override void OnStartServer()

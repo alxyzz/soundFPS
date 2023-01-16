@@ -176,12 +176,12 @@ public class MyNetworkManager : NetworkManager
     public override void OnClientSceneChanged()
     {        
         base.OnClientSceneChanged();
-        if (SceneManager.GetActiveScene().path == gameScene)
-        {
-            Debug.Log($"Client scene changed to {SceneManager.GetActiveScene().name}");
-            NetworkClient.AddPlayer();
+        //if (SceneManager.GetActiveScene().path == gameScene)
+        //{
+        //    Debug.Log($"Client scene changed to {SceneManager.GetActiveScene().name}");
+        //    NetworkClient.AddPlayer();
 
-        }
+        //}
     }
     #endregion
 

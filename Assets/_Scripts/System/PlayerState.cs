@@ -37,10 +37,10 @@ public class PlayerState : NetworkBehaviour, IDamageable
     [Command]
     private void CmdStartLocalPlayer(ulong steamIdUlong)
     {
-        _steamIdUlong = steamIdUlong;
-        SteamId = new CSteamID(steamIdUlong);
-        _nickname = SteamFriends.GetFriendPersonaName(SteamId);
-        GameState.Instance.AddPlayer(steamIdUlong, netId);
+        //_steamIdUlong = steamIdUlong;
+        //SteamId = new CSteamID(steamIdUlong);
+        //_nickname = SteamFriends.GetFriendPersonaName(SteamId);
+        //GameState.Instance.AddPlayer(steamIdUlong, netId);
     }
     //public override void OnStartLocalPlayer()
     //{
@@ -54,7 +54,7 @@ public class PlayerState : NetworkBehaviour, IDamageable
 
     private void Awake()
     {
-        _charaAnimHandler = GetComponent<CharacterAnimHandler>();      
+        //_charaAnimHandler = GetComponent<CharacterAnimHandler>();      
     }
     private void Start()
     {
@@ -68,11 +68,11 @@ public class PlayerState : NetworkBehaviour, IDamageable
     }
 
     [Header("Components")]
-    [SerializeField] private Transform _tpSocketWeaponLeft;
-    [SerializeField] private Transform _tpSocketWeaponRight;
-    [SerializeField] private Transform _fpSocketWeaponLeft;
-    [SerializeField] private Transform _fpSocketWeaponRight;
-    [SerializeField] private AudioSource _weaponAudioSource;
+    //[SerializeField] private Transform _tpSocketWeaponLeft;
+    //[SerializeField] private Transform _tpSocketWeaponRight;
+    //[SerializeField] private Transform _fpSocketWeaponLeft;
+    //[SerializeField] private Transform _fpSocketWeaponRight;
+    //[SerializeField] private AudioSource _weaponAudioSource;
     [SerializeField] public BeatHUD _beatHUDComponent;
     [SerializeField] private GameObject _scoreUI;
 
@@ -157,22 +157,22 @@ public class PlayerState : NetworkBehaviour, IDamageable
 
         if (isLocalPlayer)
         {
-            _curWpnObj = Instantiate(Resources.Load<GameObject>(path), _fpSocketWeaponRight);
+           // _curWpnObj = Instantiate(Resources.Load<GameObject>(path), _fpSocketWeaponRight);
             foreach (var item in _curWpnObj.GetComponentsInChildren<Renderer>())
             {
                 item.shadowCastingMode = ShadowCastingMode.Off;
             }
-            _curWpnObj.GetComponent<WeaponInHand>().Init(CurrentWeaponIdentity, GetComponent<LocalPlayerController>());
+           // _curWpnObj.GetComponent<WeaponInHand>().Init(CurrentWeaponIdentity, GetComponent<LocalPlayerController>());
 
             
-            UI_GameHUD.SetAmmo(ammo);
-            UI_GameHUD.SetBackupAmmo(backupAmmo);
-            UI_GameHUD.SetCrosshairWeaponSpread(data.CrosshairSpread);
+            //UI_GameHUD.SetAmmo(ammo);
+            //UI_GameHUD.SetBackupAmmo(backupAmmo);
+            //UI_GameHUD.SetCrosshairWeaponSpread(data.CrosshairSpread);
         }
         else
         {
-            _curWpnObj = Instantiate(Resources.Load<GameObject>(path), _tpSocketWeaponRight);
-            _curWpnObj.GetComponent<WeaponInHand>().Init(new WeaponIdentityData(data, 0, 0), null);
+           // _curWpnObj = Instantiate(Resources.Load<GameObject>(path), _tpSocketWeaponRight);
+            //_curWpnObj.GetComponent<WeaponInHand>().Init(new WeaponIdentityData(data, 0, 0), null);
         }
 
         Debug.Log("PlayerState.RpcEquipWeapon() done.");
@@ -338,7 +338,7 @@ public class PlayerState : NetworkBehaviour, IDamageable
     {
         //_weaponAudioSource.clip = GameManager.GetWeaponData(dbIndex).FireSound;
         //_weaponAudioSource.Play();
-        _weaponAudioSource.PlayOneShot(GameManager.GetWeaponData(dbIndex).FireSound);
+       // _weaponAudioSource.PlayOneShot(GameManager.GetWeaponData(dbIndex).FireSound);
     }
     public void EquipScroll(int val)
     {
@@ -374,12 +374,12 @@ public class PlayerState : NetworkBehaviour, IDamageable
     }
     public void ReloadAttachToHand(int attach)
     {
-        if (!IsAlive) return;
+        //if (!IsAlive) return;
 
-        if (attach > 0)
-            CurrentWeaponInHand?.RemoveMagazine(isLocalPlayer ? _fpSocketWeaponLeft : _tpSocketWeaponLeft);
-        else
-            CurrentWeaponInHand?.LoadMagazine();
+        //if (attach > 0)
+        //    CurrentWeaponInHand?.RemoveMagazine(isLocalPlayer ? _fpSocketWeaponLeft : _tpSocketWeaponLeft);
+        //else
+        //    CurrentWeaponInHand?.LoadMagazine();
     }
     public void Reload()
     {

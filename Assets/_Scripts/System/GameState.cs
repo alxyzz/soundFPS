@@ -40,7 +40,7 @@ public class GameState : NetworkBehaviour
         foreach (PlayerState item in GetPlayerStateList())
         {
             Debug.Log("GameState.GivePeopleDebugWeapons() - gave weapon to " + item);
-            item.GiveDebugWeapon();
+            //item.GiveDebugWeapon();
         }
     }
 
@@ -106,15 +106,15 @@ public class GameState : NetworkBehaviour
         Debug.Log("Game state OnStartClient. Binding callback method.");
         instance = this;
         // _playerNetIds
-        foreach (var item in playerDic)
+        foreach (var item in PlayerList_NameID)
         {
             UI_GameHUD.Instance.AddPlayerToStatistics(item.Value);
 
         }
-        playerDic.Callback += PlayerDic_Callback;
+        PlayerList_NameID.Callback += PlayerListNameIdCallback;
     }
 
-    private void PlayerDic_Callback(SyncIDictionary<ulong, uint>.Operation op, ulong key, uint item)
+    private void PlayerListNameIdCallback(SyncIDictionary<ulong, uint>.Operation op, ulong key, uint item)
     {
         Debug.Log($"On client game state _playerNetIds changed: {op}.");
         switch (op)
@@ -143,7 +143,7 @@ public class GameState : NetworkBehaviour
     [Client]
     private void UpdateConnectedPlayerNum()
     {
-        //UI_GameHUD.Instance.UpdateConnectedPlayerNum(playerDic.Count, SteamMatchmaking.GetNumLobbyMembers(SteamLobby.Instance.CurrentLobbyId));
+        //UI_GameHUD.Instance.UpdateConnectedPlayerNum(PlayerList_NameID.Count, SteamMatchmaking.GetNumLobbyMembers(SteamLobby.Instance.CurrentLobbyId));
     }
 
     private static GameState instance;
@@ -168,36 +168,16 @@ public class GameState : NetworkBehaviour
         }
     }
 
-    public readonly SyncDictionary<ulong, uint> playerDic = new SyncDictionary<ulong, uint>();
-    public int ConnectedPlayerNum => playerDic.Count;
-
+    public readonly SyncDictionary<ulong, uint> PlayerList_NameID = new SyncDictionary<ulong, uint>();
+    
+    public int ConnectedPlayerNum => PlayerList_NameID.Count;
     [Server]
-    private void OnLobbyChatUpdate(LobbyChatUpdate_t callback)
+    public void AddPlayer(ulong playerName, uint playerID)
     {
-        Debug.Log($"On lobby chat update. State : {(EChatMemberStateChange)callback.m_rgfChatMemberStateChange}");
-        switch ((EChatMemberStateChange)callback.m_rgfChatMemberStateChange)
+        if (!PlayerList_NameID.ContainsKey(playerName))
         {
-            case EChatMemberStateChange.k_EChatMemberStateChangeEntered:
-                break;
-            case EChatMemberStateChange.k_EChatMemberStateChangeLeft:
-                break;
-            case EChatMemberStateChange.k_EChatMemberStateChangeDisconnected:
-                break;
-            case EChatMemberStateChange.k_EChatMemberStateChangeKicked:
-                break;
-            case EChatMemberStateChange.k_EChatMemberStateChangeBanned:
-                break;
-            default:
-                break;
-        }
-    }
-    [Server]
-    public void AddPlayer(ulong steamIdUlong, uint netId)
-    {
-        if (!playerDic.ContainsKey(steamIdUlong))
-        {
-            Debug.Log($"Server Game State add player {netId}");
-            playerDic.Add(steamIdUlong, netId);
+            Debug.Log($"Server Game State add player {playerID}");
+            PlayerList_NameID.Add(playerName, playerID);
             switch (_stage)
             {
                 case GameStage.PLAYING:
@@ -211,22 +191,9 @@ public class GameState : NetworkBehaviour
     public void RemovePlayer(ulong steamIdUlong)
     {
         Debug.Log($"Server game state remove player {steamIdUlong}");
-        if (playerDic.ContainsKey(steamIdUlong)) playerDic.Remove(steamIdUlong);
-        uint winnerNetId;
-        bool isDraw;
-        switch (_stage)
-        {
-            case GameStage.PLAYING:
-                if (IfGameOver(out winnerNetId, out isDraw))
-                {
-                    GameOver(winnerNetId, isDraw);
-                }
-                break;
-            case GameStage.OVER:
-                break;
-            default:
-                break;
-        }
+        if (PlayerList_NameID.ContainsKey(steamIdUlong)) PlayerList_NameID.Remove(steamIdUlong);
+       
+      
     }
 
     //public bool TryGetPlayerStateAt(int index, out PlayerState ps) // usually called on the client
@@ -240,12 +207,12 @@ public class GameState : NetworkBehaviour
     //    }
     //    return false;
     //}
-    public bool TryGetPlayerStateBySteamId(ulong steamIdUlong, out PlayerState ps)
+    public bool TryGetPlayerStateByName(ulong steamIdUlong, out PlayerState ps)
     {
         ps = null;
-        if (playerDic.ContainsKey(steamIdUlong))
+        if (PlayerList_NameID.ContainsKey(steamIdUlong))
         {
-            if (NetworkClient.spawned.TryGetValue(playerDic[steamIdUlong], out NetworkIdentity identity))
+            if (NetworkClient.spawned.TryGetValue(PlayerList_NameID[steamIdUlong], out NetworkIdentity identity))
             {
                 return identity.TryGetComponent(out ps);
             }
@@ -255,7 +222,7 @@ public class GameState : NetworkBehaviour
     public bool TryGetPlayerStateByNetId(uint netId, out PlayerState ps)
     {
         ps = null;
-        if (playerDic.Values.Contains(netId))
+        if (PlayerList_NameID.Values.Contains(netId))
         {
             if (NetworkClient.spawned.TryGetValue(netId, out NetworkIdentity identity))
             {
@@ -267,7 +234,7 @@ public class GameState : NetworkBehaviour
     public List<PlayerState> GetPlayerStateList() // usually called on the client
     {
         List<PlayerState> results = new List<PlayerState>();
-        foreach (var item in playerDic.Values)
+        foreach (var item in PlayerList_NameID.Values)
         {
             if (NetworkClient.spawned.TryGetValue(item, out NetworkIdentity identity))
             {
@@ -316,7 +283,7 @@ public class GameState : NetworkBehaviour
         isDraw = false;
         if (SteamMatchmaking.GetNumLobbyMembers(SteamLobby.Instance.CurrentLobbyId) == 1)
         {
-            winnerNetId = playerDic.First().Value;
+            winnerNetId = PlayerList_NameID.First().Value;
             return true;
         }
         List<PlayerState> livings = GetPlayerStateList().FindAll(x => x.Kills >= instance.maxKills);

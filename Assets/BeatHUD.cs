@@ -25,9 +25,9 @@ public class BeatHUD : NetworkBehaviour
     public void DoBeatTick()
     {
         Debug.LogError("Beat tick just happened @ BeatHUD");
-        _beatSimpleIndicator.gameObject.SetActive(false);
-        beating = true;
-        StartCoroutine(showBeat());
+        //_beatSimpleIndicator.gameObject.SetActive(false);
+        //beating = true;
+        //StartCoroutine(showBeat());
     }
 
     IEnumerator showBeat()
@@ -45,8 +45,8 @@ public class BeatHUD : NetworkBehaviour
     {
         //leftArrowStartPos = _beatArrow_left.position;
         //rightArrowStartPos = _beatArrow_right.position;
-        CenterPos = _crosshair.position;
-        _beatSimpleIndicator.gameObject.SetActive(false);
+        //CenterPos = _crosshair.position;
+        //_beatSimpleIndicator.gameObject.SetActive(false);
         //Debug.Log("leftArrowStartPos - " + leftArrowStartPos);
         //Debug.Log("rightArrowStartPos - " + rightArrowStartPos);
         //Debug.Log("CenterPos - " + CenterPos);

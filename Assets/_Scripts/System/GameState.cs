@@ -96,9 +96,9 @@ public class GameState : NetworkBehaviour
     {
         Debug.Log("Game state OnStartServer.AAAAAAAAAAAAAAAAAAAAAAAA");
         instance = this;
-        SteamLobby.Instance.onLobbyChatUpdate += OnLobbyChatUpdate;
-        GivePeopleDebugWeapons();
-        InitializeBeat();
+        //SteamLobby.Instance.onLobbyChatUpdate += OnLobbyChatUpdate;
+        //GivePeopleDebugWeapons();
+        //InitializeBeat();
     }
 
     public override void OnStartClient()

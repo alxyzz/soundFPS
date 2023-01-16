@@ -1,8 +1,9 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
-public class BeatHUD : MonoBehaviour
+public class BeatHUD : NetworkBehaviour
 {
     [Header("HUD Elements")]
     [SerializeField] private RectTransform _crosshair;

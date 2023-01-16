@@ -232,12 +232,12 @@ public class PlayerState : NetworkBehaviour, IDamageable
 
     public void RelayBeat()
     {
-        if (!isLocalPlayer)
-        {
-            Debug.LogWarning("For some reason, RelayBEatTick@LocalPlayerController ran on a player which is not local.");
-            return;
-        }
-        _beatHUDComponent.DoBeatTick();
+        //if (!isLocalPlayer)
+        //{
+        //    Debug.LogWarning("For some reason, RelayBEatTick@LocalPlayerController ran on a player which is not local.");
+        //    return;
+        //}
+        //_beatHUDComponent.DoBeatTick();
     }
 
     public void Shoot()

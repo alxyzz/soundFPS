@@ -31,7 +31,7 @@ public class CharacterMovement : NetworkBehaviour
 
     [Header("Ground Locomotion")]
     [SerializeField] private float _maxJogSpeed = 3.0f;
-    [SerializeField] private float _maxCrouchSpeed = 1.68f;
+   // [SerializeField] private float _maxCrouchSpeed = 1.68f;
     private Vector3 _moveVelocity = Vector3.zero;
     private Vector3 _inAirVelocity = Vector3.zero;
     
@@ -41,7 +41,7 @@ public class CharacterMovement : NetworkBehaviour
         {
             float weapon = 1.0f;
             if (_playerState.CurrentWeaponIdentity != null) weapon = _playerState.CurrentWeaponIdentity.Data.MovementMultiplier;
-            if (IsCrouching) return _maxCrouchSpeed * weapon;
+            //if (IsCrouching) return _maxCrouchSpeed * weapon;
             return _maxJogSpeed * weapon;
         }
     }
@@ -56,7 +56,7 @@ public class CharacterMovement : NetworkBehaviour
 
     void Awake()
     {
-        _charaAnimHandler = GetComponent<CharacterAnimHandler>();
+        //_charaAnimHandler = GetComponent<CharacterAnimHandler>();
         _charaCtrl = GetComponent<CharacterController>();
         _playerState = GetComponent<PlayerState>();
         
@@ -65,15 +65,20 @@ public class CharacterMovement : NetworkBehaviour
     private void Update()
     {
         if (!isLocalPlayer) return;
-        if (!_playerState.IsAlive) return;
+        if (!_playerState.IsAlive)
+        {
+            Debug.Log("player not ALIVE");
+            return;
+        }
         if (GameState.Instance.Stage != GameStage.PLAYING) return;
+           
 
-        CheckOnGround();
+        //CheckOnGround();
 
         // Update movement
         Vector3 targetMove = _lastMovementInput * DesiredSpeed;
 
-        if (IsOnGround)
+        if (_charaCtrl.isGrounded)
         {
             _moveVelocity = targetMove;
 
@@ -105,12 +110,12 @@ public class CharacterMovement : NetworkBehaviour
         Vector3 input = new Vector3(rawInput.x, 0, rawInput.y);
         _lastMovementInput = Vector3.ClampMagnitude(rot * input, 1.0f);
 
-        _charaAnimHandler.FpSetFloat(_aMovementMultiplier, DesiredSpeed / _maxJogSpeed);
-        _charaAnimHandler.FpSetFloat(_aSpeedLevel, _lastMovementInput.magnitude);
+        //_charaAnimHandler.FpSetFloat(_aMovementMultiplier, DesiredSpeed / _maxJogSpeed);
+        //_charaAnimHandler.FpSetFloat(_aSpeedLevel, _lastMovementInput.magnitude);
 
-        _charaAnimHandler.CmdTpSetFloat(_aMovementMultiplier, DesiredSpeed / _maxJogSpeed);
-        _charaAnimHandler.CmdTpSetFloat(_aSpeedLevelRt, _lastMovementRawInput.x);
-        _charaAnimHandler.CmdTpSetFloat(_aSpeedLevelFwd, _lastMovementRawInput.y);
+        //_charaAnimHandler.CmdTpSetFloat(_aMovementMultiplier, DesiredSpeed / _maxJogSpeed);
+        ///_charaAnimHandler.CmdTpSetFloat(_aSpeedLevelRt, _lastMovementRawInput.x);
+        //_charaAnimHandler.CmdTpSetFloat(_aSpeedLevelFwd, _lastMovementRawInput.y);
     }
 
 
@@ -132,7 +137,7 @@ public class CharacterMovement : NetworkBehaviour
             if (!IsOnGround)
             {
                 IsOnGround = true;
-                _charaAnimHandler.CmdTpSetBool(_aIsInAir, false);
+                //_charaAnimHandler.CmdTpSetBool(_aIsInAir, false);
                 OnLanded?.Invoke(hit);
             }
         }
@@ -176,13 +181,15 @@ public class CharacterMovement : NetworkBehaviour
     [SerializeField] private float _airControl = 0.02f;
     public Action OnJumped;
     public Action<RaycastHit> OnLanded;
-    private bool CanJump => IsOnGround;
+    private bool CanJump => _charaCtrl.isGrounded;
     public void Jump()
     {
+
+        Debug.LogWarning("Character is grounded? => " + _charaCtrl.isGrounded);
         if (CanJump)
         {
             // Uncrouch();
-            _charaAnimHandler.CmdTpSetBool(_aIsInAir, true);
+            //_charaAnimHandler.CmdTpSetBool(_aIsInAir, true);
             _inAirVelocity.y = _jumpUpSpeed;
             OnJumped?.Invoke();
         }
@@ -190,23 +197,23 @@ public class CharacterMovement : NetworkBehaviour
     #endregion
 
     private void UpdateCrosshairSpread()
-    {
-        if (IsOnGround)
-        {
-            if (IsCrouching)
-                UI_GameHUD.SetCrosshairMovementSpread(0);
-            else if (_lastMovementInput != Vector3.zero)
-            {
-                if (IsWalking)
-                    UI_GameHUD.SetCrosshairMovementSpread(30 * _lastMovementInput.sqrMagnitude);
-                else
-                    UI_GameHUD.SetCrosshairMovementSpread(100 * _lastMovementInput.sqrMagnitude);
-            }
-            else
-                UI_GameHUD.SetCrosshairMovementSpread(5);
-        }
-        else
-            UI_GameHUD.SetCrosshairMovementSpread(200);
+    { //arena shooters dont need different accuracy while moving, this is not csgo
+        //if (IsOnGround)
+        //{
+        //    if (IsCrouching)
+        //        UI_GameHUD.SetCrosshairMovementSpread(0);
+        //    else if (_lastMovementInput != Vector3.zero)
+        //    {
+        //        if (IsWalking)
+        //            UI_GameHUD.SetCrosshairMovementSpread(30 * _lastMovementInput.sqrMagnitude);
+        //        else
+        //            UI_GameHUD.SetCrosshairMovementSpread(100 * _lastMovementInput.sqrMagnitude);
+        //    }
+        //    else
+        //        UI_GameHUD.SetCrosshairMovementSpread(5);
+        //}
+        //else
+        //    UI_GameHUD.SetCrosshairMovementSpread(200);
     }
 }
 

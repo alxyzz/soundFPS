@@ -67,7 +67,7 @@ public class SpectrumAnalyzer : MonoBehaviour
         PitchValue = freqN * (_fSample / 2) / QSamples; // convert index to frequency
 
 
-        Debug.LogWarning("pitch value is " + PitchValue);
+        //Debug.LogWarning("pitch value is " + PitchValue);
         return PitchValue;
     }
 }

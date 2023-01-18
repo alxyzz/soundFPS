@@ -176,12 +176,12 @@ public class MyNetworkManager : NetworkManager
     public override void OnClientSceneChanged()
     {        
         base.OnClientSceneChanged();
-        if (SceneManager.GetActiveScene().path == gameScene)
-        {
-            Debug.Log($"Client scene changed to {SceneManager.GetActiveScene().name}");
-            NetworkClient.AddPlayer();
+        //if (SceneManager.GetActiveScene().path == gameScene)
+        //{
+        //    Debug.Log($"Client scene changed to {SceneManager.GetActiveScene().name}");
+        //    //NetworkClient.AddPlayer();
 
-        }
+        //}
     }
     #endregion
 
@@ -211,7 +211,19 @@ public class MyNetworkManager : NetworkManager
     /// <param name="conn">Connection from client.</param>
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
-        
+
+
+        //try
+        //{
+        //    System.Diagnostics.Process.Start(Environment.CurrentDirectory + "Assets/_Chat/sam.exe 'hello there, new player.'");
+        //}
+        //catch (Exception e)
+        //{
+        //    Debug.Log(e.Message);
+        //    throw;
+        //}
+
+        Debug.Log("OnServerAddPlayer @ MyNetworkManager just ran.");
         base.OnServerAddPlayer(conn);
     }
 
@@ -243,6 +255,7 @@ public class MyNetworkManager : NetworkManager
     /// </summary>
     public override void OnClientConnect()
     {
+        Debug.Log("Client just connected @ MyNetworkManager.cs");
         base.OnClientConnect();
     }
 
@@ -308,15 +321,16 @@ public class MyNetworkManager : NetworkManager
     public override void OnStopClient() { }
 
     #endregion
-
-
-    //[SerializeField] private PlayerObjectController GamePlayerPrefab;
-    //public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
     [Header("Game")]
     [Scene] public string gameScene = "";
     public int numPlayerSpawnPoint;
     public void StartGame()
-    {   
+    {
+
+        SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, MyNetworkManager.singleton.maxConnections);
+        CSteamID _lobbyId = SteamLobby.Instance.CurrentLobbyId;
+        SteamMatchmaking.SetLobbyJoinable(_lobbyId, true);
+        SteamMatchmaking.SetLobbyData(_lobbyId, SteamLobby.keyGameStarted, "1");
         ServerChangeScene(gameScene);
     }
 }

@@ -16,7 +16,70 @@ public enum GameStage
     OVER // winner
 }
 
+class Beat
+{
+    private string name; //name
+    private float period; // amount of time between beats
+    private float duration;
+    public Coroutine _coroutine = null; //tracks the associated coroutine
 
+    public Beat(string n, float p, float d)
+    {
+        name = n;
+        period = p;
+        duration = d;
+    }
+
+    public string GetName()
+    {
+        return name;
+    }
+
+    public void AssociateCoroutine(Coroutine c)
+    {
+        _coroutine = c;
+    }
+
+
+    public bool isActive()
+    {
+        return !(_coroutine == null);
+    }
+}
+
+class BeatController
+{
+    private List<Beat> beats = new List<Beat>();
+    private List<Coroutine> beatCoroutines = new List<Coroutine>();
+
+    public void InitializeBeatLoop()
+    {
+        //start a periodic IEnumerator with each beat given and keep track of them
+        // so we can stop them at will or pause them or add new ones.
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="period">time from one beat to another</param>
+    /// <param name="duration">duration of beat until the next period starts</param>
+    public void AddBeat(string name, float period, float duration)
+    {
+        Beat b = new Beat(name, period, duration);
+        beats.Add(b);
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="n">beat name</param>
+    /// <param name="script">reference to script it's running</param>
+    public void RemoveBeat(string n, MonoBehaviour script )
+    {
+        List<Beat> results = beats.FindAll(x => x.GetName() == n);
+        script.StopCoroutine(results[0]._coroutine);
+    }
+
+}
 
 /* When rule-related events in the game happen and need to be tracked and shared with all players,
  * that information is stored and synced through the Game State. This information can include:
@@ -30,9 +93,13 @@ public enum GameStage
  */
 public class GameState : NetworkBehaviour
 {
-    public bool Beating;
+    public bool BeatIsEnabled;
+    [HideInInspector]private bool BEAT;
+    public bool IsBeating => BEAT;
+    [SerializeField] private float _duration;
+    [SerializeField] private float _period;
 
-
+    [HideInInspector] int maxKills = 30;
 
     public void GivePeopleDebugWeapons()
     {
@@ -44,23 +111,86 @@ public class GameState : NetworkBehaviour
         }
     }
 
+
+    public void UpdatePlayerScoreboard()
+    {
+
+    }
+    [ClientRpc]
+    public void RPCUpdatePlayerScoreboard()
+    {
+
+    }
+
+
+
+    private void InitializeBeat()
+    {
+        if (!isClient)
+        {
+            Debug.LogError("GameState@ InitializeBeat - invoked the repetition");
+            InvokeRepeating("PeriodicBeat", 0f, _period+0.001f);
+        }
+    }
+
+    int beatNr = 0;
+    IEnumerator PeriodicBeat()
+    {
+        Debug.LogError("Periodic Beat #" + beatNr);
+        beatNr++;
+        yield return new WaitForSecondsRealtime(2f);
+        if (BeatIsEnabled)
+        {
+            RpcDoBeat(_duration);
+        }
+       
+    }
+
+
+
+    /*
+       When running a game as a host with a local client, ClientRpc calls will be invoked on the local client even though it is in the same process as the server. So the behaviours of local and remote clients are the same for ClientRpc calls.
+     */
+    [ClientRpc]
+    private void RpcDoBeat(float duration)
+    {
+        foreach (PlayerState item in GetPlayerStateList())
+        {
+            Debug.Log("GameState.RPCDoBeat() -> true : " + item);
+            
+            item.RelayBeat();
+        }
+
+        StartCoroutine((beatEnd(duration)));
+    }
+
+    IEnumerator beatEnd(float duration)
+    {
+        yield return new WaitForSecondsRealtime(duration);
+        foreach (PlayerState item in GetPlayerStateList())
+        {
+            Debug.Log("GameState.RPCDoBeat() -> false : " + item);
+            item._beatHUDComponent.ToggleBeatVisibility(false);
+        }
+    }
     public override void OnStartServer()
     {
         Debug.Log("Game state OnStartServer.AAAAAAAAAAAAAAAAAAAAAAAA");
         instance = this;
         SteamLobby.Instance.onLobbyChatUpdate += OnLobbyChatUpdate;
         GivePeopleDebugWeapons();
+        InitializeBeat();
     }
 
     public override void OnStartClient()
     {
-        Debug.Log("Game state OnStartClient. Binding callbak method.");
+        Debug.Log("Game state OnStartClient. Binding callback method.");
         instance = this;
         // _playerNetIds
         foreach (var item in playerDic)
         {
-            UI_GameHUD.Instance.AddPlayerToStatistics(item.Value);           
-            
+            UI_GameHUD.Instance.AddPlayerToStatistics(item.Value);
+
         }
         playerDic.Callback += PlayerDic_Callback;
     }
@@ -106,7 +236,7 @@ public class GameState : NetworkBehaviour
         switch (newVal)
         {
             case GameStage.PLAYING:
-                if (null != LocalGame.Instance.onClientGameStarted)
+                if (LocalGame.Instance.onClientGameStarted != null)
                 {
                     LocalGame.Instance.onClientGameStarted.Invoke();
                 }
@@ -116,12 +246,12 @@ public class GameState : NetworkBehaviour
                 break;
             default:
                 break;
-        }  
+        }
     }
 
     public readonly SyncDictionary<ulong, uint> playerDic = new SyncDictionary<ulong, uint>();
     public int ConnectedPlayerNum => playerDic.Count;
-    [HideInInspector] int maxKills = 30;
+
     [Server]
     private void OnLobbyChatUpdate(LobbyChatUpdate_t callback)
     {
@@ -200,7 +330,7 @@ public class GameState : NetworkBehaviour
             {
                 return identity.TryGetComponent(out ps);
             }
-        }        
+        }
         return false;
     }
     public bool TryGetPlayerStateByNetId(uint netId, out PlayerState ps)
@@ -225,26 +355,26 @@ public class GameState : NetworkBehaviour
                 if (identity.TryGetComponent(out PlayerState ps))
                 {
                     results.Add(ps);
-                }                
+                }
             }
         }
         return results;
     }
 
-    Coroutine _cReadyCountdown;
-    private IEnumerator ReadyCountdown()
-    {
-        yield return new WaitForSecondsRealtime(1.0f);
-        RpcCountdown("3");
-        yield return new WaitForSecondsRealtime(1.0f);
-        RpcCountdown("2");
-        yield return new WaitForSecondsRealtime(1.0f);
-        RpcCountdown("1");
-        yield return new WaitForSecondsRealtime(1.0f);
-        RpcCountdown("");
-        _stage = GameStage.PLAYING;
-        LocalGame.Instance.onServerGameStarted?.Invoke();
-    }
+    //Coroutine _cReadyCountdown;
+    //private IEnumerator ReadyCountdown()
+    //{
+    //    yield return new WaitForSecondsRealtime(1.0f);
+    //    RpcCountdown("3");
+    //    yield return new WaitForSecondsRealtime(1.0f);
+    //    RpcCountdown("2");
+    //    yield return new WaitForSecondsRealtime(1.0f);
+    //    RpcCountdown("1");
+    //    yield return new WaitForSecondsRealtime(1.0f);
+    //    RpcCountdown("");
+    //    _stage = GameStage.PLAYING;
+    //    LocalGame.Instance.onServerGameStarted?.Invoke();
+    //}
     [ClientRpc]
     private void RpcCountdown(string str)
     {
@@ -297,27 +427,27 @@ public class GameState : NetworkBehaviour
     [Server]
     private void GameOver(uint winnerNetId, bool isDraw = false)
     {
-        if (null != _cReadyCountdown) StopCoroutine(_cReadyCountdown);
+
         _stage = GameStage.OVER;
         LocalGame.Instance.onServerGameEnded?.Invoke();
         if (isDraw)
         {
             Debug.Log("And then there were none.");
-            RpcDecalreWinner(winnerNetId);
+            //RpcDecalreWinner(winnerNetId);
         }
         else
         {
             Debug.Log($"Game Over! The winner's net ID is {winnerNetId}.");
-            RpcDecalreWinner(winnerNetId);
+            //RpcDecalreWinner(winnerNetId);
         }
     }
     [ClientRpc]
     private void RpcDecalreWinner(uint netId)
     {
-        if (TryGetPlayerStateByNetId(netId, out PlayerState ps))
-        {
-            UI_GameHUD.ShowWinner(ps);
-        }
+        //if (TryGetPlayerStateByNetId(netId, out PlayerState ps))
+        //{
+        //    UI_GameHUD.ShowWinner(ps);
+        //}
     }
     #endregion
 }

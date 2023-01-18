@@ -104,13 +104,13 @@ public class UI_GameHUD : MonoBehaviour
             instance._crosshair.WeaponSpread = pixel;
         }
     }
-    public static void SetCrosshairMovementSpread(float pixel)
-    {
-        if (instance._crosshair.gameObject.activeSelf)
-        {
-            instance._crosshair.MovementSpread = pixel;
-        }
-    }
+    //public static void SetCrosshairMovementSpread(float pixel)
+    //{
+    //    if (instance._crosshair.gameObject.activeSelf)
+    //    {
+    //        instance._crosshair.MovementSpread = pixel;
+    //    }
+    //}
     public static void SetCrosshairFireSpread(float pixel, float duration)
     {
         if (instance._crosshair.gameObject.activeSelf)
@@ -190,11 +190,11 @@ public class UI_GameHUD : MonoBehaviour
     {
         instance._imgWinnerIcon.texture = SteamLobby.GetSteamImageAsTexture(callback.m_iImage);
     }
-    public void OnClickReturnToLobby()
-    {
-        // SteamLobby.SceneToLoad = "Lobby";
-        MyNetworkManager.singleton.ServerChangeScene("Lobby");
-    }
+    //public void OnClickReturnToLobby()
+    //{
+    //    // SteamLobby.SceneToLoad = "Lobby";
+    //    MyNetworkManager.singleton.ServerChangeScene("Lobby");
+    //}
     public static void SetUIEnabled(bool enabled)
     {
         instance._pnlAmmo.SetActive(enabled);

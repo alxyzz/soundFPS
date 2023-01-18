@@ -18,6 +18,19 @@ public class GameManager : MonoBehaviour
     [Header("Weapon")]
     [SerializeField] private List<WeaponData> _wpnDatabase;
 
+    private void Start()
+    {
+       // Greet();
+    }
+
+    private void Greet()
+    {
+        string name = System.Environment.MachineName;
+        Debug.Log(Application.dataPath);
+        System.Diagnostics.Process.Start(Application.dataPath+"/sam.exe", "Hellooooo there. " + name);
+
+    }
+
     public static WeaponData GetRandomWeaponData()
     {
         return instance._wpnDatabase[Random.Range(0, instance._wpnDatabase.Count)];

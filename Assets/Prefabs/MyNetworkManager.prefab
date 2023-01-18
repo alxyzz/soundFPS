@@ -51,13 +51,13 @@ MonoBehaviour:
   autoStartServerBuild: 1
   autoConnectClientBuild: 0
   sendRate: 60
-  offlineScene: Assets/Scenes/MainMenu.unity
+  offlineScene: 
   onlineScene: 
   transport: {fileID: 8336989789479734868}
   networkAddress: localhost
   maxConnections: 16
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 4616776752580904572, guid: 4d2d2acfee7e04340b1b41bae69ecd50,
+  playerPrefab: {fileID: 3497460100174721767, guid: 4863ad098fed9b940aa542e8fe679ac9,
     type: 3}
   autoCreatePlayer: 0
   playerSpawnMethod: 1

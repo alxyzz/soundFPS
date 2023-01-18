@@ -31,6 +31,9 @@ public enum GameStage
 public class GameState : NetworkBehaviour
 {
     public bool beat_toggle;
+    [HideInInspector] public float timeElapsed;
+
+    public float maxTime = 15; //in minutes 
 
     [HideInInspector] int maxKills = 30;
 
@@ -44,6 +47,15 @@ public class GameState : NetworkBehaviour
         }
     }
 
+    
+
+    public void Update()
+    {
+        if (!isLocalPlayer)
+        {
+            timeElapsed += Time.deltaTime;
+        }
+    }
 
     public void UpdatePlayerScoreboard()
     {
@@ -108,10 +120,10 @@ public class GameState : NetworkBehaviour
         // _playerNetIds
         foreach (var item in PlayerList_NameID)
         {
-            UI_GameHUD.Instance.AddPlayerToStatistics(item.Value);
+            UI_GameHUD.Instance.AddPlayerToStatistics(item.Key);
 
         }
-        PlayerList_NameID.Callback += PlayerListNameIdCallback;
+        //PlayerList_NameID.Callback += PlayerListNameIdCallback;
     }
 
     private void PlayerListNameIdCallback(SyncIDictionary<ulong, uint>.Operation op, ulong key, uint item)
@@ -168,30 +180,24 @@ public class GameState : NetworkBehaviour
         }
     }
 
-    public readonly SyncDictionary<ulong, uint> PlayerList_NameID = new SyncDictionary<ulong, uint>();
+    public readonly SyncDictionary<uint, string> PlayerList_NameID = new SyncDictionary<uint, string>();
     
     public int ConnectedPlayerNum => PlayerList_NameID.Count;
     [Server]
-    public void AddPlayer(ulong playerName, uint playerID)
+    public void AddPlayer(string playerName, uint playerID)
     {
-        if (!PlayerList_NameID.ContainsKey(playerName))
+        if (!PlayerList_NameID.ContainsKey(playerID))
         {
             Debug.Log($"Server Game State add player {playerID}");
-            PlayerList_NameID.Add(playerName, playerID);
-            switch (_stage)
-            {
-                case GameStage.PLAYING:
-                    break;
-                case GameStage.OVER:
-                    break;
-            }
+            PlayerList_NameID.Add(playerID, playerName);
+            
         }
     }
     [Server]
-    public void RemovePlayer(ulong steamIdUlong)
+    public void RemovePlayer(uint ID)
     {
-        Debug.Log($"Server game state remove player {steamIdUlong}");
-        if (PlayerList_NameID.ContainsKey(steamIdUlong)) PlayerList_NameID.Remove(steamIdUlong);
+        Debug.Log($"Server game state remove player {ID}");
+        if (PlayerList_NameID.ContainsKey(ID)) PlayerList_NameID.Remove(ID);
        
       
     }
@@ -207,12 +213,12 @@ public class GameState : NetworkBehaviour
     //    }
     //    return false;
     //}
-    public bool TryGetPlayerStateByName(ulong steamIdUlong, out PlayerState ps)
+    public bool TryGetPlayerStateByName(string nickname, out PlayerState ps)
     {
         ps = null;
-        if (PlayerList_NameID.ContainsKey(steamIdUlong))
-        {
-            if (NetworkClient.spawned.TryGetValue(PlayerList_NameID[steamIdUlong], out NetworkIdentity identity))
+        if (PlayerList_NameID.Values.Contains(nickname))
+        { //we check if the list of spawned players contains the same ID as the player we need, then we use that to grab that player's NetworkIdentity
+            if (NetworkClient.spawned.TryGetValue(PlayerList_NameID.FirstOrDefault(x => x.Value == nickname).Key, out NetworkIdentity identity))
             {
                 return identity.TryGetComponent(out ps);
             }
@@ -222,7 +228,7 @@ public class GameState : NetworkBehaviour
     public bool TryGetPlayerStateByNetId(uint netId, out PlayerState ps)
     {
         ps = null;
-        if (PlayerList_NameID.Values.Contains(netId))
+        if (PlayerList_NameID.Keys.Contains<uint>(netId))
         {
             if (NetworkClient.spawned.TryGetValue(netId, out NetworkIdentity identity))
             {
@@ -234,7 +240,7 @@ public class GameState : NetworkBehaviour
     public List<PlayerState> GetPlayerStateList() // usually called on the client
     {
         List<PlayerState> results = new List<PlayerState>();
-        foreach (var item in PlayerList_NameID.Values)
+        foreach (var item in PlayerList_NameID.Keys)
         {
             if (NetworkClient.spawned.TryGetValue(item, out NetworkIdentity identity))
             {
@@ -267,38 +273,40 @@ public class GameState : NetworkBehaviour
         UI_GameHUD.SetCountdown(str);
     }
     [Server]
-    public void PlayerDied(uint netId) // only called on the server
+    public void PlayerDied(uint ID) // only called on the server
     {
-        if (IfGameOver(out uint winnerNetId, out bool isDraw))
+        if (IfGameOver(out string winnerName, out bool isDraw))
         {
-            GameOver(winnerNetId, isDraw);
+            GameOver(winnerName, isDraw);
         }
     }
 
     #region End Conditions
 
-    private bool IfGameOver(out uint winnerNetId, out bool isDraw)
+    private bool IfGameOver(out string winner, out bool isDraw)
     {
-        winnerNetId = 0;
+        ;
         isDraw = false;
-        if (SteamMatchmaking.GetNumLobbyMembers(SteamLobby.Instance.CurrentLobbyId) == 1)
-        {
-            winnerNetId = PlayerList_NameID.First().Value;
-            return true;
-        }
+       
         List<PlayerState> livings = GetPlayerStateList().FindAll(x => x.Kills >= instance.maxKills);
 
+        
         switch (livings.Count)
         {
-            case 0:
-                isDraw = true;
-                return true;
             case 1:
-                winnerNetId = livings[0].netId;
-                isDraw = false;
+                winner = livings[0].Nickname;
                 return true;
             default:
+                if (timeElapsed >= (maxTime * 60))
+                {
+                    isDraw = true;
+                    winner = null;
+                    return true;
+                }
+                isDraw = false;
+                winner = null;
                 return false;
+                break;
         }
     }
     //[Server]
@@ -311,20 +319,18 @@ public class GameState : NetworkBehaviour
     //    }
     //}
     [Server]
-    private void GameOver(uint winnerNetId, bool isDraw = false)
+    private void GameOver(string winnerNetId, bool isDraw = false)
     {
 
         _stage = GameStage.OVER;
         LocalGame.Instance.onServerGameEnded?.Invoke();
         if (isDraw)
         {
-            Debug.Log("And then there were none.");
-            //RpcDecalreWinner(winnerNetId);
+            Debug.Log("DRAW! Time has elapsed with no winner.");
         }
         else
         {
-            Debug.Log($"Game Over! The winner's net ID is {winnerNetId}.");
-            //RpcDecalreWinner(winnerNetId);
+            Debug.Log($"MATCH END: WINNER IS {winnerNetId}");
         }
     }
     [ClientRpc]

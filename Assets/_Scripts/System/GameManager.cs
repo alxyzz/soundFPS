@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     {
         string name = System.Environment.MachineName;
         Debug.Log(Application.dataPath);
-        System.Diagnostics.Process.Start(Application.dataPath+"/sam.exe", "Hellooooo there. " + name);
+        //System.Diagnostics.Process.Start(Application.dataPath+"/sam.exe", "Hellooooo there. " + name); //todo do something wiht this TTS stuff
 
     }
 

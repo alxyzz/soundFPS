@@ -49,7 +49,7 @@ public class PlayerState : NetworkBehaviour, IDamageable
     //}
     public override void OnStopServer()
     {
-        GameState.Instance.RemovePlayer(_steamIdUlong);
+        GameState.Instance.RemovePlayer(_playerID);
     }
 
     private void Awake()
@@ -99,21 +99,12 @@ public class PlayerState : NetworkBehaviour, IDamageable
     [SerializeField] private LayerMask _shootingLayer;
 
     // ----------------------------
-    //  Steam status
+    //  Player
     // ----------------------------
-    [SyncVar(hook = nameof(OnSteamIdUlongChanged))] private ulong _steamIdUlong;
-    public CSteamID SteamId { get; private set; }
-    public Action<string> onNicknameChanged;
-    private void OnSteamIdUlongChanged(ulong oldVal, ulong newVal)
-    {
-        SteamId = new CSteamID(newVal);
-    }
-    [SyncVar(hook = nameof(OnNicknameChanged))] private string _nickname;
+   private uint _playerID;
+    
+     private string _nickname;
     public string Nickname => _nickname;
-    private void OnNicknameChanged(string oldStr, string newStr)
-    {
-        onNicknameChanged?.Invoke(newStr);
-    }
 
     [SyncVar(hook = nameof(OnBodyColourChanged))][HideInInspector] public Color bodyColour;
 

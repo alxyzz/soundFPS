@@ -68,9 +68,9 @@ public class UI_Panel_Statistics : UI_Widget
 
     public void AddPlayerSlot(uint netId)
     {
-        UI_Stat_PlayerSlot slot = Instantiate(_pfbPlayerSlot, _list).GetComponent<UI_Stat_PlayerSlot>();
-        slot.Initialise(netId);
-        _slots.Add(slot);
+        //UI_Stat_PlayerSlot slot = Instantiate(_pfbPlayerSlot, _list).GetComponent<UI_Stat_PlayerSlot>();
+        //slot.Initialise(netId);
+        //_slots.Add(slot);
     }
     public void RemovePlayerSlot(uint netId)
     {

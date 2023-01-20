@@ -363,11 +363,11 @@ public class LocalPlayerController : NetworkBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            UI_GameHUD.Instance.SetStatisticsShown(true);
+           // UI_GameHUD.Instance.SetStatisticsShown(true);
         }
         else if (Input.GetKeyUp(KeyCode.Tab))
         {
-            UI_GameHUD.Instance.SetStatisticsShown(false);
+            //UI_GameHUD.Instance.SetStatisticsShown(false);
         }
     }
     #endregion
@@ -383,7 +383,7 @@ public class LocalPlayerController : NetworkBehaviour
         SetFirstPersonVisible(false);
         SetThirdPersonVisible(true);
 
-        UI_GameHUD.SetUIEnabled(false);
+       // UI_GameHUD.SetUIEnabled(false);
 
         Camera.main.transform.GetChild(0).SetParent(Camera.main.transform.parent);
         Camera.main.transform.SetParent(null);

@@ -200,8 +200,8 @@ public class WeaponInHand : MonoBehaviour
         int val = Mathf.Min(_identity.BackupAmmo, _identity.Data.Ammo - _identity.CurrentAmmo);
         _identity.CurrentAmmo += val;
         _identity.BackupAmmo -= val;
-        UI_GameHUD.SetAmmo(_identity.CurrentAmmo);
-        UI_GameHUD.SetBackupAmmo(_identity.BackupAmmo);
+        //UI_GameHUD.SetAmmo(_identity.CurrentAmmo);
+        //UI_GameHUD.SetBackupAmmo(_identity.BackupAmmo);
     }
     public virtual void EndReload()
     {

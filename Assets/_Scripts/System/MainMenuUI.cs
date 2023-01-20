@@ -1,4 +1,4 @@
-using Steamworks;
+
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,11 +7,11 @@ using UnityEngine.UI;
 
 public class MainMenuUI : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField _ifLobbyId;
+    [SerializeField] private TMP_InputField _lobbyNicknameTextbox;
     [SerializeField] GameObject grid;
     private void Start()
     {
-        SteamLobby.Instance.onRecoverUI += () => { SetChildrenEnabled(true); };
+        
         EpilepsyMenu.SetActive(true);
     }
     private void SetChildrenEnabled(bool enabled)
@@ -23,10 +23,32 @@ public class MainMenuUI : MonoBehaviour
     }
     public void OnClickHost()
     {
-        SetChildrenEnabled(false);
-        SteamLobby.Instance.HostLobby();
+        if (NicknameCheckInvalid())
+        {  
+            
+        }
+        else
+        {
+            SetChildrenEnabled(false);
+            MyNetworkManager.singleton.StartHost();
+        }
+
+        
+
+
     }
 
+    private bool NicknameCheckInvalid()
+    {
+        if (string.IsNullOrEmpty(_lobbyNicknameTextbox.text) || _lobbyNicknameTextbox.text.Length <= 3 || _lobbyNicknameTextbox.text.Length >= 25)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     public void OnClickDebugJoin()
     {
@@ -38,15 +60,9 @@ public class MainMenuUI : MonoBehaviour
     public void OnClickJoin()
     {
         SetChildrenEnabled(false);
-        if (ulong.TryParse(_ifLobbyId.text, out ulong result))
-        {
-            SteamLobby.Instance.JoinLobby(result);
-        }
-        else
-        {
+        
             MasterUIManager.AddPopupHint("The LobbyID is not a number...");
-            SetChildrenEnabled(true);
-        }
+        
     }
 
     [SerializeField] GameObject EpilepsyMenu;

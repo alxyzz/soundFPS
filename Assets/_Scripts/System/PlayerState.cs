@@ -1,5 +1,4 @@
 using Mirror;
-using Steamworks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -61,10 +60,15 @@ public class PlayerState : NetworkBehaviour, IDamageable
         if (isLocalPlayer)
         {
             Debug.Log("On player state start.");
-            CmdStartLocalPlayer(SteamUser.GetSteamID().m_SteamID);
-            onHealthChanged += (val) => UI_GameHUD.Instance.SetHealth(val);
+            
+           
             _cUpdatePing = StartCoroutine(UpdatePing());
         }
+    }
+
+    public void SetNickname(string b)
+    {
+        _nickname = b;
     }
 
     [Header("Components")]
@@ -171,7 +175,7 @@ public class PlayerState : NetworkBehaviour, IDamageable
 
     public void PickUpWeapon(WeaponData data, int currentAmmo, int backupAmmo) // only called on the client in order to replenish the equivalent weapon's ammo when entering a weapon pickup's collider
     {
-        UI_GameHUD.SetNewWeapon(data.WeaponID ,data.WeaponName);
+        //UI_GameHUD.SetNewWeapon(data.WeaponID ,data.WeaponName);
 
         if (inventoryWeapons[data.WeaponID] != null)
         {
@@ -435,11 +439,11 @@ public class PlayerState : NetworkBehaviour, IDamageable
     {
         if (isByNetObj && NetworkClient.spawned.TryGetValue(netId, out NetworkIdentity identity))
         {
-            UI_GameHUD.Instance.SetDamaged(identity.transform);
+          //  UI_GameHUD.Instance.SetDamaged(identity.transform);
         }
         else
         {
-            UI_GameHUD.Instance.SetDamaged(null);
+            //UI_GameHUD.Instance.SetDamaged(null);
         }
     }
     private void OnHealthChanged(int oldVal, int newVal)

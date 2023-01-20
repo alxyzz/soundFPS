@@ -34,6 +34,6 @@ public class LevelManager : NetworkBehaviour
     [ClientRpc]
     private void RpcKillMessage(string killerName, string objectName, int dbIndex, DamageType type)
     {
-        UI_GameHUD.AddKillMessage(killerName, objectName, GameManager.GetWeaponData(dbIndex).KillIcon, type);
+      //  UI_GameHUD.AddKillMessage(killerName, objectName, GameManager.GetWeaponData(dbIndex).KillIcon, type);
     }
-}
+}   

@@ -1,5 +1,4 @@
 using Mirror;
-using Steamworks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -118,11 +117,11 @@ public class GameState : NetworkBehaviour
         Debug.Log("Game state OnStartClient. Binding callback method.");
         instance = this;
         // _playerNetIds
-        foreach (var item in PlayerList_NameID)
-        {
-            UI_GameHUD.Instance.AddPlayerToStatistics(item.Key);
+        //foreach (var item in PlayerList_NameID)
+        //{
+        //    UI_GameHUD.Instance.AddPlayerToStatistics(item.Key);
 
-        }
+        //}
         //PlayerList_NameID.Callback += PlayerListNameIdCallback;
     }
 
@@ -138,7 +137,7 @@ public class GameState : NetworkBehaviour
             case SyncIDictionary<ulong, uint>.Operation.OP_CLEAR:
                 break;
             case SyncIDictionary<ulong, uint>.Operation.OP_REMOVE:
-                UI_GameHUD.Instance.RemovePlayerFromStatistics(item);
+                //UI_GameHUD.Instance.RemovePlayerFromStatistics(item);
                 break;
             case SyncIDictionary<ulong, uint>.Operation.OP_SET:
                 break;
@@ -268,10 +267,10 @@ public class GameState : NetworkBehaviour
     //    LocalGame.Instance.onServerGameStarted?.Invoke();
     //}
     [ClientRpc]
-    private void RpcCountdown(string str)
-    {
-        UI_GameHUD.SetCountdown(str);
-    }
+    //private void RpcCountdown(string str)
+    //{
+    //    UI_GameHUD.SetCountdown(str);
+    //}
     [Server]
     public void PlayerDied(uint ID) // only called on the server
     {

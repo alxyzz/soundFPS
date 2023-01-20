@@ -7,12 +7,7 @@ public class LevelInitManager : NetworkBehaviour
 {
     private void Awake()
     {
-        if (SteamLobby.Instance == null)
-        {
-            SceneManager.LoadScene("MainMenu");
-            Debug.LogWarning("LevelInitManager.Awake() - Steamlobby was null, going to main menu.");
-            return;
-        }
+     SceneManager.LoadScene("MainMenu");
     }
 
     [Header("Weapon Spawning")]

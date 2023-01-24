@@ -24,18 +24,12 @@ public class MainMenuUI : MonoBehaviour
     public void OnClickHost()
     {
         if (NicknameCheckInvalid())
-        {  
-            
-        }
-        else
         {
+
+            return;
+        }
             SetChildrenEnabled(false);
             MyNetworkManager.singleton.StartHost();
-        }
-
-        
-
-
     }
 
     private bool NicknameCheckInvalid()

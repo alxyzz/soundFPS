@@ -146,7 +146,7 @@ public class AnimateGridMaterialWithSound : MonoBehaviour
             //iteration++;
 
 
-            Debug.Log(("the range of object " + each.name + " equals " + c));
+           // Debug.Log(("the range of object " + each.name + " equals " + c));
             //Debug.Log(("iteration is now " + iteration + Environment.NewLine + " Hz Per Iteration is =>" + HzPerIteration + " and amount of objects is => + " + amtOfObjects));
             //  (rangeSegmentation* iteration), (rangeSegmentation* iteration) + rangeSegmentation 
         }

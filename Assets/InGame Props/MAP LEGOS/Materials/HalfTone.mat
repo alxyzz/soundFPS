@@ -28,7 +28,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -107,11 +107,11 @@ Material:
     - _DstBlend: 0
     - _EnvironmentReflections: 1
     - _First_Edge: 2.23
-    - _Float: 0.32
-    - _Float_1: 0.06
-    - _Float_2: -0.36
-    - _Float_3: 3.39
-    - _Float_4: 0.3
+    - _Float: 0.12
+    - _Float_1: -0.06
+    - _Float_2: 0.85
+    - _Float_3: 1.52
+    - _Float_4: 0.49
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -137,13 +137,13 @@ Material:
     - _Background: {r: 0, g: 0.043137312, b: 1, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Color_1: {r: 0.745283, g: 0.745283, b: 0.745283, a: 0}
-    - _Color_2: {r: 0, g: 0.31873178, b: 1, a: 0}
+    - _Color_1: {r: 1, g: 1, b: 1, a: 0}
+    - _Color_2: {r: 1, g: 0, b: 0.6510434, a: 0}
     - _Color_3: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Light_Stuff: {r: 7.37, g: 15.3, b: -9.33, a: 0}
     - _MainColor: {r: 1, g: 0, b: 0, a: 0}
     - _OutLine_Color: {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _Vector3: {r: -192.35, g: -195.2, b: -53.3, a: 0}
+    - _Vector3: {r: -185.42, g: -195.2, b: -53.3, a: 0}
   m_BuildTextureStacks: []

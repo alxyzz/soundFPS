@@ -107,11 +107,11 @@ Material:
     - _DstBlend: 0
     - _EnvironmentReflections: 1
     - _First_Edge: 2.23
-    - _Float: 0.12
-    - _Float_1: -0.06
+    - _Float: 1.06
+    - _Float_1: -0.15
     - _Float_2: 0.85
-    - _Float_3: 1.52
-    - _Float_4: 0.49
+    - _Float_3: 1.43
+    - _Float_4: 0.45
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0

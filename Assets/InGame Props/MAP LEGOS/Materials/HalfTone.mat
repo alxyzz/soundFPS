@@ -108,10 +108,10 @@ Material:
     - _EnvironmentReflections: 1
     - _First_Edge: 2.23
     - _Float: 1.06
-    - _Float_1: -0.15
-    - _Float_2: 0.85
-    - _Float_3: 1.43
-    - _Float_4: 0.45
+    - _Float_1: -0.14
+    - _Float_2: 0.84
+    - _Float_3: 0.85
+    - _Float_4: 19.9
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -138,7 +138,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color_1: {r: 1, g: 1, b: 1, a: 0}
-    - _Color_2: {r: 1, g: 0, b: 0.6510434, a: 0}
+    - _Color_2: {r: 1, g: 0, b: 0.16099787, a: 0}
     - _Color_3: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Light_Stuff: {r: 7.37, g: 15.3, b: -9.33, a: 0}

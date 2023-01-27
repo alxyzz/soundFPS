@@ -116,7 +116,7 @@ public class AnimateGridMaterialWithSound : MonoBehaviour
     }
 
 
-
+    private float highestHz;
 
 
     private void InitializeAnimatedObjects()
@@ -141,6 +141,7 @@ public class AnimateGridMaterialWithSound : MonoBehaviour
             Tuple<int, int> c = Tuple.Create((HzPerIteration * d.matchNumber),(HzPerIteration * d.matchNumber) + HzPerIteration);
 
             AnimatedMenuElement b = new AnimatedMenuElement(each, d.matchNumber);
+            b.image = each.GetComponent<Image>();
             b.ActivationRange = c;
             animatedSquares.Add(b);
             //iteration++;
@@ -244,7 +245,11 @@ public class AnimateGridMaterialWithSound : MonoBehaviour
 
             clipLoudness /= sampleDataLength; //clipLoudness is what you are looking for
 
-           
+            if (clipLoudness > highestHz)
+            {
+                highestHz = clipLoudness;
+                Debug.Log(highestHz);
+            }
         }
     }
 
@@ -254,14 +259,18 @@ public class AnimateGridMaterialWithSound : MonoBehaviour
         Color newColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f); //new Color((float)clipLoudness, originalMat.color.g, originalMat.color.b);
         if (clipLoudness > clipLoudnessBeatDetectionThreshold)
         {
-            sunLight.color = new Color(originalLightColor.r + (clipLoudness * onBeatSunColorModifier), originalLightColor.g, originalLightColor.b);
-            MaterialToAnimate.SetColor("_BaseColor", newColor);
+            //sunLight.color = new Color(originalLightColor.r + (clipLoudness * onBeatSunColorModifier), originalLightColor.g, originalLightColor.b);
+           // MaterialToAnimate.SetColor("_BaseColor", newColor);
             titleText.color = newColor;
+            foreach (var VARIABLE in objectsToAnimate)
+            {
+                VARIABLE.GetComponent<Image>().color = newColor;
+            }
         }
         else
         {
-            sunLight.color = originalLightColor;
-            MaterialToAnimate.SetColor("_BaseColor", Color.white);
+            //sunLight.color = originalLightColor;
+           // MaterialToAnimate.SetColor("_BaseColor", Color.white);
             titleText.color = Color.white;
         }
     }

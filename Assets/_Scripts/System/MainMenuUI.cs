@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class MainMenuUI : MonoBehaviour
 {
     [SerializeField] private TMP_InputField _lobbyNicknameTextbox;
-    [SerializeField] GameObject grid;
+
     private void Start()
     {
         
@@ -25,11 +25,11 @@ public class MainMenuUI : MonoBehaviour
     {
         if (NicknameCheckInvalid())
         {
-
+            
             return;
         }
             SetChildrenEnabled(false);
-            MyNetworkManager.singleton.StartHost();
+          .singleton.StartHost();
     }
 
     private bool NicknameCheckInvalid()
@@ -66,7 +66,7 @@ public class MainMenuUI : MonoBehaviour
         menuScript.started = true;
         menuScript.epilepsy = true;
         EpilepsyMenu.SetActive(false);
-        grid.GetComponent<Animator>().enabled = false;
+        //grid.GetComponent<Animator>().enabled = false;
 
     }
 

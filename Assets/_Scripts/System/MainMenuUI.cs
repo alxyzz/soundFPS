@@ -29,7 +29,7 @@ public class MainMenuUI : MonoBehaviour
             return;
         }
             SetChildrenEnabled(false);
-          .singleton.StartHost();
+          //.singleton.StartHost();
     }
 
     private bool NicknameCheckInvalid()

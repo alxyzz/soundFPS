@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a71f15c6523d63f4bba2e442273e25de, type: 3}
+  m_Name: Pistol
+  m_EditorClassIdentifier: 
+  _weaponName: 
+  _type: 0
+  _rangeType: 0
+  _maxRange: 0
+  _automatic: 0
+  _fireDelay: 0
+  _recoilHorizontal:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _recoilVertical:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _recoilRecoveryDuration:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.3
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _burstRecoilGain: 0
+  _crosshairSpread: 0
+  _fireSpread: 0
+  _inAirSpreadGain: 0.4
+  _joggingSpreadGain: 0.04
+  _walkingSpreadGain: 0.02
+  _crouchingSpreadGain: 0.01
+  _inAirSpreadMultiplier: 3
+  _joggingSpreadMultiplier: 2
+  _walkingSpreadMultiplier: 0.9
+  _crouchingSpreadMultiplier: 0.8
+  _baseDamage: 0
+  _dmgHeadMultiplier: 3.2
+  _dmgBodyMultiplier: 0.9
+  _dmgArmMultiplier: 1
+  _dmgThighMultiplier: 0.7
+  _dmgCalfMultiplier: 0.6
+  _distanceAttenuation:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _PenetrationAttenuation:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  _reloadMultiplier: 0
+  _ammo: 0
+  _backupAmmo: 0
+  _movementMultiplier: 0
+  _fireSound: {fileID: 0}
+  _killIcon: {fileID: 0}

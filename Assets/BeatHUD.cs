@@ -1,9 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using Mirror;
 
-public class BeatHUD : NetworkBehaviour
+public class BeatHUD : MonoBehaviour
 {
     [Header("HUD Elements")]
     [SerializeField] private RectTransform _crosshair;
@@ -25,19 +24,25 @@ public class BeatHUD : NetworkBehaviour
     public void DoBeatTick()
     {
         Debug.LogError("Beat tick just happened @ BeatHUD");
-        //_beatSimpleIndicator.gameObject.SetActive(false);
-        //beating = true;
-        //StartCoroutine(showBeat());
+        
+        beating = true;
+        StartCoroutine(showBeat());
+    }
+
+    public void ToggleBeatVisibility(bool b)
+    {
+
+        _beatSimpleIndicator.gameObject.SetActive(b);
     }
 
     IEnumerator showBeat()
     {
-        _beatSimpleIndicator.gameObject.SetActive(true);
+        ToggleBeatVisibility(true);
 
         yield return new WaitForSecondsRealtime(0.2f);
 
         beating = false;
-        _beatSimpleIndicator.gameObject.SetActive(false);
+        ToggleBeatVisibility(false);
     }
 
     // Start is called before the first frame update
@@ -45,8 +50,8 @@ public class BeatHUD : NetworkBehaviour
     {
         //leftArrowStartPos = _beatArrow_left.position;
         //rightArrowStartPos = _beatArrow_right.position;
-        //CenterPos = _crosshair.position;
-        //_beatSimpleIndicator.gameObject.SetActive(false);
+        CenterPos = _crosshair.position;
+        _beatSimpleIndicator.gameObject.SetActive(false);
         //Debug.Log("leftArrowStartPos - " + leftArrowStartPos);
         //Debug.Log("rightArrowStartPos - " + rightArrowStartPos);
         //Debug.Log("CenterPos - " + CenterPos);

@@ -26,7 +26,7 @@ public class MainMenuUI : MonoBehaviour
     {
         if (NicknameCheckInvalid())
         {
-            GameState.Instance.AddHostToPlayer(string nick);
+            GameState.Instance.AddHostToPlayer(_lobbyNicknameTextbox.text);
             return;
         }
             SetChildrenEnabled(false);

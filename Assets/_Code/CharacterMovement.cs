@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class unused_CharacterMovement : NetworkBehaviour
+public class CharacterMovement : NetworkBehaviour
 {
     // [Header("Components")]
     // [SerializeField] private Animator _firstPersonAnimator;

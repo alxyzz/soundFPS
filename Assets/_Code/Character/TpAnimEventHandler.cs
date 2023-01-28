@@ -5,12 +5,12 @@ using UnityEngine;
 public class TpAnimEventHandler : CharacterAnimEventHandler
 {
     //private AudioSource _audioSource;
-    //private unused_CharacterMovement _charaMovement;
+    //private CharacterMovement _charaMovement;
     //protected override void Awake()
     //{
     //    base.Awake();
     //    _audioSource = GetComponent<AudioSource>();
-    //    _charaMovement = GetComponentInParent<unused_CharacterMovement>();
+    //    _charaMovement = GetComponentInParent<CharacterMovement>();
     //}
 
     //private void FootStep()

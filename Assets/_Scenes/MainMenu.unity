@@ -657,8 +657,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 63490871}
   m_HandleRect: {fileID: 63490870}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 1
+  m_Value: 0
+  m_Size: 0.99999714
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2480,7 +2480,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lobbyNicknameTextbox: {fileID: 1018077470}
-  grid: {fileID: 0}
   EpilepsyMenu: {fileID: 825754995}
   menuScript: {fileID: 1958714697}
 --- !u!114 &749501887
@@ -4854,7 +4853,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000048134476}
+  m_AnchoredPosition: {x: 0, y: -0.000037703066}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1697598365
@@ -6233,7 +6232,7 @@ MonoBehaviour:
   MaterialToAnimate: {fileID: 2100000, guid: 1d730623f28132a4f90d216f8cd1eaf7, type: 2}
   soundAnalyzer: {fileID: 749501887}
   frequencyStartHz: 0
-  frequencyEndHz: 1250
+  frequencyEndHz: 0
   barDecayValue: 0.001
   barGrowMultiplier: 5
   barLerpStep: 0.04
@@ -6244,29 +6243,7 @@ MonoBehaviour:
   updateStep: 0.25
   sampleDataLength: 1024
   clipLoudnessBeatDetectionThreshold: 1
-  objectsToAnimate:
-  - {fileID: 1910877483}
-  - {fileID: 1195780287}
-  - {fileID: 1073919813}
-  - {fileID: 410286219}
-  - {fileID: 1482040333}
-  - {fileID: 468741507}
-  - {fileID: 565748728}
-  - {fileID: 874923833}
-  - {fileID: 1641736766}
-  - {fileID: 1917246823}
-  - {fileID: 561724556}
-  - {fileID: 1421063387}
-  - {fileID: 1938493314}
-  - {fileID: 1217287352}
-  - {fileID: 1899343874}
-  - {fileID: 1582250498}
-  - {fileID: 2040022231}
-  - {fileID: 859916404}
-  - {fileID: 649145485}
-  - {fileID: 1589590503}
-  - {fileID: 584915394}
-  - {fileID: 2009879850}
+  objectsToAnimate: []
 --- !u!1 &1986097665
 GameObject:
   m_ObjectHideFlags: 0
@@ -6582,7 +6559,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 867777822}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
   m_Name: 
@@ -6606,7 +6583,7 @@ MonoBehaviour:
   autoStartServerBuild: 1
   autoConnectClientBuild: 0
   sendRate: 60
-  offlineScene: Assets/_Scenes/MainMenu.unity
+  offlineScene: Assets/_Scenes/MainMap.unity
   onlineScene: Assets/_Scenes/MainMap.unity
   transport: {fileID: 2057893528}
   networkAddress: localhost
@@ -6647,25 +6624,6 @@ MonoBehaviour:
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0
---- !u!114 &2057893529
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 867777822}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebe08595155294544b51c07ffe414e7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  secretHandshake: -5042789269105014436
-  serverBroadcastListenPort: 7777
-  enableActiveDiscovery: 1
-  ActiveDiscoveryInterval: 3
-  BroadcastAddress: 
-  ServerEntryPrefab: {fileID: 0}
-  ServerListContentParent: {fileID: 0}
 --- !u!114 &2057893532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6696,7 +6654,7 @@ MonoBehaviour:
   enableActiveDiscovery: 1
   ActiveDiscoveryInterval: 3
   BroadcastAddress: 
-  transport: {fileID: 0}
+  transport: {fileID: 2057893528}
   OnServerFound:
     m_PersistentCalls:
       m_Calls:

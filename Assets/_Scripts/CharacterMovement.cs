@@ -11,7 +11,7 @@ public class CharacterMovement : NetworkBehaviour
     // [SerializeField] private Animator _thirdPersonAnimator;
     private CharacterAnimHandler _charaAnimHandler;
     private CharacterController _charaCtrl;
-    private PlayerState _playerState;
+    private PlayerBody _playerBody;
 
     private readonly int _aSpeedLevel = Animator.StringToHash("SpeedLevel");
     private readonly int _aMovementMultiplier = Animator.StringToHash("MovementMultiplier");
@@ -39,10 +39,10 @@ public class CharacterMovement : NetworkBehaviour
     {
         get
         {
-            float weapon = 1.0f;
-            if (_playerState.CurrentWeaponIdentity != null) weapon = _playerState.CurrentWeaponIdentity.Data.MovementMultiplier;
+            //float weapon = 1.0f;
+            //if (_playerBody.CurrentWeaponIdentity != null) weapon = _playerBody.CurrentWeaponIdentity.Data.MovementMultiplier;
             //if (IsCrouching) return _maxCrouchSpeed * weapon;
-            return _maxJogSpeed * weapon;
+            return _maxJogSpeed ;
         }
     }
     
@@ -58,18 +58,18 @@ public class CharacterMovement : NetworkBehaviour
     {
         //_charaAnimHandler = GetComponent<CharacterAnimHandler>();
         _charaCtrl = GetComponent<CharacterController>();
-        _playerState = GetComponent<PlayerState>();
+        _playerBody = GetComponent<PlayerBody>();
         
     }
 
     private void Update()
     {
         if (!isLocalPlayer) return;
-        if (!_playerState.IsAlive)
-        {
-            Debug.Log("player not ALIVE");
-            return;
-        }
+        //if (!_playerBody.IsAlive)
+        //{
+        //    Debug.Log("player not ALIVE");
+        //    return;
+        //}
         if (GameState.Instance.Stage != GameStage.PLAYING) return;
            
 

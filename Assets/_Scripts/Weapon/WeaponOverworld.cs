@@ -23,7 +23,7 @@ public class WeaponOverworld : NetworkBehaviour
         _pfbInfoWidget = Resources.Load<GameObject>("UI/Game/InfoWidget");
     }
 
-    public void BeInteracted(PlayerState pState)
+    public void BeInteracted(PlayerBody pBody)
     {
         
     }
@@ -31,7 +31,7 @@ public class WeaponOverworld : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        PlayerState b = other.GetComponentInChildren<PlayerState>();
+        PlayerBody b = other.GetComponentInChildren<PlayerBody>();
         if (b != null)
         {
             b.PickUpWeapon(_data, CurrentAmmo, BackupAmmo);

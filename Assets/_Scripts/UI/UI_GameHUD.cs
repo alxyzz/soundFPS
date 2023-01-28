@@ -1,5 +1,5 @@
 using Mirror;
-using Steamworks;
+
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,6 +9,8 @@ using UnityEngine.UI;
 public class UI_GameHUD : MonoBehaviour
 {
     private static UI_GameHUD instance;
+
+
     public static UI_GameHUD Instance => instance;
     private void Awake()
     {
@@ -19,33 +21,7 @@ public class UI_GameHUD : MonoBehaviour
         ClearInteractionHint();
     }
 
-    [Header("Countdown")]
-    [SerializeField] private TextMeshProUGUI _tmpBeginplayCountdown;
-    [SerializeField] private TextMeshProUGUI _tmpZoneCountdown;
-    public void UpdateConnectedPlayerNum(int num, int max)
-    {
-        _tmpBeginplayCountdown.SetText($"Waiting for other players...{num}/{max}");
-    }
-    public static void SetCountdown(string str)
-    {
-        instance._tmpBeginplayCountdown.SetText(str);
-    }
-    public void SetZoneCountdown(int val, bool urgent = false)
-    {
-        _tmpZoneCountdown.color = urgent ? Color.red : Color.white;
-        if (null != _cZoneCountdown) StopCoroutine(_cZoneCountdown);
-        _cZoneCountdown = StartCoroutine(ZoneCountdown(val));
-    }
-    Coroutine _cZoneCountdown;
-    private IEnumerator ZoneCountdown(int val)
-    {
-        while (val > 0)
-        {
-            _tmpZoneCountdown.SetText(val.ToString() + " s");
-            val--;
-            yield return new WaitForSeconds(1.0f);
-        }
-    }
+    
 
     [Header("Interaction")]
     [SerializeField] private TextMeshProUGUI _tmpInteraction;
@@ -67,43 +43,45 @@ public class UI_GameHUD : MonoBehaviour
         instance._tmpAimedPlayerName.SetText(nickname);
     }
 
-    [Header("Inventory")]
-    [SerializeField] private UI_Panel_Inventory _inventory;
-    public static void SetNewWeapon(int index, string newName)
-    {
-        instance._inventory.SetNewWeapon(index, newName);
-    }
-    public static void ActiveInventorySlot(int index)
-    {
-        instance._inventory.ActiveSlot(index);
-    }
+    //[Header("Inventory")]
+    //[SerializeField] private UI_Panel_Inventory _inventoryScroller;
+    //public static void SetNewWeapon(int index, string newName)
+    //{
+    //    instance._inventoryScroller.SetNewWeapon(index, newName);
+    //}
+    //public static void ActiveInventorySlot(int index)
+    //{
+    //    instance._inventoryScroller.ActiveSlot(index);
+    //}
 
     [Header("Ammo")]
     [SerializeField] private GameObject _pnlAmmo;
-    [SerializeField] private TextMeshProUGUI _tmpAmmo;
-    [SerializeField] private TextMeshProUGUI _tmpBackupAmmo;
-    public static void SetAmmo(int val)
-    {
-        instance._tmpAmmo.SetText(val.ToString());
-    }
-    public static void SetBackupAmmo(int val)
-    {
-        instance._tmpBackupAmmo.SetText(val.ToString());
-    }
 
-    [Header("Crosshair")]
-    [SerializeField] private UI_Crosshair _crosshair;
-    public static void SetCrosshairActive(bool active)
-    {
-        instance._crosshair.gameObject.SetActive(active);
-    }
-    public static void SetCrosshairWeaponSpread(float pixel)
-    {
-        if (instance._crosshair.gameObject.activeSelf)
-        {
-            instance._crosshair.WeaponSpread = pixel;
-        }
-    }
+    public GameObject _crosshair;
+    public GameObject _inventoryScroller;
+
+    //public static void SetAmmo(int val)
+    //{
+    //    instance._tmpAmmo.SetText(val.ToString());
+    //}
+    //public static void SetBackupAmmo(int val)
+    //{
+    //    instance._tmpBackupAmmo.SetText(val.ToString());
+    //}
+
+    //[Header("Crosshair")]
+    //[SerializeField] private UI_Crosshair _crosshair;
+    //public static void SetCrosshairActive(bool active)
+    //{
+    //    instance._crosshair.gameObject.SetActive(active);
+    //}
+    //public static void SetCrosshairWeaponSpread(float pixel)
+    //{
+    //    if (instance._crosshair.gameObject.activeSelf)
+    //    {
+    //        instance._crosshair.WeaponSpread = pixel;
+    //    }
+    //}
     //public static void SetCrosshairMovementSpread(float pixel)
     //{
     //    if (instance._crosshair.gameObject.activeSelf)
@@ -111,13 +89,13 @@ public class UI_GameHUD : MonoBehaviour
     //        instance._crosshair.MovementSpread = pixel;
     //    }
     //}
-    public static void SetCrosshairFireSpread(float pixel, float duration)
-    {
-        if (instance._crosshair.gameObject.activeSelf)
-        {
-            instance._crosshair.SetFireSpread(pixel, duration);
-        }
-    }
+    //public static void SetCrosshairFireSpread(float pixel, float duration)
+    //{
+    //    if (instance._crosshair.gameObject.activeSelf)
+    //    {
+    //        instance._crosshair.SetFireSpread(pixel, duration);
+    //    }
+    //}
 
     [Header("Personal")]
     [SerializeField] private GameObject _pnlPersonal;
@@ -126,6 +104,11 @@ public class UI_GameHUD : MonoBehaviour
     [SerializeField] private Color _hpColor2 = Color.yellow;
     [SerializeField] private Color _hpColor3 = Color.red;
     [SerializeField] private TextMeshProUGUI _tmpArmor;
+
+    [SerializeField]
+    private GameObject _statistics;
+
+
     public void SetHealth(int val)
     {
         instance._tmpHealth.SetText(val.ToString());
@@ -137,37 +120,37 @@ public class UI_GameHUD : MonoBehaviour
         instance._tmpArmor.SetText(val.ToString());
     }
 
-    [Header("Damaged")]
-    [SerializeField] private UI_Game_Damaged _damaged;
-    public void RegisterPlayerTransform(Transform player)
-    {
-        _damaged.PlayerTransform = player;
-    }
-    public void SetDamaged(Transform instigator)
-    {
-        _damaged.SetDamaged(instigator);
-    }
+    //[Header("Damaged")]
+    //[SerializeField] private UI_Game_Damaged _damaged;
+    //public void RegisterPlayerTransform(Transform player)
+    //{
+    //    _damaged.PlayerTransform = player;
+    //}
+    //public void SetDamaged(Transform instigator)
+    //{
+    //    _damaged.SetDamaged(instigator);
+    //}
 
-    [Header("Kill Message")]
-    [SerializeField] private UI_Game_KillMsg _killMsg;
-    public static void AddKillMessage(string killerName, string objectName, Sprite icon, DamageType type)
-    {
-        instance._killMsg.AddKillMessage(killerName, objectName, icon, type);
-    }
-    [Header("Statistics")]
-    [SerializeField] private UI_Panel_Statistics _statistics;
-    public void SetStatisticsShown(bool shown)
-    {
-        _statistics.SetShown(shown);
-    }
-    public void AddPlayerToStatistics(uint netId)
-    {
-        _statistics.AddPlayerSlot(netId);
-    }
-    public void RemovePlayerFromStatistics(uint netId)
-    {
-        _statistics.RemovePlayerSlot(netId);
-    }
+    //[Header("Kill Message")]
+    //[SerializeField] private UI_Game_KillMsg _killMsg;
+    //public static void AddKillMessage(string killerName, string objectName, Sprite icon, DamageType type)
+    //{
+    //    instance._killMsg.AddKillMessage(killerName, objectName, icon, type);
+    //}
+    //[Header("Statistics")]
+    //[SerializeField] private UI_Panel_Statistics _statistics;
+    //public void SetStatisticsShown(bool shown)
+    //{
+    //    _statistics.SetShown(shown);
+    //}
+    //public void AddPlayerToStatistics(uint netId)
+    //{
+    //    _statistics.AddPlayerSlot(netId);
+    //}
+    //public void RemovePlayerFromStatistics(uint netId)
+    //{
+    //    _statistics.RemovePlayerSlot(netId);
+    //}
     //private void InitPlayerStatistics()
     //{
     //    foreach (var item in GameState.Instance._playerNetIds)
@@ -182,46 +165,44 @@ public class UI_GameHUD : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _tmpWinnerName;
     [SerializeField] private Button _btnReturnToLobby;
 
-    public static void ShowWinner(PlayerState ps)
+    public static void ShowWinner(PlayerBody ps)
     {
 
     }
-    private void OnWinnerIconLoaded(AvatarImageLoaded_t callback)
-    {
-        instance._imgWinnerIcon.texture = SteamLobby.GetSteamImageAsTexture(callback.m_iImage);
-    }
+
     //public void OnClickReturnToLobby()
     //{
     //    // SteamLobby.SceneToLoad = "Lobby";
     //    MyNetworkManager.singleton.ServerChangeScene("Lobby");
     //}
+
     public static void SetUIEnabled(bool enabled)
     {
         instance._pnlAmmo.SetActive(enabled);
         instance._pnlPersonal.SetActive(enabled);
-        instance._inventory.gameObject.SetActive(enabled);
+        instance._inventoryScroller.gameObject.SetActive(enabled);
         instance._crosshair.gameObject.SetActive(enabled);
     }
 
     private void FixedUpdate()
     {
-        if (null == GameState.Instance) return;
-        if (GameState.Instance.Stage != GameStage.PLAYING) return;
+        //if (null == GameState.Instance) return;
+        //if (GameState.Instance.Stage != GameStage.PLAYING) return;
 
-        // check aiming player
-        if (Physics.Raycast(Camera.main.transform.position,
-            Camera.main.transform.forward,
-            out RaycastHit hit,
-            150,
-            _aimLayerMask))
-        {
-            // Debug.Log(hit.transform.gameObject.name);
-            if (hit.transform.TryGetComponent(out PlayerState ps))
-            {
-                SetAimedPlayerName(ps.Nickname);
-                return;
-            }            
-        }
-        SetAimedPlayerName("");
+        //// check aiming player
+        //if (Physics.Raycast(Camera.main.transform.position,
+        //    Camera.main.transform.forward,
+        //    out RaycastHit hit,
+        //    150,
+        //    _aimLayerMask))
+        //{
+        //    // Debug.Log(hit.transform.gameObject.name);
+        //    if (hit.transform.TryGetComponent(out PlayerBody ps))
+        //    {
+        //       // SetAimedPlayerName(ps.Nickname);
+        //        return;
+        //    }            
+        //}
+        //SetAimedPlayerName("");
     }
 }

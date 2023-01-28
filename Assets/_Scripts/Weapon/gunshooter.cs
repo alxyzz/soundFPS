@@ -10,7 +10,7 @@ public class gunshooter : MonoBehaviour
 
     // Update is called once per frame
 
-    public void onShoot(PlayerState instigator)
+    public void onShoot(PlayerBody instigator)
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
@@ -25,7 +25,7 @@ public class gunshooter : MonoBehaviour
             {
                 Debug.Log("Hit object -> " + hit.transform.name);
 
-                PlayerState p = hit.transform.GetComponent<PlayerState>();
+                PlayerBody p = hit.transform.GetComponent<PlayerBody>();
                 if (p != null)
                 {
                     Debug.Log("hit object was played. applying damage");

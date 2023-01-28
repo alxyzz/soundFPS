@@ -6,5 +6,5 @@ public interface IInteractable
 {
     public void StartBeingSeen();
     public void EndBeingSeen();
-    public void BeInteracted(PlayerState pState);
+    public void BeInteracted(PlayerBody pBody);
 }

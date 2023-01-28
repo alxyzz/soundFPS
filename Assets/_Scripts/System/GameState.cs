@@ -39,7 +39,7 @@ public class GameState : NetworkBehaviour
     public void GivePeopleDebugWeapons()
     {
         Debug.Log("GameState.GivePeopleDebugWeapons() start.");
-        foreach (PlayerState item in GetPlayerStateList())
+        foreach (PlayerBody item in GetPlayerStateList())
         {
             Debug.Log("GameState.GivePeopleDebugWeapons() - gave weapon to " + item);
             //item.GiveDebugWeapon();
@@ -95,10 +95,10 @@ public class GameState : NetworkBehaviour
     [ClientRpc]
     private void RPCDoBeat()
     {
-        foreach (PlayerState item in GetPlayerStateList())
+        foreach (PlayerBody item in GetPlayerStateList())
         {
             Debug.Log("GameState.GivePeopleDebugWeapons() - gave weapon to " + item);
-            item.RelayBeat();
+            item.DoBeat();
         }
 
     }
@@ -201,7 +201,7 @@ public class GameState : NetworkBehaviour
       
     }
 
-    //public bool TryGetPlayerStateAt(int index, out PlayerState ps) // usually called on the client
+    //public bool TryGetPlayerStateAt(int index, out PlayerBody ps) // usually called on the client
     //{
     //    ps = null;
     //    if (index < 0 || index >= ConnectedPlayerNum) return false;
@@ -212,7 +212,7 @@ public class GameState : NetworkBehaviour
     //    }
     //    return false;
     //}
-    public bool TryGetPlayerStateByName(string nickname, out PlayerState ps)
+    public bool TryGetPlayerStateByName(string nickname, out PlayerBody ps)
     {
         ps = null;
         if (PlayerList_NameID.Values.Contains(nickname))
@@ -224,7 +224,7 @@ public class GameState : NetworkBehaviour
         }
         return false;
     }
-    public bool TryGetPlayerStateByNetId(uint netId, out PlayerState ps)
+    public bool TryGetPlayerStateByNetId(uint netId, out PlayerBody ps)
     {
         ps = null;
         if (PlayerList_NameID.Keys.Contains<uint>(netId))
@@ -236,14 +236,14 @@ public class GameState : NetworkBehaviour
         }
         return false;
     }
-    public List<PlayerState> GetPlayerStateList() // usually called on the client
+    public List<PlayerBody> GetPlayerStateList() // usually called on the client
     {
-        List<PlayerState> results = new List<PlayerState>();
+        List<PlayerBody> results = new List<PlayerBody>();
         foreach (var item in PlayerList_NameID.Keys)
         {
             if (NetworkClient.spawned.TryGetValue(item, out NetworkIdentity identity))
             {
-                if (identity.TryGetComponent(out PlayerState ps))
+                if (identity.TryGetComponent(out PlayerBody ps))
                 {
                     results.Add(ps);
                 }
@@ -287,7 +287,7 @@ public class GameState : NetworkBehaviour
         ;
         isDraw = false;
        
-        List<PlayerState> livings = GetPlayerStateList().FindAll(x => x.Kills >= instance.maxKills);
+        List<PlayerBody> livings = GetPlayerStateList().FindAll(x => x.Kills >= instance.maxKills);
 
         
         switch (livings.Count)
@@ -335,7 +335,7 @@ public class GameState : NetworkBehaviour
     [ClientRpc]
     private void RpcDecalreWinner(uint netId)
     {
-        //if (TryGetPlayerStateByNetId(netId, out PlayerState ps))
+        //if (TryGetPlayerStateByNetId(netId, out PlayerBody ps))
         //{
         //    UI_GameHUD.ShowWinner(ps);
         //}

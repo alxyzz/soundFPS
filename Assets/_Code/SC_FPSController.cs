@@ -25,6 +25,7 @@ public class SC_FPSController : NetworkBehaviour
     public float lookXLimit = 45.0f;
     public bool Fly;
 
+    [SerializeField]private AudioListener listener;
     CharacterController characterController;
     Vector3 moveDirection = Vector3.zero;
     float rotationX = 0;
@@ -37,8 +38,16 @@ public class SC_FPSController : NetworkBehaviour
         if (characterController == null)
             characterController = GetComponent<CharacterController>();
 
-
-        characterController.enabled = false;
+        if (isLocalPlayer)
+        {
+            _fpsRoot.SetActive(true);
+        }
+        else
+        {
+            _fpsRoot.SetActive(false);
+           
+        }
+       
         GetComponent<NetworkTransform>().syncDirection = SyncDirection.ClientToServer;
         // Lock cursor
         Cursor.lockState = CursorLockMode.Locked;
@@ -73,7 +82,7 @@ public class SC_FPSController : NetworkBehaviour
 
     private void HandleShooting()
     {
-        if (body.beat)
+        if (true)//body.beat)
         {
             if (Input.GetKey(KeyCode.Mouse0))
             {
@@ -84,23 +93,45 @@ public class SC_FPSController : NetworkBehaviour
 
     private void Shoot()
     {
+        if (body.CurrWepAnim == null)
+        {
+            Debug.Log("WEP ANIM IS NULL");
+        }
+        body.CurrWepAnim.SetTrigger("shot");
         body.equippedWep.Shoot(transform, transform.forward);
     }
 
 
+
+
+
     private void HandleWeaponSwitching()
     {
+        if (Input.GetAxis("Mouse ScrollWheel") > 0)
+        {
+            body.EquipNextWep();
+        }
+
+        if (Input.GetAxis("Mouse ScrollWheel") < 0)
+        {
+            body.EquipPreviousWep();
+        }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            
-        }
+           
+            body.ChangeWeaponBasedOnIndex(1);
+
+
+        }else
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-
-        }
+            body.ChangeWeaponBasedOnIndex(2);
+           
+        }else
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-
+             body.ChangeWeaponBasedOnIndex(3); 
+             
         }
     }
 
@@ -127,6 +158,11 @@ public class SC_FPSController : NetworkBehaviour
         {
             characterController = gameObject.GetComponent<CharacterController>();
             moveDirection.y = jumpSpeed;
+            //AudioListener[] components = Resources.FindObjectsOfTypeAll<AudioListener>();
+            //foreach (AudioListener VARIABLE in components)
+            //{
+            //    Debug.LogWarning("HELLO YOUR COMPUTER HAVE VIRUS - " + VARIABLE.name + " PLUS " + VARIABLE.gameObject.name);
+            //}
         }
         else
         {

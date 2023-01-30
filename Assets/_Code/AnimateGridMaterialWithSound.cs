@@ -228,7 +228,7 @@ public class AnimateGridMaterialWithSound : MonoBehaviour
 
     }
 
-
+    
     private void GetClipLoudness()
     {
         currentUpdateTime += Time.deltaTime;
@@ -256,7 +256,7 @@ public class AnimateGridMaterialWithSound : MonoBehaviour
     private void ShiftColor()
     {
         //we get the data
-        Color newColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f); //new Color((float)clipLoudness, originalMat.color.g, originalMat.color.b);
+        var newColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f); //new Color((float)clipLoudness, originalMat.color.g, originalMat.color.b);
         if (clipLoudness > clipLoudnessBeatDetectionThreshold)
         {
             //sunLight.color = new Color(originalLightColor.r + (clipLoudness * onBeatSunColorModifier), originalLightColor.g, originalLightColor.b);

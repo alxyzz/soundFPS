@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class keepOnLocalPlayer : NetworkBehaviour
+public class keepOnLocalPlayer : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
     {
-        if (!isLocalPlayer)
-        {
-            Destroy(this);
-        }
+        
     }
 
 

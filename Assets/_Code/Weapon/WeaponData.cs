@@ -16,15 +16,10 @@ public class WeaponData : MonoBehaviour
 {
     [Header("General")]
     [SerializeField] private string _weaponName;
-    [SerializeField] private int _weaponID; //the order of the weapon in the inventory. must be unique
     [SerializeField] private GameObject bulletPrefab;
     public string WeaponName => _weaponName;
-    
- 
     [SerializeField] private float _maxRange;
     public float MaxRange => _maxRange;
-
-
     enum WeaponFireType
     {
         Pistol,

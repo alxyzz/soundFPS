@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8148686590251316529}
   - component: {fileID: 3881853037863535307}
-  - component: {fileID: 5281117456675762494}
   - component: {fileID: 4503247404855086926}
   m_Layer: 0
   m_Name: MyNetworkManager
@@ -63,27 +62,6 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs: []
   timeInterpolationGui: 0
---- !u!114 &5281117456675762494
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148686590251316525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c761308e733c51245b2e8bb4201f46dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  secretHandshake: -397827590690052204
-  serverBroadcastListenPort: 47777
-  enableActiveDiscovery: 1
-  ActiveDiscoveryInterval: 3
-  BroadcastAddress: 
-  transport: {fileID: 4503247404855086926}
-  OnServerFound:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &4503247404855086926
 MonoBehaviour:
   m_ObjectHideFlags: 0

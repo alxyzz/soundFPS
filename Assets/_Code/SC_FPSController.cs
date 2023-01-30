@@ -1,12 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using Mirror;
 
 [RequireComponent(typeof(CharacterController))]
-
+[RequireComponent(typeof(NetworkTransform))]
 public class SC_FPSController : NetworkBehaviour
 {
+
+
+    [Header("Components")]
+    public GameObject _fpsRoot;
+    public GameObject _tpsRoot;
+    public PlayerBody body;
+
+    [Header("Movement Settings")]
     public float walkingSpeed = 7.5f;
     public float runningSpeed = 11.5f;
     public float jumpSpeed = 8.0f;
@@ -14,6 +23,7 @@ public class SC_FPSController : NetworkBehaviour
     public Camera playerCamera;
     public float lookSpeed = 2.0f;
     public float lookXLimit = 45.0f;
+    public bool Fly;
 
     CharacterController characterController;
     Vector3 moveDirection = Vector3.zero;
@@ -24,11 +34,28 @@ public class SC_FPSController : NetworkBehaviour
 
     void Start()
     {
-        characterController = GetComponent<CharacterController>();
+        if (characterController == null)
+            characterController = GetComponent<CharacterController>();
 
+
+        characterController.enabled = false;
+        GetComponent<NetworkTransform>().syncDirection = SyncDirection.ClientToServer;
         // Lock cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+
+    public void SetLifeState(bool alive)
+    {
+        if (alive)
+        {
+            Fly = false;
+        }
+        else
+        {
+            Fly = true;
+        }
     }
 
     void Update()
@@ -37,6 +64,55 @@ public class SC_FPSController : NetworkBehaviour
         {
             return;
         }
+
+        HandleMovement();
+        HandleShooting();
+        HandleWeaponSwitching();
+    }
+
+
+    private void HandleShooting()
+    {
+        if (body.beat)
+        {
+            if (Input.GetKey(KeyCode.Mouse0))
+            {
+                Shoot();
+            }
+        }
+    }
+
+    private void Shoot()
+    {
+        body.equippedWep.Shoot(transform, transform.forward);
+    }
+
+
+    private void HandleWeaponSwitching()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+
+        }
+    }
+
+    private float GetCurrentWeaponSpeedMultiplier()
+    {
+        if (body.equippedWep == null) return 1;
+
+        return body.equippedWep.MovementMultiplier;
+    }
+
+    private void HandleMovement()
+    {
         // We are grounded, so recalculate move direction based on axes
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
@@ -45,16 +121,28 @@ public class SC_FPSController : NetworkBehaviour
         float curSpeedX = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Vertical") : 0;
         float curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Horizontal") : 0;
         float movementDirectionY = moveDirection.y;
-        moveDirection = (forward * curSpeedX) + (right * curSpeedY);
+        moveDirection = (forward * curSpeedX * GetCurrentWeaponSpeedMultiplier()) + (right * curSpeedY * GetCurrentWeaponSpeedMultiplier());
 
-        if (Input.GetButton("Jump") && canMove && characterController.isGrounded)
+        if (Input.GetKey(KeyCode.Space) && canMove && characterController.isGrounded)
         {
             characterController = gameObject.GetComponent<CharacterController>();
             moveDirection.y = jumpSpeed;
         }
         else
         {
-            moveDirection.y = movementDirectionY;
+            if (!Fly)
+            {
+                moveDirection.y = movementDirectionY;
+            }
+            else
+            {
+                if (Input.GetKey(KeyCode.LeftControl) && canMove)
+                {
+                    characterController = gameObject.GetComponent<CharacterController>();
+                    moveDirection.y = -jumpSpeed;
+                }
+            }
+
         }
 
         // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
@@ -62,7 +150,7 @@ public class SC_FPSController : NetworkBehaviour
         // as an acceleration (ms^-2)
         if (!characterController.isGrounded)
         {
-            moveDirection.y -= gravity * Time.deltaTime;
+            if (!Fly) { moveDirection.y -= gravity * Time.deltaTime; }
         }
 
         // Move the controller

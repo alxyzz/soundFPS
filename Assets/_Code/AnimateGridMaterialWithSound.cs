@@ -122,7 +122,7 @@ public class AnimateGridMaterialWithSound : MonoBehaviour
     private void InitializeAnimatedObjects()
     {
         //range - 20 to 15000
-        int iteration = 0;
+        //int iteration = 0;
         int HzPerIteration;
         int amtOfObjects = objectsToAnimate.Count;
 

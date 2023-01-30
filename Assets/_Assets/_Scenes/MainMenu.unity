@@ -1944,19 +1944,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 589715004}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &589715006 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5281117456675762494, guid: 856c3e986636cf64389bcf8b2574ee22,
-    type: 3}
-  m_PrefabInstance: {fileID: 589715004}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 589715005}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c761308e733c51245b2e8bb4201f46dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &589715007
+--- !u!114 &589715011
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1965,10 +1953,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 589715005}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88c37d3deca7a834d80cfd8d3cfcc510, type: 3}
+  m_Script: {fileID: 11500000, guid: 76208ad51a201bb46b7efea05db12533, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkDiscovery: {fileID: 589715006}
+  onReceivedServerResponse:
+    m_PersistentCalls:
+      m_Calls: []
+  m_serverPort: 18418
+  gameServerPortNumber: 7777
+--- !u!114 &589715012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 589715005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29b6a1c7ca9c9424bbdd22865460867d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  additionalDataToDisplay:
+  - Map
+  drawGUI: 1
+  offsetX: 5
+  offsetY: 150
+  width: 500
+  height: 400
+  refreshInterval: 3
+  onConnectEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &606663323
 GameObject:
   m_ObjectHideFlags: 0
@@ -4664,7 +4679,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000004897186}
+  m_AnchoredPosition: {x: 0, y: -0.0000038146973}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1697598365

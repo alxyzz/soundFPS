@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using Mirror;
 using UnityEditor.ShaderGraph.Drawing.Inspector.PropertyDrawers;
 using UnityEngine;
@@ -6,42 +7,102 @@ using UnityEngine;
 public class PlayerBody : NetworkBehaviour
 {
 
-    public LocalPlayerController Controller;
-    public PlayerMind Mind;
+
+
+    [HideInInspector] [SyncVar]public uint ID;
+    [HideInInspector] [SyncVar] public uint kills;
+    [HideInInspector] [SyncVar] public uint deaths;
+    [HideInInspector] [SyncVar] public uint assists;
+    [HideInInspector] [SyncVar] public int Health = 100;
+
+    public SC_FPSController Controller;
+
+    //public PlayerMind Mind;
+
+    public WeaponData pistolWep;
+    public WeaponData smgWep;
+    public WeaponData sniperWep;
 
     public Tuple<WeaponData, bool, int> pistol;
     public Tuple<WeaponData, bool, int> smg;
     public Tuple<WeaponData, bool, int> sniper;
 
     public WeaponData equippedWep;
+    private int currWepIndex = 0;
 
 
-    public PlayerMind lastAttacker;
-    public PlayerMind penultimateAttacker;
+    [HideInInspector]public PlayerBody lastAttacker;
+    [HideInInspector] public PlayerBody penultimateAttacker;
 
 
-
+    public bool beat;
 
 
     void Start()
     {
-        Controller = GetComponent<LocalPlayerController>();
-        Mind = GetComponent<PlayerMind>();
+        Controller = GetComponent<SC_FPSController>();
+        
+        if (LocalGame.Instance.localPlayer != null)
+        {
+            throw new Exception("LocalGame localPlayer was not null.");
+        }
+
+        if (isLocalPlayer)
+        {
+            LocalGame.Instance.localPlayer = this.gameObject;
+          Debug.Log("just set up the local player.");
+
+            
+        }
+        GameState.Instance.lastconnectedplayerID++;
+        ID = GameState.Instance.lastconnectedplayerID;
     }
 
 
-    
-
-    public void Die()
+    public void DieAcknowledgement()
     {
 
+       
+        
 
 
-
-        //DieCommand();
+        
     }
 
+    
+    public void DieMessage()
+    {
 
+        deaths++;
+        NetworkClient.Send(new DeathMessage { who = ID });
+
+
+        
+    }
+    public void HitAcknowledgement()
+    {
+
+        deaths++;
+        NetworkClient.Send(new DeathMessage { who = ID });
+
+
+
+    }
+
+    public void HitMessage()
+    {
+
+        deaths++;
+        NetworkClient.Send(new DeathMessage { who = ID });
+
+
+
+    }
+
+    public void Respawn()
+    {
+
+    }
 
     public void DieCommand()
     {
@@ -83,33 +144,44 @@ public class PlayerBody : NetworkBehaviour
 
 
     }
-    public void Beat(bool toggle)
-    {
 
-    }
-    public void Unbeat(bool toggle)
-    {
-
-    }
+    
 
     public void EquipNextWep()
     {
-        
+        currWepIndex = Mathf.Clamp(currWepIndex + 1, 0, 3);
     }
 
     public void EquipPreviousWep()
     {
-
+        currWepIndex = Mathf.Clamp(currWepIndex - 1, 0, 3);
     }
 
+    private void ChangeWeaponBasedOnIndex(int i)
+    {
+        switch (currWepIndex)
+        {
+            case 1:
+                equippedWep = pistol.Item1;
+                break;
 
+            case 2:
+                equippedWep = smg.Item1;
+                break;
 
+            case 3:
+                equippedWep = sniper.Item1;
+                break;
+        }
 
-    [Command]
-    private void CommandEquipWeapon()
+        ChangeWeaponVisibility();
+    }
+
+    private void ChangeWeaponVisibility()
     {
 
     }
+
 
     public void DoBeat()
     {

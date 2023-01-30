@@ -24,13 +24,9 @@ public class MainMenuUI : MonoBehaviour
     }
     public void OnClickHost()
     {
-        if (NicknameCheckInvalid())
-        {
-            GameState.Instance.AddHostToPlayer(_lobbyNicknameTextbox.text);
-            return;
-        }
-            SetChildrenEnabled(false);
-          NetworkManager_ArenaFPS.singleton.StartHost();
+       
+        SetChildrenEnabled(false);
+        NetworkManager_ArenaFPS.singleton.StartHost();
     }
     [Header("Popup Hint")]
     [SerializeField] private RectTransform _popupHintList;
@@ -46,17 +42,7 @@ public class MainMenuUI : MonoBehaviour
 
         Debug.Log("Popup message simulated with content: " + content);
     }
-    private bool NicknameCheckInvalid()
-    {
-        if (string.IsNullOrEmpty(_lobbyNicknameTextbox.text) || _lobbyNicknameTextbox.text.Length <= 3 || _lobbyNicknameTextbox.text.Length >= 25)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+   
 
     public void OnClickDebugJoin()
     {

@@ -10,7 +10,7 @@ public class LevelInitManager : NetworkBehaviour
     
     private void Awake()
     {
-     SceneManager.LoadScene("MainMenu");
+     //SceneManager.LoadScene("MainMenu");
     }
 
 

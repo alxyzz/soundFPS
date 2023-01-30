@@ -13,6 +13,7 @@ public class LocalGame : MonoBehaviour
         instance = this;
     }
 
+    [HideInInspector]public GameObject localPlayer;
 
 
     public Action onServerGameStarted;

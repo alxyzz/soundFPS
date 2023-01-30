@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst;
+using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public enum WeaponType
 {
@@ -9,12 +12,12 @@ public enum WeaponType
     HITSCAN
 }
 
-[CreateAssetMenu(fileName = "New Weapon", menuName = "Data/Weapon")]
-public class WeaponData : ScriptableObject
+public class WeaponData : MonoBehaviour
 {
     [Header("General")]
     [SerializeField] private string _weaponName;
     [SerializeField] private int _weaponID; //the order of the weapon in the inventory. must be unique
+    [SerializeField] private GameObject bulletPrefab;
     public string WeaponName => _weaponName;
     
  
@@ -49,6 +52,52 @@ public class WeaponData : ScriptableObject
             }
         }
     }
+
+    void Update()
+    {
+        timeSinceLastShot += Time.deltaTime;
+    }
+    private float timeSinceLastShot;
+    
+    public void Shoot(Transform source, Vector3 direction)
+    {
+        if (timeSinceLastShot < FireDelay)
+        {
+            return;
+        }
+
+        timeSinceLastShot = 0;
+        Vector3 d = source.forward;
+        d.x += Random.Range(-FireSpread, FireSpread);
+        d.y += Random.Range(-FireSpread, FireSpread);
+
+
+      
+       
+        Vector3 target = source.position + direction * 100f;
+        RaycastHit hit;
+        GameObject b = Instantiate(bulletPrefab, source.position, Quaternion.identity);
+        b.GetComponent<BulletScript>().direction = target;
+        if (Physics.Raycast(source.position, direction, out hit, 100f))
+        {
+            try
+            {
+                PlayerBody enemy = hit.transform.gameObject.GetComponent<PlayerBody>();
+                enemy.Health -= BaseDamage;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+           
+            Debug.Log("Hit " + hit.transform.name);
+        }
+    }
+
+
+
+
     [Tooltip("delay for continuous shooting")]
     [SerializeField] private float _fireDelay;
     public float FireDelay => _fireDelay;
@@ -56,20 +105,7 @@ public class WeaponData : ScriptableObject
     //[Tooltip("degrees the raycast will deviate randomly")]
     //[SerializeField] private float _spread;
     //public float Spread => _spread;
-    [Header("Recoil")]
-    [Tooltip("Bias of degree. Abscissa range from 0 to _ammo")]
-    [SerializeField] private AnimationCurve _recoilHorizontal;
-    public AnimationCurve RecoilHorizontal => _recoilHorizontal;
-    [Tooltip("Bias of degree. Abscissa range from 0 to _ammo")]
-    [SerializeField] private AnimationCurve _recoilVertical;
-    public AnimationCurve RecoilVertical => _recoilVertical;
-    [Tooltip("Recoil recovery duration for certain ammo")]
-    [SerializeField] private AnimationCurve _recoilRecoveryDuration = AnimationCurve.EaseInOut(0, 0.3f, 1, 1);
-    public AnimationCurve RecoilRecoveryDuration => _recoilRecoveryDuration;
-    [Tooltip("how much recoil value should be added when burst shoot quickly.")]
-    [SerializeField] private float _burstRecoilGain;
-    public float BurstRecoilGain => _burstRecoilGain;
-
+  
     [Header("Spread")]
     [Tooltip("basic spread on the crosshair. unit is pixel")]
     [SerializeField] private float _crosshairSpread;
@@ -77,45 +113,18 @@ public class WeaponData : ScriptableObject
     [Tooltip("spread when firing. unit is meter")]
     [SerializeField] private float _fireSpread;
     public float FireSpread => _fireSpread;
-    [SerializeField] private float _inAirSpreadGain = 0.4f;
-    public float InAirSpreadGain => _inAirSpreadGain;
-    [SerializeField] private float _joggingSpreadGain = 0.04f;
-    public float JoggingSpreadGain => _joggingSpreadGain;
-    [SerializeField] private float _walkingSpreadGain = 0.02f;
-    public float WalkingSpreadGain => _walkingSpreadGain;
-    [SerializeField] private float _crouchingSpreadGain = 0.01f;
-    public float CrouchingSpreadGain => _crouchingSpreadGain;
-    [SerializeField] private float _inAirSpreadMultiplier = 3.0f;
-    public float InAirSpreadMultiplier => _inAirSpreadMultiplier;
-    [SerializeField] private float _joggingSpreadMultiplier = 2.0f;
-    public float JoggingSpreadMultiplier => _joggingSpreadMultiplier;
-    [SerializeField] private float _walkingSpreadMultiplier = 0.9f;
-    public float WalkingSpreadMultiplier => _walkingSpreadMultiplier;
-    [SerializeField] private float _crouchingSpreadMultiplier = 0.8f;
-    public float CrouchingSpreadMultiplier => _crouchingSpreadMultiplier;
+  
 
 
     [Header("Damage")]
-    [SerializeField] private float _baseDamage;
-    [SerializeField] private float _dmgHeadMultiplier = 3.2f;
-    [SerializeField] private float _dmgBodyMultiplier = 0.9f;
-    [SerializeField] private float _dmgArmMultiplier = 1.0f;
-    [SerializeField] private float _dmgThighMultiplier = 0.7f;
-    [SerializeField] private float _dmgCalfMultiplier = 0.6f;
-    public float BaseDamage => _baseDamage;
-    public float DamageHead => _baseDamage * _dmgHeadMultiplier;
-    public float DamageBody => _baseDamage * _dmgBodyMultiplier;
-    public float DamageArm => _baseDamage * _dmgArmMultiplier;
-    public float DamageThigh => _baseDamage * _dmgThighMultiplier;
-    public float DamageCalf => _baseDamage * _dmgCalfMultiplier;
-
-    [Header("Reload")]
-    [SerializeField] private float _reloadMultiplier;
-    public float ReloadMultiplier => _reloadMultiplier;
-    [SerializeField] private int _ammo;
-    public int Ammo => _ammo;
-    [SerializeField] private int _backupAmmo;
-    public int BackupAmmo => _backupAmmo;
+    [SerializeField] private int _baseDamage;
+    [SerializeField] private float _dmgHeadMultiplier = 2f;
+    [SerializeField] private float _dmgBodyMultiplier = 1f;
+    
+    public int BaseDamage => _baseDamage;
+    public int DamageHead => (int)(_baseDamage * _dmgHeadMultiplier);
+    public int DamageBody => (int)(_baseDamage * _dmgBodyMultiplier);
+   
 
     [Header("Miscellaneous")]
     [SerializeField] private float _movementMultiplier;

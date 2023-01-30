@@ -89,7 +89,7 @@ public class LocalPlayerController : NetworkBehaviour
     private CharacterMovement _charaMovement;
     public CharacterMovement CharaMovementComp => _charaMovement;
     private PlayerBody _playerState;
-
+    public bool fly;
 
     [Header("Settings")]
     [SerializeField] private float _mouseSensitivity = 2.0f;
@@ -151,10 +151,12 @@ public class LocalPlayerController : NetworkBehaviour
         if (!isLocalPlayer) return;
         //UpdateShowStatisticsInput();
         //if (!_playerState.IsAlive) return; no need for this because playerbody should be disposed when player dies
-        UpdateMovementInput();
-        if (GameState.Instance.Stage != GameStage.PLAYING) return;
-        if (InputManager.Instance.InputMode == EInputMode.UIOnly) return;
         UpdateRotationInput();
+        if (GameState.Instance.Stage != GameStage.PLAYING) return;
+        UpdateMovementInput();
+        
+        if (InputManager.Instance.InputMode == EInputMode.UIOnly) return;
+       
         //UpdateCrouchingInput();
         //UpdateWalkingInput();
         UpdateJumpingInput();

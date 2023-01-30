@@ -5,49 +5,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using JetBrains.Annotations;
+using Telepathy;
 using Unity.VisualScripting;
 using UnityEngine;
 
 
 
-public class PlayerData
-{
-    public uint Kills;
-    public uint Deaths;
-    public uint Assists;
+//public class PlayerData
+//{
+//    public uint Kills;
+//    public uint Deaths;
+//    public uint Assists;
 
 
-    public string nickname;
-    public string Ip;
-    public uint Id;
-    public uint Ping;
-    public float SecondsConnected;
-    public bool Dead;
+//    public string nickname;
+//    public string Ip;
+//    public uint Id;
+//    public uint Ping;
+//    public float SecondsConnected;
+//    public bool Dead;
 
 
-    public PlayerData()
-    {
-    }
+//    public PlayerData()
+//    {
+//    }
 
-    public void GetObjectData(SerializationInfo info, StreamingContext context)
-    {
-        if (info == null)
-            throw new ArgumentNullException("info");
+//    public void GetObjectData(SerializationInfo info, StreamingContext context)
+//    {
+//        if (info == null)
+//            throw new ArgumentNullException("info");
 
-        info.AddValue("Kills", this.Kills);
-        info.AddValue("Deaths", this.Deaths);
-        info.AddValue("Assists", this.Assists);
+//        info.AddValue("Kills", this.Kills);
+//        info.AddValue("Deaths", this.Deaths);
+//        info.AddValue("Assists", this.Assists);
 
 
-        info.AddValue("nickname", this.nickname);
-        info.AddValue("Ip", this.Ip);
-        info.AddValue("Id", this.Id);
-        info.AddValue("Ping", this.Ping);
-        info.AddValue("Dead", this.Dead);
+//        info.AddValue("nickname", this.nickname);
+//        info.AddValue("Ip", this.Ip);
+//        info.AddValue("Id", this.Id);
+//        info.AddValue("Ping", this.Ping);
+//        info.AddValue("Dead", this.Dead);
 
-        throw new NotImplementedException();
-    }
-}
+//        throw new NotImplementedException();
+//    }
+//}
 
 
 
@@ -77,9 +78,9 @@ public class GameState : NetworkBehaviour
 {
     public bool beat_toggle;
     [HideInInspector] public float timeElapsed;
-    public readonly List<PlayerData> players = new();
-    public Dictionary<uint, PlayerMind> playerMinds;
-    public readonly List<PlayerData> deadPlayers = new();
+    
+   
+    public readonly List<GameObject> players = new();
 
 
     public bool inactive = false;
@@ -88,17 +89,9 @@ public class GameState : NetworkBehaviour
     [SyncVar] [SerializeField] int maxKills = 30;
 
 
-    private uint lastconnectedplayerID = 0;
+    public uint lastconnectedplayerID = 0;
 
-    public void GivePeopleDebugWeapons()
-    {
-        Debug.Log("GameState.GivePeopleDebugWeapons() start.");
-        foreach (PlayerData item in GameState.instance.players)
-        {
-            Debug.Log("GameState.GivePeopleDebugWeapons() - gave weapon to " + item);
-            //item.GiveDebugWeapon();
-        }
-    }
+
 
     
     [Server]
@@ -108,14 +101,14 @@ public class GameState : NetworkBehaviour
         {
             return;
         }
-        if (!isLocalPlayer)
-        {
             timeElapsed += Time.deltaTime;
-            foreach (PlayerData v in players)
+            if (timeElapsed >= maxTime)
             {
-                v.SecondsConnected += Time.deltaTime;
+                if (_stage == GameStage.PLAYING)
+                {
+                    GameOver("no one", true);
+                }
             }
-        }
     }
 
     //public void UpdatePlayerScoreboard()
@@ -127,24 +120,31 @@ public class GameState : NetworkBehaviour
     //{
 
     //}
-    public void AddHostToPlayer(string nick)
-    {
-        PlayerData host = new PlayerData();
-        host.nickname = nick;
-        host.Ip = NetworkManager_ArenaFPS.singleton.networkAddress;
-        players.Add(host);
-        Debug.Log("host nickname is " + host.nickname);
-        Debug.Log("host ip is " + host.Ip);
-    }
+   // [Server]
+    //public void AddHostToPlayer(string nick)
+    //{
+    //    PlayerData host = new PlayerData();
+    //    host.nickname = nick;
+    //    host.Ip = NetworkManager_ArenaFPS.singleton.networkAddress;
+    //    lastconnectedplayerID++;
+    //    host.Id = lastconnectedplayerID;
+    //    players.Add(host);
+    //    Debug.Log("host nickname is " + host.nickname);
+    //    Debug.Log("host ip is " + host.Ip);
+    //}
 
-    public void AddPlayer()
-    {
-        
-    }
-
+    private bool beatrunning = false;
+    [Server]
     public void InitializeBeat()
     {
-        if (!isClient)
+        if (beatrunning)
+        {
+            return;
+        }
+
+        beatrunning = true;
+        Debug.Log(("InitializeBeat @ GameState just ran."));
+        if (!isClient) //wont happen anyways but oh well
         {
             Debug.LogError("GameState@ InitializeBeat - invoked the repetition");
             InvokeRepeating("PeriodicBeat", 4, 4);
@@ -159,53 +159,38 @@ public class GameState : NetworkBehaviour
         yield return new WaitForSecondsRealtime(2f);
         if (beat_toggle)
         {
-            RpcBeat();
+            NetworkServer.SendToAll(new Beat { beat = true });
 
             yield return new WaitForSecondsRealtime(2f);
 
 
-            RPCUnbeat();
+            NetworkServer.SendToAll(new Beat {beat = false});
         }
        
     }
+    
+
     /*
        When running a game as a host with a local client, ClientRpc calls will be invoked on the local client even though it is in the same process as the server. So the behaviours of local and remote clients are the same for ClientRpc calls.
      */
-    [ClientRpc]
-    private void RpcBeat()
-    {
-        foreach (KeyValuePair<uint, PlayerMind> item in playerMinds)
-        {
-            Debug.Log("Started beat for player with ID" + item.Value.ID);
-            item.Value.Body.Beat(true);
-        }
-
-    }
-
-    private void RPCUnbeat()
-    {
-        foreach (KeyValuePair<uint, PlayerMind> item in playerMinds)
-        {
-            Debug.Log("Started beat for player with ID" + item.Value.ID);
-            item.Value.Body.Beat(false);
-        }
-
-    }
-
 
     public override void OnStartServer()
     {
         Debug.Log("Game state OnStartServer.AAAAAAAAAAAAAAAAAAAAAAAA");
         instance = this;
-        //SteamLobby.Instance.onLobbyChatUpdate += OnLobbyChatUpdate;
-        //GivePeopleDebugWeapons();
-        //InitializeBeat();
     }
+
+    [Command]
+   
+  
 
     public override void OnStartClient()
     {
         Debug.Log("Game state OnStartClient. Binding callback method.");
         instance = this;
+
+
+
         // _playerNetIds
         //foreach (var item in PlayerList_NameID)
         //{
@@ -269,165 +254,6 @@ public class GameState : NetworkBehaviour
         }
     }
 
-    public void AddPlayer(string playerName, string playerIP)
-    {
-        int indexIP = players.FindIndex(item => item.Ip == playerIP);
-        if (indexIP == -1)
-        {
-            int indexname = players.FindIndex(item => item.nickname == playerName);
-            if (indexname == -1)
-            {
-                try
-                {
-                    Debug.Log($"Server Game State add player {playerIP}");
-                    lastconnectedplayerID++;
-                    PlayerData b = new PlayerData();
-                    b.Id = lastconnectedplayerID;
-                    b.nickname = playerName;
-                    b.Ip = playerIP;
-//todo make sure this works because serialization is tricky
-
-                    players.Add(b);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
-                
-            }
-            else
-            {
-                Debug.LogWarning("Player tried to join as name " + playerName  + " from IP " + playerIP + " but name was already used."); //TODO HANDLE THIS
-            }
-            
-            
-        }
-    }
-    [Server]
-    public void RemovePlayer(uint ID)
-    {
-        int indexIP = players.FindIndex(item => item.Id == ID);
-        if (indexIP != -1)
-        {
-            
-            
-                players.RemoveAt(indexIP);
-            
-            
-            
-                Debug.LogWarning("Player with ID " + ID + " was removed from the game."); //TODO HANDLE THIS
-            
-
-
-        }
-
-
-    }
-
-    //public bool TryGetPlayerStateAt(int index, out PlayerBody ps) // usually called on the client
-    //{
-    //    ps = null;
-    //    if (index < 0 || index >= ConnectedPlayerNum) return false;
-
-    //    if (NetworkClient.spawned.TryGetValue(_playerNetIds[index], out NetworkIdentity identity))
-    //    {
-    //        return identity.TryGetComponent(out ps);
-    //    }
-    //    return false;
-    //}
-    //public bool TryGetPlayerStateByName(string nickname, out PlayerBody ps)
-    //{
-    //    ps = null;
-    //    if (PlayerList_NameID.Values.Contains(nickname))
-    //    { //we check if the list of spawned players contains the same ID as the player we need, then we use that to grab that player's NetworkIdentity
-    //        if (NetworkClient.spawned.TryGetValue(PlayerList_NameID.FirstOrDefault(x => x.Value == nickname).Key, out NetworkIdentity identity))
-    //        {
-    //            return identity.TryGetComponent(out ps);
-    //        }
-    //    }
-    //    return false;
-    //}
-    //public bool TryGetPlayerStateByNetId(uint netId, out PlayerBody ps)
-    //{
-    //    ps = null;
-    //    if (PlayerList_NameID.Keys.Contains<uint>(netId))
-    //    {
-    //        if (NetworkClient.spawned.TryGetValue(netId, out NetworkIdentity identity))
-    //        {
-    //            return identity.TryGetComponent(out ps);
-    //        }
-    //    }
-    //    return false;
-    //}
-  
-    //Coroutine _cReadyCountdown;
-    //private IEnumerator ReadyCountdown()
-    //{
-    //    yield return new WaitForSecondsRealtime(1.0f);
-    //    RpcCountdown("3");
-    //    yield return new WaitForSecondsRealtime(1.0f);
-    //    RpcCountdown("2");
-    //    yield return new WaitForSecondsRealtime(1.0f);
-    //    RpcCountdown("1");
-    //    yield return new WaitForSecondsRealtime(1.0f);
-    //    RpcCountdown("");
-    //    _stage = GameStage.PLAYING;
-    //    LocalGame.Instance.onServerGameStarted?.Invoke();
-    //}
-    //[ClientRpc]
-    //private void RpcCountdown(string str)
-    //{
-    //    UI_GameHUD.SetCountdown(str);
-    //}
-
-
-    public void ServersideRegisterKill(uint attacker, uint victim)
-    {
-        PlayerDied(attacker, victim);
-    }
-
-   
-    private void PlayerDied(uint attacker, uint victim) // only called on the server
-    {
-        PlayerMind att;
-        PlayerMind vic;
-
-        
-
-        playerMinds.TryGetValue(attacker, out att);
-        playerMinds.TryGetValue(victim, out vic);
-
-        PlayerData attM = players.Find(i => i.Id == attacker);
-        PlayerData vicM = players.Find(i => i.Id == victim);
-
-       
-        try
-        {
-            int assistant = vic.GetPenultimateAttacker();
-            PlayerData assist = players.Find(i => i.Id == assistant);
-            assist.Assists += 1;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-       
-        
-        attM.Deaths += 1;
-        vicM.Kills += 1;
-
-        if (_stage != GameStage.OVER)
-        {
-            if (IfGameOver(out string winnerName, out bool isDraw))
-            {
-                GameOver(winnerName, isDraw);
-            }
-        }
-       
-    }
-
 
 
 
@@ -440,32 +266,12 @@ public class GameState : NetworkBehaviour
 
     #region End Conditions
 
-    private bool IfGameOver(out string winner, out bool isDraw)
+    private bool IfGameOver(out string winner, out bool isDraw, string winnerID)
     {
-        ;
-        isDraw = false;
-       
-       List<PlayerData> playersScore =  players.FindAll(x => x.Kills >= instance.maxKills);
-
-        //List<PlayerMind> livings =
-        switch (playersScore.Count)
-        {
-            case 1:
-                winner = playersScore[0].nickname;
+                winner = winnerID;
+                isDraw = false;
                 //DISPLAY WINNER //todo add the popup display here
                 return true;
-            default:
-                if (timeElapsed >= (maxTime * 60))
-                {
-                    isDraw = true;
-                    winner = null;
-                    return true;
-                }
-                isDraw = false;
-                winner = null;
-                return false;
-                break;
-        }
     }
     //[Server]
     //private void GameReady()

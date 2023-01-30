@@ -1,15 +1,39 @@
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Mirror;
+using Mirror;using Mirror.SimpleWeb;
+using TMPro;
+using UnityEngine.UI;
 
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/components/network-manager
 	API Reference: https://mirror-networking.com/docs/api/Mirror.NetworkManager.html
 */
 
+public struct Hit : NetworkMessage
+{
+    public uint attacker;
+    public int damage;
+    public uint victim;
+}
+
+public struct RespawnMessage : NetworkMessage
+{
+    public uint who;
+}
+public struct DeathMessage : NetworkMessage
+{
+    public uint who;
+}
+
+public struct Beat : NetworkMessage
+{
+    public bool beat;
+}
+
 public class NetworkManager_ArenaFPS : NetworkManager
 {
+
     // Overrides the base singleton so we don't
     // have to cast to this type everywhere.
     public static new NetworkManager_ArenaFPS singleton { get; private set; }
@@ -36,9 +60,27 @@ public class NetworkManager_ArenaFPS : NetworkManager
     /// </summary>
     public override void Start()
     {
+
         singleton = this;
+      
+       
+        NetworkServer.RegisterHandler<DeathMessage>(OnDeath);
+
+
+
         base.Start();
     }
+
+    private void OnDeath(NetworkConnectionToClient arg1, DeathMessage arg2)
+    {
+        throw new NotImplementedException();
+    }
+
+   
+
+   
+
+
 
     /// <summary>
     /// Runs on both Server and Client
@@ -92,8 +134,27 @@ public class NetworkManager_ArenaFPS : NetworkManager
         if (newSceneName == "MainMap")
         {
             GameState.Instance.InitializeBeat();
+            /////overrides base proc
+            //Transform startPos = GetStartPosition();
+            //GameObject player = startPos != null
+            //    ? Instantiate(playerPrefab, startPos.position, startPos.rotation)
+            //    : Instantiate(playerPrefab);
+            //PlayerData d = GameState.Instance.AddPlayer("host", NetworkManager_ArenaFPS.singleton.networkAddress);
 
+            //if (d != null)
+            //{
+            //    PlayerMind newPlayerMind = player.GetComponent<PlayerMind>();
+            //    newPlayerMind.ID = d.Id;
+            //    GameState.Instance.playerMinds.Add(d.Id, newPlayerMind);
+
+
+            //}
+            //// instantiating a "Player" prefab gives it the name "Player(clone)"
+            //// => appending the connectionId is WAY more useful for debugging!
+            //player.name = $"{playerPrefab.name} [connId={ NetworkManager_ArenaFPS.singleton.networkAddress}]";
         }
+       
+       
 
         base.ServerChangeScene(newSceneName);
     }
@@ -118,7 +179,10 @@ public class NetworkManager_ArenaFPS : NetworkManager
     /// <param name="newSceneName">Name of the scene that's about to be loaded</param>
     /// <param name="sceneOperation">Scene operation that's about to happen</param>
     /// <param name="customHandling">true to indicate that scene loading will be handled through overrides</param>
-    public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation, bool customHandling) { }
+    public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation, bool customHandling)
+    {
+
+    }
 
     /// <summary>
     /// Called on clients when a scene has completed loaded, when the scene load was initiated by the server.
@@ -138,13 +202,11 @@ public class NetworkManager_ArenaFPS : NetworkManager
     /// <para>Unity calls this on the Server when a Client connects to the Server. Use an override to tell the NetworkManager what to do when a client connects to the server.</para>
     /// </summary>
     /// <param name="conn">Connection from client.</param>
-    public override void OnServerConnect(NetworkConnectionToClient conn)
+    public override void OnServerConnect(NetworkConnectionToClient conn) //TODO MAKE SURE THIS STUFF WORKS - ADD NICKNAME I/O FROM CLIENT TO SERVER
     { // it means "here on the server" one of the clients has connected
-        base.OnServerConnect(conn);
-
-       Debug.Log("a client connected " + conn.connectionId + " " + conn.address);
-       Debug.Log("address? " + conn.address);
        
+
+       base.OnServerConnect(conn);
     }
 
     /// <summary>
@@ -164,6 +226,32 @@ public class NetworkManager_ArenaFPS : NetworkManager
     /// <param name="conn">Connection from client.</param>
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
+       
+        //Debug.Log("a client connected " + conn.connectionId + " " + conn.address);
+        //Debug.Log("address? " + conn.address);
+        /////overrides base proc
+        //Transform startPos = GetStartPosition();
+        //GameObject player = startPos != null
+        //    ? Instantiate(playerPrefab, startPos.position, startPos.rotation)
+        //    : Instantiate(playerPrefab);
+        //PlayerData d = GameState.Instance.AddPlayer("unnamed", conn.address);
+        
+        //if (d != null)
+        //{
+        //    PlayerMind newPlayerMind = player.GetComponent<PlayerMind>();
+        //    newPlayerMind.ID = d.Id;
+        //    GameState.Instance.playerMinds.Add(d.Id, newPlayerMind);
+          
+
+        //}
+        //// instantiating a "Player" prefab gives it the name "Player(clone)"
+        //// => appending the connectionId is WAY more useful for debugging!
+        //player.name = $"{playerPrefab.name} [connId={conn.connectionId}]";
+
+
+
+        //NetworkServer.AddPlayerForConnection(conn, player);
+        ///overrides base proc
         base.OnServerAddPlayer(conn);
     }
 

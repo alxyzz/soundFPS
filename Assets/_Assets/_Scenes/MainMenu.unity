@@ -1986,7 +1986,7 @@ MonoBehaviour:
   additionalDataToDisplay:
   - Map
   drawGUI: 1
-  offsetX: 5
+  offsetX: 150
   offsetY: 150
   width: 500
   height: 400

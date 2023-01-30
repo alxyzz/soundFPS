@@ -92,14 +92,16 @@ public class SC_FPSController : NetworkBehaviour
         }
     }
 
+
     private void Shoot()
     {
         if (body.CurrWepAnim == null)
         {
             Debug.Log("WEP ANIM IS NULL");
         }
-        body.CurrWepAnim.SetTrigger("shot");
-        body.equippedWep.Shoot(body.transform, body.Camera.transform.forward);
+        body.CurrWepAnim?.ResetTrigger("shot");
+        body.CurrWepAnim?.SetTrigger("shot");
+        body.equippedWep?.Shoot(body.transform, body.Camera.transform.forward);
     }
 
 

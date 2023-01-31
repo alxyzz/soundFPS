@@ -1,4 +1,6 @@
 using System;
+using System.Net;
+using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;using Mirror.SimpleWeb;
@@ -65,7 +67,15 @@ public class NetworkManager_ArenaFPS : NetworkManager
       
        
         NetworkServer.RegisterHandler<DeathMessage>(OnDeath);
-
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (var ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                networkAddress = ip.ToString();
+            }
+        }
+        
 
 
         base.Start();

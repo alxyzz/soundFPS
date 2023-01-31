@@ -12,6 +12,10 @@ public class MainMenuUI : MonoBehaviour
 {
     //[SerializeField] private TMP_InputField _lobbyNicknameTextbox;
     public TextMeshProUGUI ipHint;
+    public Image AddressValidityIndicator;
+    public Sprite addressInvalid;
+    public Sprite addressValid;
+
 
     public GameObject skillIssue;
    
@@ -94,17 +98,48 @@ public class MainMenuUI : MonoBehaviour
 
     public void OnClickDebugJoin()
     {
-       // SetChildrenEnabled(false);
-       // SteamLobby.Instance.HostLobby();
-       //// SteamLobby.Instance.JoinLobby(result);
+       
     }
+
+
+    public void TargetAddressValueChange()
+    {
+        AddressValidityIndicator.sprite = addressInvalid;
+        StopCoroutine("PollPing");
+
+        string address = ipHint.text;
+        targetPing = new Ping(address);
+        StartCoroutine("PollPing");
+    }
+
+    IEnumerator PollPing()
+    {
+        Debug.Log("Started polling the address.");
+        while (true)
+        {
+            yield return new WaitForSecondsRealtime(0.5f);
+            if (targetPing.time != 0)
+            {
+                AddressValidityIndicator.sprite = addressValid;
+            }
+        }
+    }
+
+    private void PingFoundServer()
+    {
+
+    }
+    
+    
+    private Ping targetPing;
 
     public void OnClickJoin()
     {
         SetChildrenEnabled(false);
-        
-            //MasterUIManager.AddPopupHint("The LobbyID is not a number...");
-        
+        NetworkManager_ArenaFPS.singleton.networkAddress = ipHint.text;
+        NetworkManager_ArenaFPS.singleton.StartClient();
+        //MainMenuUI..AddPopupHint("The LobbyID is not a number...");
+
     }
 
     [SerializeField] GameObject EpilepsyMenu;

@@ -1,8 +1,6 @@
 using System;
-using JetBrains.Annotations;
 using Mirror;
 using TMPro;
-using UnityEditor.ShaderGraph.Drawing.Inspector.PropertyDrawers;
 using UnityEngine;
 
 public class PlayerBody : NetworkBehaviour

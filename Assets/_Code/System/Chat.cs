@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Mirror;
-using TMPro.EditorUtilities;
+using System;
 using UnityEngine;
 public struct ChatMessage : NetworkMessage
 {

@@ -77,6 +77,7 @@ public class SC_FPSController : NetworkBehaviour
         HandleMovement();
         HandleShooting();
         HandleWeaponSwitching();
+        HandleExit();
     }
 
 
@@ -91,18 +92,23 @@ public class SC_FPSController : NetworkBehaviour
         }
     }
 
+
     private void Shoot()
     {
-        if (body.CurrWepAnim == null)
-        {
-            Debug.Log("WEP ANIM IS NULL");
-        }
+        body.CurrWepAnim.ResetTrigger("shot");
         body.CurrWepAnim.SetTrigger("shot");
-        body.equippedWep.Shoot(transform, transform.forward);
+        body.equippedWep.Shoot(body.transform, body.Camera.transform.forward);
     }
 
 
+    private void HandleExit()
+    {
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+    }
 
 
     private void HandleWeaponSwitching()

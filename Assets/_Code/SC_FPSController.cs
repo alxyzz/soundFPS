@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -78,9 +79,17 @@ public class SC_FPSController : NetworkBehaviour
         HandleShooting();
         HandleWeaponSwitching();
         HandleExit();
+
+        HandleDebug();
     }
 
-
+    private void HandleDebug()
+    {
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            Debug.Log("Server is active bool =>" + NetworkServer.active + Environment.NewLine + " Server address is " + NetworkServer.localConnection.address + Environment.NewLine + " NetworkManager_ArenaFPS.singleton.networkAddress is +> " + NetworkManager_ArenaFPS.singleton.networkAddress);
+        }
+    }
     private void HandleShooting()
     {
         if (true)//body.beat)

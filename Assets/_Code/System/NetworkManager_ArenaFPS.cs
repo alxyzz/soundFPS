@@ -72,7 +72,7 @@ public class NetworkManager_ArenaFPS : NetworkManager
         {
             if (ip.AddressFamily == AddressFamily.InterNetwork)
             {
-                networkAddress = ip.ToString();
+                //networkAddress = ip.ToString();
             }
         }
         

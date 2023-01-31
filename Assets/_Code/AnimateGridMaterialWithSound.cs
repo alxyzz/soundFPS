@@ -34,7 +34,7 @@ public class AnimatedMenuElement
 
     public void ApplyVisualChange(float targetWidth, float lerpStep)
     {
-        imageDimensions.sizeDelta = new Vector2(Mathf.Clamp(Mathf.Lerp(imageDimensions.sizeDelta.x, targetWidth, lerpStep), 100, 436.11f), imageDimensions.sizeDelta.y);
+        imageDimensions.sizeDelta = new Vector2(Mathf.Clamp(Mathf.Lerp(imageDimensions.sizeDelta.x, targetWidth, lerpStep), 100, 800), imageDimensions.sizeDelta.y);
     }
 
 
@@ -211,6 +211,10 @@ public class AnimateGridMaterialWithSound : MonoBehaviour
 
 
     }
+
+    private float period = 1.5f;
+    private float periodCurrent = 0 ;
+
     // Update is called once per frame
     void Update()
     {
@@ -220,8 +224,14 @@ public class AnimateGridMaterialWithSound : MonoBehaviour
             return;
         }
 
+        periodCurrent += Time.deltaTime;
+       
+        if (periodCurrent > period)
+        {
+            ShiftColor();
+            periodCurrent = 0;
+        }
         GetClipLoudness();
-        ShiftColor();
         float b = soundAnalyzer.AnalyzeSound();
         //and now we act accordingly
         Animate(b);

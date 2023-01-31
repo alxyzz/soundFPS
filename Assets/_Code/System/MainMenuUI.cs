@@ -1,6 +1,8 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
 using Mirror.Examples.MultipleAdditiveScenes;
 using TMPro;
 using UnityEngine;
@@ -8,13 +10,44 @@ using UnityEngine.UI;
 
 public class MainMenuUI : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField _lobbyNicknameTextbox;
+    //[SerializeField] private TMP_InputField _lobbyNicknameTextbox;
+    public TextMeshProUGUI ipHint;
 
+    public GameObject skillIssue;
+   
     private void Start()
     {
-        
+        ipHint.text = GetLocalIP();
         EpilepsyMenu.SetActive(true);
     }
+
+
+
+    public string GetLocalIP()
+    {
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (var ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                return ip.ToString();
+            }
+        }
+
+        return "Your network adapter does not seem to have an Ipv4 Local/AddressFamily.InterNetwork address.";;
+    }
+
+    public GameObject creditsmenu;
+    public void OnClickCreditsEnter()
+    {
+        creditsmenu.SetActive(true);
+    }
+
+    public void OnClickCreditsExit()
+    {
+        creditsmenu.SetActive(false);
+    }
+
     private void SetChildrenEnabled(bool enabled)
     {
         foreach (var item in GetComponentsInChildren<Selectable>())
@@ -22,6 +55,7 @@ public class MainMenuUI : MonoBehaviour
             item.interactable = enabled;
         }       
     }
+
     public void OnClickHost()
     {
        
@@ -32,8 +66,22 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private RectTransform _popupHintList;
     [SerializeField] private GameObject _pfbPopupHint;
 
+    public void onClickQuit()
+    {
+        Application.Quit();
+    }
 
+    public void SkillIssue()
+    {
+        skillIssue.SetActive(true);
+        StartCoroutine(skiller());
+;    }
 
+    IEnumerator skiller()
+    {
+        yield return new WaitForSecondsRealtime(2.5f);
+        skillIssue.SetActive(false);
+    }
 
     public static void AddPopupHint(string content)
     {

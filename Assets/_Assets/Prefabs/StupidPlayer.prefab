@@ -1040,7 +1040,7 @@ MonoBehaviour:
   lookSpeed: 2
   lookXLimit: 45
   Fly: 0
-  listener: {fileID: 0}
+  listener: {fileID: 2132815514663957661}
   canMove: 1
 --- !u!1 &3524857682931198060
 GameObject:
@@ -1819,6 +1819,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4701f8265e52b384799551f5af9f5864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!81 &2132815514663957661 stripped
+AudioListener:
+  m_CorrespondingSourceObject: {fileID: 1204679426497593275, guid: dc4090efcaa4c164ba65b5cbe7c9d1c7,
+    type: 3}
+  m_PrefabInstance: {fileID: 949883382473460518}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6007961004740990964 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6795431923131669714, guid: dc4090efcaa4c164ba65b5cbe7c9d1c7,

@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.guciodevs.simple-min-max-slider": {
-      "version": "https://github.com/Adamcbrz/SimpleMinMaxSlider.git#upm",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "28db02378e9c4c44ebd1ea10a01f0c5558a6cf1f"
-    },
     "com.unity.burst": {
       "version": "1.7.3",
       "depth": 1,
